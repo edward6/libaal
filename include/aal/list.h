@@ -40,7 +40,7 @@ extern aal_list_t *aal_list_find(aal_list_t *list, void *data);
 extern aal_list_t *aal_list_find_custom(aal_list_t *list, void *needle, 
 					comp_func_t comp_func, void *data);
 
-extern void aal_list_free(aal_list_t *list);
+extern void aal_list_free(aal_list_t *list, foreach_func_t func, void *data);
 
 /* Macros for walking through the list in both directions (forward and
    backward). They are used for simple search, etc. */

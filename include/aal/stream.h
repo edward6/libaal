@@ -25,9 +25,9 @@ extern int32_t aal_stream_write(aal_stream_t *stream,
 
 extern int32_t aal_stream_format(aal_stream_t *stream,
 				 const char *format, ...);
-extern aal_stream_t *aal_stream_init(aal_stream_t *stream,
-				     void *entity,
-				     aal_proto_t *proto);
+extern void aal_stream_init(aal_stream_t *stream,
+			    void *entity,
+			    aal_proto_t *proto);
 				       
 #endif
 

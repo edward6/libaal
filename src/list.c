@@ -119,42 +119,29 @@ aal_list_t *aal_list_insert(aal_list_t *list,
 aal_list_t *aal_list_insert_sorted(aal_list_t *list, void *data,
 				   comp_func_t comp_func, void *user)
 {
+	aal_list_t *at = list;
 	int cmp;
-	aal_list_t *new_list;
-	aal_list_t *tmp_list = list;
 
 	if (!comp_func)
 		return NULL;
     
 	if (!list) {
-		new_list = aal_list_alloc(data);
-		return new_list;
+		at = aal_list_alloc(data);
+		return at;
 	}
   
-	cmp = comp_func(tmp_list->data,	data, user);
+	cmp = comp_func(at->data, data, user);
   
-	while ((tmp_list->next) && (cmp < 0)) {
-		tmp_list = tmp_list->next;
-		cmp = comp_func(tmp_list->data, data, user);
+	while ((at->next) && (cmp < 0)) {
+		at = at->next;
+		cmp = comp_func(at->data, data, user);
 	}
 
-	new_list = aal_list_alloc(data);
-
-	if ((!tmp_list->next) && (cmp < 0)) {
-		tmp_list->next = new_list;
-		new_list->prev = tmp_list;
-		return new_list;
-	}
-   
-	if (tmp_list->prev) {
-		tmp_list->prev->next = new_list;
-		new_list->prev = tmp_list->prev;
-	}
+	at = (cmp > 0) ? 
+		aal_list_prepend(at, data) : 
+		aal_list_append(at, data);
 	
-	new_list->next = tmp_list;
-	tmp_list->prev = new_list;
- 
-	return new_list;
+	return (list == at->next) ? at : list;
 }
 
 /* Inserts new item just before passed @list */
@@ -254,13 +241,16 @@ aal_list_t *aal_list_find_custom(aal_list_t *list, void *needle,
 }
 
 /* Releases all list items */
-void aal_list_free(aal_list_t *list) {
+void aal_list_free(aal_list_t *list, foreach_func_t func, void *data) {
 	aal_list_t *last = list;
     
 	if (!list) return;
     
 	while (last->next) {
 		aal_list_t *temp = last->next;
+
+		if (func) func(last->data, data);
+		
 		aal_free(last);
 		last = temp;
 	}

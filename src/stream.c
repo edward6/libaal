@@ -18,12 +18,11 @@ aal_stream_t *aal_stream_create(void *entity,
 	if (!(stream = aal_calloc(sizeof(*stream), 0)))
 		return NULL;
 
-	return aal_stream_init(stream, entity, proto);
+	aal_stream_init(stream, entity, proto);
+	return stream;
 }
 
-aal_stream_t *aal_stream_init(aal_stream_t *stream,
-			      void *entity, aal_proto_t *proto)
-{
+void aal_stream_init(aal_stream_t *stream, void *entity, aal_proto_t *proto) {
 	aal_assert("umka-2640", proto != NULL);
 	aal_assert("umka-1543", stream != NULL);
 
@@ -31,8 +30,6 @@ aal_stream_t *aal_stream_init(aal_stream_t *stream,
 	stream->offset = 0;
 	stream->proto = proto;
 	stream->entity = entity;
-	
-	return stream;
 }
 
 void aal_stream_fini(aal_stream_t *stream) {

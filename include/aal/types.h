@@ -12,19 +12,19 @@
 
 /* Some usefull return codes */
 #undef EINVAL
-#define EINVAL                  0x1
+#define EINVAL                  22
 
 #undef ENOSPC
-#define ENOSPC                  0x2
+#define ENOSPC                  28
 
 #undef ENOMEM
-#define ENOMEM                  0x3
+#define ENOMEM                  12
 
 #undef EIO
-#define EIO                     0x4
+#define EIO                     5
 
 #undef ESTRUCT
-#define ESTRUCT                 0x5
+#define ESTRUCT                 50
 
 #ifndef __int8_t_defined
 #define __int8_t_defined
@@ -261,7 +261,7 @@ typedef enum aal_exception_option aal_exception_option_t;
 #define __aal_check_format(style, format, begin) \
         __attribute__((__format__(style, format, begin)))
 #else
-        __aal_check_format(style, format, begin)
+#define __aal_check_format(style, format, begin) 
 #endif
 
 /* This is exception structure. It contains: exception message, exception type,
