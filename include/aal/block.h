@@ -9,27 +9,28 @@
 #include <aal/types.h>
 
 #ifndef ENABLE_STAND_ALONE
-extern errno_t aal_block_reread(aal_block_t *block, 
-				aal_device_t *device,
-				blk_t number);
+extern void aal_block_move(aal_block_t *block,
+			   aal_device_t *device,
+			   blk_t nr);
 
 extern errno_t aal_block_write(aal_block_t *block);
-
-extern void aal_block_move(aal_block_t *block, 
-			   blk_t number);
 #endif
 
-extern aal_block_t *aal_block_read(aal_device_t *device, 
-				   uint32_t size,
-				   blk_t number);
-
-extern aal_block_t *aal_block_create(aal_device_t *device, 
-				     uint32_t size,
-				     blk_t number, char c);
-
 extern void aal_block_free(aal_block_t *block);
-extern blk_t aal_block_number(aal_block_t *block);
-extern uint32_t aal_block_size(aal_block_t *block);
+extern void aal_block_fini(aal_block_t *block);
+extern errno_t aal_block_read(aal_block_t *block);
 
+extern errno_t aal_block_fill(aal_block_t * block,
+			      unsigned char c);
+
+extern errno_t aal_block_init(aal_block_t *block,
+			      aal_device_t *device, 
+			      uint32_t size, blk_t nr);
+
+extern aal_block_t *aal_block_alloc(aal_device_t *device, 
+				    uint32_t size, blk_t nr);
+
+extern aal_block_t *aal_block_load(aal_device_t *device, 
+				   uint32_t size, blk_t nr);
 #endif
 

@@ -223,10 +223,9 @@ struct aal_device_ops {
    block), block size, offset (offset in bytes where block is placed on device),
    and pointer to device, block opened on. */
 struct aal_block {
-	int flags;
+	blk_t nr;
+	int dirty;
 	void *data;
-
-	blk_t number;
 	uint32_t size;
 	aal_device_t *device;
 };

@@ -141,30 +141,6 @@ bool_t aal_device_equals(
 	aal_device_check_routine(device1, equals, return 0);
 	return device1->ops->equals(device1, device2);
 }
-
-/* Returns device name. For standard file it is file name */
-char *aal_device_name(
-	aal_device_t *device)	/* device, name will be obtained from */
-{
-	aal_assert("umka-442", device != NULL);
-	return device->name;
-}
-
-/* Returns last error occured on device */
-char *aal_device_error(
-	aal_device_t *device)	/* device error description will be get from */
-{
-	aal_assert("umka-752", device != NULL);
-	return device->error;
-}
-
-/* Returns flags, device was opened with */
-int aal_device_flags(
-	aal_device_t *device)	/* device instance flags will be obtained from */
-{
-	aal_assert("umka-437", device != NULL);
-	return device->flags;
-}
 #endif
 
 /* Checks and sets new block size for specified device. Returns error code, see
