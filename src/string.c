@@ -5,7 +5,7 @@
   libaal/COPYING.
 */
 
-#if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_STRING_FUNCTIONS)) || !defined(ENABLE_STRING_FUNCTIONS)
+#if defined(ENABLE_STAND_ALONE) && defined(ENABLE_STRING_FUNCTIONS)
 #include <aal/aal.h>
 
 /* 
