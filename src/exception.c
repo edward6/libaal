@@ -9,16 +9,6 @@
 
 static aal_exception_handler_t exception_handler = NULL;
 
-/* Strings for all exception types */
-static char *type_names[] = {
-	"Info ",
-	"",
-	"Warn ", 
-	"Error", 
-	"Fatal", 
-	"Bug  "
-};
-
 /* Strings for all exception options */
 static char *option_names[] = {
 	"Yes", 
@@ -30,14 +20,6 @@ static char *option_names[] = {
 };
 
 static int disable_count = 0;
-
-/* Helper functions for getting different exception attributes (option string,
-   type string, etc). They are used in exception handing functions. */
-char *aal_exception_type_name(
-	aal_exception_type_t type)	/* type to be converted to string */
-{
-	return type_names[type - 1];
-}
 
 /* Returns exception type from passed exception instance */
 aal_exception_type_t aal_exception_type(
