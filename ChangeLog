@@ -6,6 +6,11 @@ reiser4progs/COPYING.
 This file may be modified and/or distributed without restriction. This is
 not an invitation to misrepresent the history of reiser4progs.
 
+2004-12-04
+	The version is 1.0.
+2004-11-24
+	Some method interfaces are changed.
+	Return error codes are changed to match the system values.
 2004-10-21
 	Make memory manager enabled by default for the libminimal.
 	The version is 1.0.2
