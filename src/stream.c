@@ -123,7 +123,7 @@ static int32_t write_memory(aal_stream_t *stream,
 {
 	/* Expanding memory erea to fit yet another @n bytes. */
 	if (stream->offset + n > stream->size) {
-		stream->size = stream->size + n;
+		stream->size = stream->size + n + 1;
 		
 		if (!(stream->entity = realloc(stream->entity,
 					       stream->size)))
@@ -135,6 +135,7 @@ static int32_t write_memory(aal_stream_t *stream,
 	/* Copying data to memory area attached to @print_stream. */
 	aal_memcpy(stream->entity + stream->offset, buff, n);
 	stream->offset += n;
+	*(char *)(stream->entity + stream->offset) = 0;
 	
 	return n;
 }
