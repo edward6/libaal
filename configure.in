@@ -44,14 +44,14 @@ AC_DEFINE_UNQUOTED(LIBAAL_MIN_INTERFACE_VERSION, $LIBAAL_INTERFACE_AGE)
 
 AM_ENABLE_SHARED
 
+AC_ARG_ENABLE(Werror,
+    [  --enable-Werror                enable build with gcc -Werror], ,
+	enable_Werror=no
+)
+
 AC_ARG_ENABLE(debug, 
     [  --disable-debug                disable debug information in binaries], , 
 	enable_debug=yes
-)
-
-AC_ARG_ENABLE(Werror,
-    [  --disable-Werror               disable build with gcc -Werror], ,
-	enable_Werror=yes
 )
 
 AC_ARG_ENABLE(stand_alone,
@@ -206,5 +206,5 @@ AC_OUTPUT([
 ])
 
 echo
-echo Type \'make\' to compile libaal
-echo Don\'t forget to add \'$prefix/lib\' directory to /etc/ld.so.conf
+echo Type \'make\' to compile libaal.
+echo Don\'t forget to run /sbin/ldconfig as root after make install.
