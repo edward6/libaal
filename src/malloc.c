@@ -23,6 +23,7 @@ static aal_realloc_handler_t realloc_handler = realloc;
 static aal_free_handler_t free_handler = free;
 #endif
 
+#ifndef ENABLE_STAND_ALONE
 /* 
   Sets new handler for malloc function. This is useful for alone mode, because
   all application which are working in alone mode (without libc, probably in
@@ -68,6 +69,7 @@ void aal_free_set_handler(
 aal_free_handler_t aal_free_get_handler(void) {
 	return free_handler;
 }
+#endif
 
 /*
   Memory manager stuff. Simple memory manager is needed for appliances where
@@ -168,14 +170,14 @@ static void *__chunk_split(chunk_t *chunk, uint32_t size) {
 	return (void *)((int)chunk + sizeof(chunk_t));
 }
 
-static inline int __chunk_exact(chunk_t *chunk,
-				uint32_t size)
+static int __chunk_exact(chunk_t *chunk,
+ 			 uint32_t size)
 {
 	return chunk->len == size;
 }
 
-static inline int __chunk_proper(chunk_t *chunk,
-				 uint32_t size)
+static int __chunk_proper(chunk_t *chunk,
+ 			  uint32_t size)
 {
 	if (chunk->state != ST_FREE)
 		return 0;
@@ -207,6 +209,7 @@ static void *__chunk_alloc(uint32_t size) {
 			if (__chunk_exact(walk, size)) {
 				walk->state = ST_USED;
 				mem_free -= walk->len;
+				
 				return (void *)walk + sizeof(chunk_t);
 			}
 			
@@ -253,6 +256,9 @@ void aal_mem_fini(void) {
 	mem_len = 0;
 	mem_free = 0;
 	mem_start = NULL;
+	
+	free_handler = NULL;
+	malloc_handler = NULL;
 }
 
 uint32_t aal_mem_free(void) {
@@ -270,6 +276,7 @@ uint32_t aal_mem_free(void) {
 }
 #endif
 
+#ifndef ENABLE_STAND_ALONE
 /*
   The wrapper for realloc function. It checks for result memory allocation and
   if it failed then reports about this.
@@ -289,6 +296,7 @@ errno_t aal_realloc(
 	*old = mem;
 	return 0;
 }
+#endif
 
 /*
   The wrapper for free function. It checks for passed memory pointer and if it
