@@ -20,8 +20,9 @@ extern aal_list_t *aal_list_prev(aal_list_t *list);
 
 extern uint32_t aal_list_len(aal_list_t *list);
 
-extern int aal_list_foreach(aal_list_t *list, 
-			    foreach_func_t func, void *data);
+extern errno_t aal_list_foreach(aal_list_t *list, 
+				foreach_func_t func,
+				void *data);
 
 extern int32_t aal_list_pos(aal_list_t *list, void *data);
 extern aal_list_t *aal_list_at(aal_list_t *list, uint32_t n);

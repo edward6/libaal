@@ -69,25 +69,26 @@ uint32_t aal_list_len(aal_list_t *list) {
 
 #ifndef ENABLE_STAND_ALONE
 /*
-  This functions makes walk though the @list and calls passed @func for each
-  list item. This may be used for searching something, or performing some
-  per-item actions.
+  This function walks though the @list and calls passed @func for each list
+  item. This may be used for searching something, or performing some per-item
+  actions.
 */
-int aal_list_foreach(aal_list_t *list, foreach_func_t func, 
-		     void *data) 
+errno_t aal_list_foreach(aal_list_t *list,
+			 foreach_func_t func, 
+			 void *data) 
 {
+	errno_t res;
+	aal_list_t *walk, *next;
 
-	if (!func)
-		return -EINVAL;
+	for (walk = list; walk; ) {
+		next = walk->next;
 
-	while (list) {
-		int res;
-	
-		if ((res = func(list->data, data)))
+		if ((res = func(walk->data, data)))
 			return res;
-	
-		list = list->next;
+			
+		walk = next;
 	}
+
 	return 0;
 }
 
