@@ -17,6 +17,5 @@ extern int aal_vsnprintf(char *buff, uint32_t n,
 extern int aal_snprintf(char *buff, uint32_t n,
 			const char *format, 
 			...);
-
 #endif
 

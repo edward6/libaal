@@ -23,22 +23,23 @@ void *aal_memset(void *dest, int c, uint32_t n) {
 }
 
 void *aal_memcpy(void *dest, const void *src, uint32_t n) {
-	char *dest_p; 
 	char *src_p;
+	char *dest_p; 
 
-	if (dest > src) {
-		dest_p = (char *)dest; 
+//	if (dest > src) {
 		src_p = (char *)src;
+		dest_p = (char *)dest; 
 
 		for (; (int)src_p - (int)src < (int)n; src_p++, dest_p++)
 			*dest_p = *src_p;
-	} else {
-		dest_p = (char *)dest + n - 1; 
-		src_p = (char *)src + n  - 1;
+		
+/*	} else {
+		src_p = (char *)src + n - 1;
+		dest_p = (char *)dest + n - 1;
 
 		for (; (int)src_p - (int)src >= 0; src_p--, dest_p--)
 			*dest_p = *src_p;
-	}
+	}*/
     
 	return dest;
 }
