@@ -80,10 +80,6 @@ int32_t aal_stream_read(aal_stream_t *stream,
 
 int aal_stream_eof(aal_stream_t *stream) {
 	aal_assert("umka-2643", stream != NULL);
-	
-	if (!stream->proto->eof)
-		return 0;
-	
 	return stream->proto->eof(stream);
 }
 
@@ -154,13 +150,6 @@ static void fini_memory(aal_stream_t *stream) {
 	}
 }
 
-aal_proto_t memory_stream = {
-	.eof   = eof_memory, 
-	.fini  = fini_memory,
-	.read  = read_memory,
-	.write = write_memory
-};
-
 static int32_t read_file(aal_stream_t *stream,
 			 void *buff, uint32_t n)
 {
@@ -171,13 +160,17 @@ static int32_t read_file(aal_stream_t *stream,
 	file = (FILE *)stream->entity;
 
 	for (read = 0; read < n; read += res) {
-		if ((res = fread(buff + read, 1,
-				 n - read, file)) <= 0)
-		{
-			return read;
+		res = fread(buff + read, 1,
+			    n - read, file);
+		
+		if (res < n - read) {
+			read += res;
+			goto error_update_offset;
 		}
 	}
 
+ error_update_offset:
+	stream->offset += read;
 	return read;
 }
 
@@ -191,19 +184,30 @@ static int32_t write_file(aal_stream_t *stream,
 	file = (FILE *)stream->entity;
 
 	for (write = 0; write < n; write += res) {
-		if ((res = fwrite(buff + write, 1,
-				  n - write, file)) <= 0)
-		{
-			return write;
+		res = fwrite(buff + write, 1,
+			     n - write, file);
+		
+		if (res < n - write) {
+			write += res;
+			goto error_update_offset;
 		}
 	}
 
+ error_update_offset:
+	stream->offset += write;
 	return write;
 }
 
 static int eof_file(aal_stream_t *stream) {
 	return feof((FILE *)stream->entity);
 }
+
+aal_proto_t memory_stream = {
+	.eof   = eof_memory, 
+	.fini  = fini_memory,
+	.read  = read_memory,
+	.write = write_memory
+};
 
 aal_proto_t file_stream = {
 	.fini  = NULL,

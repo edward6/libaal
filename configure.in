@@ -14,7 +14,7 @@ AH_TEMPLATE([ENABLE_MEMORY_MANAGER], [Define for enable simple memory manager.])
 
 LIBAAL_MAJOR_VERSION=0
 LIBAAL_MINOR_VERSION=4
-LIBAAL_MICRO_VERSION=12
+LIBAAL_MICRO_VERSION=13
 
 LIBAAL_INTERFACE_AGE=0
 LIBAAL_BINARY_AGE=0
@@ -62,11 +62,6 @@ AC_ARG_ENABLE(stand_alone,
 AC_ARG_ENABLE(memory_manager,
     [  --enable-memory-manager        enable memory manager in stand alone library], ,
         enable_memory_manager=no
-)
-
-AC_ARG_ENABLE(string_functions,
-    [  --enable-string-functions      enable strncpy and friends in stand alone library], ,
-        enable_string_functions=no
 )
 
 # Checks for programs.
@@ -161,12 +156,7 @@ if test x$enable_stand_alone = xyes; then
 	MEMORY_MANAGER_CFLAGS="-DENABLE_MEMORY_MANAGER"
     fi
 
-    if test x$enable_string_functions = xyes; then
-	STRING_FUNCTIONS_CFLAGS="-DENABLE_STRING_FUNCTIONS"
-    fi
-
-    ALONE_CFLAGS="$ALONE_CFLAGS -DENABLE_STAND_ALONE $MEMORY_MANAGER_CFLAGS \
-$STRING_FUNCTIONS_CFLAGS $ALIGN_FLAGS"
+    ALONE_CFLAGS="$ALONE_CFLAGS -DENABLE_STAND_ALONE $MEMORY_MANAGER_CFLAGS $ALIGN_FLAGS"
 fi
 
 CFLAGS="$CFLAGS -W -Wall"
