@@ -100,7 +100,7 @@ aal_hash_node_t **aal_hash_table_lookup_node(aal_hash_table_t *table,
 	aal_assert("umka-2270", table != NULL);
 	
 	hash = table->hash_func(key);
-	node = &table->nodes[hash % table->size];
+	node = &table->nodes[hash & (table->size - 1)];
 
 	while (*node && table->comp_func((*node)->key, key, NULL))
 		node = &(*node)->next;
