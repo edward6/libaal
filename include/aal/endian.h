@@ -1,11 +1,9 @@
-/*
-  endian.h -- endianess translation macros. This is a number of macro because
-  macro is better for performance than to use functions which are determining
-  the translation kind in the run time.
-    
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   endian.h -- endianess translation macros. This is a number of macro because
+   macro is better for performance than to use functions which are determining
+   the translation kind in the run time. */
 
 #ifndef AAL_ENDIAN_H
 #define AAL_ENDIAN_H

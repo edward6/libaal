@@ -1,9 +1,7 @@
-/*
-  list.h -- double-linked list implementation.
-    
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   list.h -- double-linked list implementation. */
 
 #ifndef AAL_LIST_H
 #define AAL_LIST_H
@@ -46,10 +44,8 @@ extern aal_list_t *aal_list_find_custom(aal_list_t *list, void *needle,
 
 extern void aal_list_free(aal_list_t *list);
 
-/* 
-  Macros for walking through the list in both directions (forward and
-  backward). They are used for simple search, etc.
-*/
+/* Macros for walking through the list in both directions (forward and
+   backward). They are used for simple search, etc. */
 #define aal_list_foreach_forward(list, walk) \
     for (walk = aal_list_first(list); walk; walk = walk->next)
 

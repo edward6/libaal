@@ -1,9 +1,7 @@
-/*
-  hash.h -- hash table implementation.
-    
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   hash.h -- hash table implementation. */
 
 #ifndef AAL_HASH_H
 #define AAL_HASH_H

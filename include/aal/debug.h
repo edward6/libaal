@@ -1,9 +1,7 @@
-/*
-  debug.h -- assert implementation.
-    
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   debug.h -- asserts implementation. */
 
 #ifndef AAL_DEBUG_H
 #define AAL_DEBUG_H
@@ -17,10 +15,7 @@ extern void __actual_assert(char *hint, int cond, char *text,
 
 #if !defined(ENABLE_STAND_ALONE) && defined(ENABLE_DEBUG)
 
-/*
-  Something like standard assert, but working through exception 
-  factory.
-*/
+/* Something like standard assert, but working through the exception factory. */
 #ifdef __GNUC__
 #define aal_assert(hint, cond)          \
     	__actual_assert(hint, cond,     \

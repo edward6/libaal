@@ -1,13 +1,11 @@
-/*
-  malloc.h -- memory allocation functions. ctualy they are memory allocation
-  handlers which may be set by caller. In the allone mode they will point to
-  corresponding memory allocation functions, which are used in certain alone
-  application (bootloaders, etc). In the standard mode they are pointed to libc
-  memory allocation functions (malloc, free, etc).
-  
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   malloc.h -- memory allocation functions. ctualy they are memory allocation
+   handlers which may be set by caller. In the allone mode they will point to
+   corresponding memory allocation functions, which are used in certain alone
+   application (bootloaders, etc). In the standard mode they are pointed to libc
+   memory allocation functions (malloc, free, etc). */
 
 #ifndef AAL_MALLOC_H
 #define AAL_MALLOC_H

@@ -1,9 +1,7 @@
-/*
-  bitops.h -- bitops functions.
-  
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   bitops.h -- bitops functions. */
 
 #ifndef AAL_BITOPS_H
 #define AAL_BITOPS_H

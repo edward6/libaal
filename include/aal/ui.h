@@ -1,9 +1,7 @@
-/*
-  ui.c -- callback function for using them for ask user enter something.
-    
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   ui.c -- callback function for using them for ask user enter something. */
 
 #ifndef AAL_UI_H
 #define AAL_UI_H

@@ -1,9 +1,7 @@
-/*
-  device.h -- device functions declaration.
-    
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   device.h -- device functions declaration. */
 
 #ifndef AAL_DEVICE_H
 #define AAL_DEVICE_H

@@ -1,10 +1,8 @@
-/*
-  exception.c -- exceptions handling functions. Exception factory is used for
-  providing unified interface for error handling.
-
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   exception.c -- exceptions handling functions. Exception factory is used for
+   providing unified interface for error handling. */
 
 #if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_EXCEPTIONS)) || !defined(ENABLE_STAND_ALONE)
 #include <aal/aal.h>
@@ -32,10 +30,8 @@ static char *option_names[] = {
 
 static int disable_count = 0;
 
-/* 
-  Helper functions for getting different exception attributes (option string,
-  type string, etc). They are used in exception handing functions.
-*/
+/* Helper functions for getting different exception attributes (option string,
+   type string, etc). They are used in exception handing functions. */
 char *aal_exception_type_name(
 	aal_exception_type_t type)	/* type to be converted to string */
 {
@@ -70,10 +66,8 @@ char *aal_exception_message(
 	return exception->message;
 }
 
-/* 
-  Sets alternative exception handler, if passed handler isn't NULL. Otherwise
-  sets exception handler into default one.
-*/
+/* Sets alternative exception handler, if passed handler isn't NULL. Otherwise
+   sets exception handler into default one. */
 void aal_exception_set_handler(
 	aal_exception_handler_t handler) /* new exception handler */
 {
@@ -94,10 +88,8 @@ void aal_exception_catch(
 	aal_free(exception);
 }
 
-/* 
-  The job of this function is to call current exception handler and return the
-  result of handling (for instance, retry, ignore, etc).
-*/
+/* The job of this function is to call current exception handler and return the
+   result of handling (for instance, retry, ignore, etc). */
 static aal_exception_option_t aal_exception_actual_throw(
 	aal_exception_t *exception)	/* exception to be thrown */
 {
@@ -112,10 +104,9 @@ static aal_exception_option_t aal_exception_actual_throw(
 	return opt;
 }
 
-/* 
-  Public function for throw exception. It creates new exception instance and
-  pass the control to aal_exception_actual_throw function for further handling.
-*/
+/* Public function for throw exception. It creates new exception instance and
+   pass the control to aal_exception_actual_throw function for further
+   handling. */
 aal_exception_option_t aal_exception_throw(
 	aal_exception_type_t type,	/* exception type */
 	aal_exception_option_t opts,	/* exception options */
@@ -148,12 +139,10 @@ aal_exception_option_t aal_exception_throw(
 	return EXCEPTION_UNHANDLED;
 }
 
-/* 
-  These functions are used for switching exception factory into silent mode.
-  This mode forces it do not handle exceptions at all. As it may be used few
-  times while the control flows through the stack, here is the special counter
-  for keeping track of how many times exception factory was disabled.
-*/
+/* These functions are used for switching exception factory into silent mode.
+   This mode forces it do not handle exceptions at all. As it may be used few
+   times while the control flows through the stack, here is the special counter
+   for keeping track of how many times exception factory was disabled. */
 void aal_exception_off(void) {
 	disable_count++;
 }

@@ -1,11 +1,9 @@
-/*
-  debug.c -- implements assertions through exceptions factory. That is if some
-  exception occurs, user will have the ability to make choise, continue running
-  or not.
-
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   debug.c -- implements assertions through exceptions factory. That is if some
+   exception occurs, user will have the ability to make choise, continue running
+   or not. */
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
@@ -19,10 +17,8 @@
 static void default_assert_handler(char *hint, int cond, char *text,
 				   char *file, int line, char *func)
 {
-	/* 
-	  Actual exception throwing. Messages will contain hint for owner, file,
-	  line and function assertion was failed in.
-	*/ 
+	/* Actual exception throwing. Messages will contain hint for owner,
+	   file, line and function assertion was failed in. */ 
 	aal_exception_bug("%s: Assertion (%s) at %s:%d in function %s() failed.",
 			  hint, text, file, line, func);
 
@@ -44,10 +40,8 @@ void aal_assert_set_handler(assert_handler_t handler) {
 
 #endif
 
-/* 
-  This function is used to provide asserts via exceptions. It is used by macro
-  aal_assert().
-*/
+/* This function is used to provide asserts via exceptions. It is used by macro
+   aal_assert(). */
 void __actual_assert(
 	char *hint,	     /* person owner of assert */
 	int cond,	     /* condition of assertion */

@@ -1,9 +1,7 @@
-/*
-  print.h -- printing and formating strings functions.
-
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   print.h -- printing and formating strings functions. */
 
 #ifndef AAL_PRINT_H
 #define AAL_PRINT_H

@@ -1,9 +1,7 @@
-/*
-  device.c -- device independent interface and block-working functions.
-
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   device.c -- device independent interface and block-working functions. */
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
@@ -12,19 +10,17 @@
 #include <aal/aal.h>
 #include <fcntl.h>
 
-/* 
-  This macro is used for checking whether specified routine from the device
-  operations is implemented or not. If not, it throws exception and performs
-  specified action.
+/* This macro is used for checking whether specified routine from the device
+   operations is implemented or not. If not, it throws exception and performs
+   specified action.
+   
+   It is using in the following maner:
 
-  It is using in the following maner:
-
-  aal_device_check_routine(some_devive_instance, read_operation, goto
-  error_processing);
+   aal_device_check_routine(some_devive_instance, read_operation, goto
+   error_processing);
     
-  This macro was introdused to decrease source code by removing a lot of common
-  pieces and replace them by just one line of macro.
-*/
+   This macro was introdused to decrease source code by removing a lot of common
+   pieces and replace them by just one line of macro. */
 #ifndef ENABLE_STAND_ALONE
 #define aal_device_check_routine(device, routine, action)		\
     do {								\
@@ -38,10 +34,8 @@
 #define aal_device_check_routine(device, routine, action)
 #endif
 
-/*
-  Initializes device instance, checks and sets all device attributes (blocksize,
-  flags, etc) and returns initialized instance to caller.
-*/
+/* Initializes device instance, checks and sets all device attributes
+   (blocksize, flags, etc) and returns initialized instance to caller. */
 aal_device_t *aal_device_open(
 	struct aal_device_ops *ops, /* pointer to device operations */
 	void *person,               /* device personality (filename, etc) */
@@ -107,11 +101,9 @@ bool_t aal_device_readonly(aal_device_t *device) {
 	return ((device->flags & 7) == O_RDONLY) ? TRUE : FALSE;
 }
 
-/* 
-  Performs write operation on specified device. Actualy it calls corresponding
-  operation (write) from assosiated with device operations. Returns error code,
-  see aal.h for more detailed description of errno_t.
-*/
+/* Performs write operation on specified device. Actualqy it calls corresponding
+   operation (write) from assosiated with device operations. Returns error code,
+   see aal.h for more detailed description of errno_t. */
 errno_t aal_device_write(
 	aal_device_t *device,	/* device instance we will write into */
 	void *buff,		/* buffer with data to be wrote */
@@ -125,11 +117,9 @@ errno_t aal_device_write(
 	return device->ops->write(device, buff, block, count);
 }
 
-/* 
-  Performs sync operation on specified device. Actualy it calls corresponding
-  operation (sync) from assosiated with device operations. Returns error code,
-  see aal.h for more detailed description of errno_t.
-*/
+/* Performs sync operation on specified device. Actualy it calls corresponding
+   operation (sync) from assosiated with device operations. Returns error code,
+   see aal.h for more detailed description of errno_t. */
 errno_t aal_device_sync(
 	aal_device_t *device)	/* device instance that will be synchronized */
 {
@@ -139,11 +129,9 @@ errno_t aal_device_sync(
 	return device->ops->sync(device);
 }
 
-/* 
-  Compares two devices. Returns TRUE for equal devices and FALSE for different
-  ones. This function is needed in order to be aware is host device user has
-  specified corresponds journal one. And in some other cases.
-*/
+/* Compares two devices. Returns TRUE for equal devices and FALSE for different
+   ones. This function is needed in order to be aware is host device user has
+   specified corresponds journal one. And in some other cases. */
 bool_t aal_device_equals(
 	aal_device_t *device1,	/* first device for comparing */
 	aal_device_t *device2)	/* second one */
@@ -165,7 +153,7 @@ char *aal_device_name(
 
 /* Returns last error occured on device */
 char *aal_device_error(
-	aal_device_t *device)	/* device error description will be obtailed from */
+	aal_device_t *device)	/* device error description will be get from */
 {
 	aal_assert("umka-752", device != NULL);
 	return device->error;
@@ -178,13 +166,10 @@ int aal_device_flags(
 	aal_assert("umka-437", device != NULL);
 	return device->flags;
 }
-
 #endif
 
-/* 
-  Checks and sets new block size for specified device. Returns error code, see
-  aal.h for more detailed description of errno_t.
-*/
+/* Checks and sets new block size for specified device. Returns error code, see
+   aal.h for more detailed description of errno_t. */
 errno_t aal_device_set_bs(
 	aal_device_t *device,	/* device to be set with passed blocksize */
 	uint32_t blocksize)	/* new blocksize value */
@@ -229,11 +214,9 @@ uint32_t aal_device_get_bs(
 	return device->blocksize;
 }
 
-/* 
-  Performs read operation on specified device. Actualy it calls corresponding
-  operation (read) from assosiated with device operations. Returns error code,
-  see aal.h for more detailed description of errno_t.
-*/
+/* Performs read operation on specified device. Actualy it calls corresponding
+   operation (read) from assosiated with device operations. Returns error code,
+   see aal.h for more detailed description of errno_t. */
 errno_t aal_device_read(
 	aal_device_t *device,	/* device instance we will read from */
 	void *buff,		/* buffer we will read into */
@@ -248,7 +231,7 @@ errno_t aal_device_read(
 
 /* Returns device length in blocks */
 count_t aal_device_len(
-	aal_device_t *device)	/* device, length in blocks will be obtained from */
+	aal_device_t *device)	/* device, length in blocks will be get from */
 {
 	aal_assert("vpf-216", device != NULL);
 

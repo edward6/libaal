@@ -1,17 +1,13 @@
-/*
-  malloc.c -- hanlders for memory allocation functions.
-    
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   malloc.c -- hanlders for memory allocation functions. */
 
 #include <aal/aal.h>
 
-/*
-  Checking whether allone mode is in use. If so, initializes memory working
-  handlers as NULL, because application that is use libreiser4 and libaal must
-  set it up.
-*/
+/* Checking whether allone mode is in use. If so, initializes memory working
+   handlers as NULL, because application that is use libreiser4 and libaal must
+   set it up. */
 #if defined(ENABLE_STAND_ALONE) && defined(ENABLE_MEMORY_MANAGER)
 static aal_malloc_handler_t malloc_handler = NULL;
 static aal_realloc_handler_t realloc_handler = NULL;
@@ -24,14 +20,12 @@ static aal_free_handler_t free_handler = free;
 #endif
 
 #ifndef ENABLE_STAND_ALONE
-/* 
-  Sets new handler for malloc function. This is useful for alone mode, because
-  all application which are working in alone mode (without libc, probably in
-  real mode of processor, etc) have own memory allocation factory. That factory
-  usualy operates on some static memory heap. And all allocation function just
-  mark some piece of heap as used. And all deallocation function marks
-  corresponding piece as unused.
-*/
+/* Sets new handler for malloc function. This is useful for alone mode, because
+   all application which are working in alone mode (without libc, probably in
+   real mode of processor, etc) have own memory allocation factory. That factory
+   usualy operates on some static memory heap. And all allocation function just
+   mark some piece of heap as used. And all deallocation function marks
+   corresponding piece as unused. */
 void aal_malloc_set_handler(
 	aal_malloc_handler_t handler)  /* new handler to be set */
 {
@@ -43,10 +37,8 @@ aal_malloc_handler_t aal_malloc_get_handler(void) {
 	return malloc_handler;
 }
 
-/* 
-  Sets new handler for "realloc" operation. The same as in malloc case. See
-  above for details.
-*/
+/* Sets new handler for "realloc" operation. The same as in malloc case. See
+   above for details. */
 void aal_realloc_set_handler(
 	aal_realloc_handler_t handler)   /* new handler for realloc */
 {
@@ -71,10 +63,8 @@ aal_free_handler_t aal_free_get_handler(void) {
 }
 #endif
 
-/*
-  Memory manager stuff. Simple memory manager is needed for appliances where
-  libc cannot be used but libreiser4 must be working.
-*/
+/* Memory manager stuff. Simple memory manager is needed for appliances where
+   libc cannot be used but libreiser4 must be working. */
 #if defined(ENABLE_STAND_ALONE) && defined(ENABLE_MEMORY_MANAGER)
 typedef struct chunk chunk_t;
 typedef enum chunk_state chunk_state_t;
@@ -129,10 +119,8 @@ static int __chunk_fuse(chunk_t *chunk, chunk_t *right) {
 static void *__chunk_split(chunk_t *chunk, uint32_t size) {
 	void *new = (void *)((int)chunk + sizeof(chunk_t) + size);
 
-	/*
-	  Okay, we have found chunk good enough. And now we
-	  split it onto two chunks.
-	*/
+	/* Okay, we have found chunk good enough. And now we split it onto two
+	   chunks. */
 	__chunk_init(new, chunk->len - size - sizeof(chunk_t),
 		     ST_FREE, chunk, chunk->next);
 
@@ -146,10 +134,8 @@ static void *__chunk_split(chunk_t *chunk, uint32_t size) {
 	return (void *)((int)chunk + sizeof(chunk_t));
 }
 
-/*
-  Makes search for proper memory chunk in list of chunks. If found, split it in
-  order to allocate requested amount of memory.
-*/
+/* Makes search for proper memory chunk in list of chunks. If found, split it in
+   order to allocate requested amount of memory. */
 static void *__chunk_alloc(uint32_t size) {
 	chunk_t *walk = (chunk_t *)area_start;
 	
@@ -183,10 +169,8 @@ static void __chunk_free(void *ptr) {
 	chunk->state = ST_FREE;
 	area_free += chunk->len;
 
-	/*
-	  Fusing both left and right neighbour chunks if they are not used. This
-	  is needed for keep memory manager area not fragmented.
-	*/
+	/* Fusing both left and right neighbour chunks if they are not
+	   used. This is needed for keep memory manager area not fragmented. */
 	__chunk_fuse(chunk, chunk->next);
 	__chunk_fuse(chunk->prev, chunk);
 }
@@ -229,10 +213,8 @@ uint32_t aal_mem_free(void) {
 #endif
 
 #ifndef ENABLE_STAND_ALONE
-/*
-  The wrapper for realloc function. It checks for result memory allocation and
-  if it failed then reports about this.
-*/
+/* The wrapper for realloc function. It checks for result memory allocation and
+   if it failed then reports about this. */
 errno_t aal_realloc(
 	void **old,		    /* pointer to previously allocated piece */
 	uint32_t size)              /* new size */
@@ -250,10 +232,8 @@ errno_t aal_realloc(
 }
 #endif
 
-/*
-  The wrapper for free function. It checks for passed memory pointer and if it
-  is invalid then reports about this.
-*/
+/* The wrapper for free function. It checks for passed memory pointer and if it
+   is invalid then reports about this. */
 void aal_free(
 	void *ptr)		    /* pointer onto memory to be released */
 {
@@ -263,20 +243,16 @@ void aal_free(
 	free_handler(ptr);
 }
 
-/*
-  The wrapper for malloc function. It checks for result memory allocation and if
-  it failed then reports about this.
-*/
+/* The wrapper for malloc function. It checks for result memory allocation and
+   if it failed then reports about this. */
 void *aal_malloc(
 	uint32_t size)              /* size of memory piece to be allocated */
 {
 	void *mem;
 
-	/* 
-	  We are using simple printf function instead of exception, because
-	  exception initialization is needed correctly worked memory allocation
-	  handler.
-	*/
+	/* We are using simple printf function instead of exception, because
+	   exception initialization is needed correctly worked memory allocation
+	   handler. */
 	if (!malloc_handler)
 		return NULL;
 

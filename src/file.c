@@ -1,10 +1,8 @@
-/*
-  file.c -- standard file device abstraction layer. It is used files functions
-  to read or write into device.
-
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   file.c -- standard file device abstraction layer. It is used files functions
+   to read or write into device. */
 
 #ifndef ENABLE_STAND_ALONE
 
@@ -35,10 +33,8 @@ static void file_error(
 		aal_strncpy(device->error, error, aal_strlen(error));
 }
 
-/*
-  Opens actual file, initializes aal_device_t instance and returns it to caller
-  function.
-*/
+/* Opens actual file, initializes aal_device_t instance and returns it to caller
+   function. */
 errno_t file_open(
 	aal_device_t *device,
 	void *person,               /* name of file to be used as file device */
@@ -54,10 +50,8 @@ errno_t file_open(
 	if (!person || aal_strlen((char *)person) == 0) 
 		return -EINVAL;
     
-	/*
-	  Initializing device entity (file descripror in the case of file
-	  device).
-	*/
+	/* Initializing device entity (file descripror in the case of file
+	   device). */
 	if (!(device->entity = aal_calloc(sizeof(int), 0)))
 		return -ENOMEM;
 
@@ -83,11 +77,9 @@ errno_t file_open(
 	return -EINVAL;
 }
 
-/* 
-   Closes file device. Close opened file descriptor, frees all assosiated
+/* Closes file device. Close opened file descriptor, frees all assosiated
    memory.  It is usualy called at end for work any utility from reiser4progs
-   set.
-*/
+   set. */
 void file_close(
 	aal_device_t *device)	     /* file device to be closed */
 {
@@ -99,10 +91,8 @@ void file_close(
 	aal_free(device->entity);
 }
 
-/*
-  Handler for "read" operation for use with file device. See bellow for
-  understanding where it is used.
-*/
+/* Handler for "read" operation for use with file device. See bellow for
+   understanding where it is used. */
 static errno_t file_read(
 	aal_device_t *device,	    /* file device for reading */
 	void *buff,		    /* buffer data will be placed in */
@@ -114,11 +104,9 @@ static errno_t file_read(
 	if (!device || !buff)
 		return -EINVAL;
     
-	/* 
-	   Positioning inside file. As configure script defines
+	/* Positioning inside file. As configure script defines
 	   __USE_FILE_OFFSET64 macro inside config.h file, lseek function will
-	   be mapped into lseek64 one.
-	*/
+	   be mapped into lseek64 one. */
 	off = (off_t)block * (off_t)device->blocksize;
 	
 	if (lseek(*((int *)device->entity), off, SEEK_SET) == (off_t)-1) {
@@ -137,10 +125,8 @@ static errno_t file_read(
 	return 0;
 }
 
-/*
-  Handler for "write" operation for use with file device. See bellow for
-  understanding where it is used.
-*/
+/* Handler for "write" operation for use with file device. See bellow for
+   understanding where it is used. */
 static errno_t file_write(
 	aal_device_t *device,	    /* file device, data will be wrote onto */
 	void *buff,		    /* buffer, data stored in */
@@ -171,20 +157,16 @@ static errno_t file_write(
 	return 0;
 }
 
-/*
-  Handler for "sync" operation for use with file device. See bellow for
-  understanding where it is used.
-*/
+/* Handler for "sync" operation for use with file device. See bellow for
+   understanding where it is used. */
 static errno_t file_sync(
 	aal_device_t *device)	    /* file device to be synchronized */
 {
 	if (!device) 
 		return -EINVAL;
 	
-	/*
-	  As this is file device, we are using fsync function for synchronizing
-	  file.
-	*/
+	/* As this is file device, we are using fsync function for synchronizing
+	   file. */
 	if (fsync(*((int *)device->entity))) {
 		file_error(device);
 		return errno;
@@ -193,10 +175,8 @@ static errno_t file_sync(
 	return 0;
 }
 
-/*
-  Handler for "equals" operation for use with file device. See bellow for
-  understanding where it is used.
-*/
+/* Handler for "equals" operation for use with file device. See bellow for
+   understanding where it is used. */
 static int file_equals(
 	aal_device_t *device1,	    /* the first device for comparing */
 	aal_device_t *device2)	    /* the second one */
@@ -217,10 +197,8 @@ static int file_equals(
 #   define BLKGETSIZE64 _IOR(0x12, 114, sizeof(uint64_t))
 #endif
 
-/*
-  Handler for "len" operation for use with file device. See bellow for
-  understanding where it is used.
-*/
+/* Handler for "len" operation for use with file device. See bellow for
+   understanding where it is used. */
 static count_t file_len(
 	aal_device_t *device)	    /* file device, lenght will be obtained from */
 {
@@ -270,12 +248,10 @@ static count_t file_len(
 	return (count_t)(max_off / device->blocksize);
 }
 
-/*
-  Initializing the file device operations. They are used when any operation of
-  enumerated bellow is performed on a file device. Here is the heart of file the
-  device. It is pretty simple. The same as in linux implemented abstraction from
-  interrupt controller.
-*/
+/* Initializing the file device operations. They are used when any operation of
+   enumerated bellow is performed on a file device. Here is the heart of file
+   the device. It is pretty simple. The same as in linux implemented abstraction
+   from interrupt controller. */
 struct aal_device_ops file_ops = {
 	.open   = file_open,        /* handler for "open" operation */
 	.close  = file_close,       /* handler for "create" operation */

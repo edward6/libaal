@@ -1,11 +1,9 @@
-/*
-  bitops.c -- bitops functions. This file contains not only functions for
-  getting/setting one bit at some position, but also functions for working with
-  bit range.
-  
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   bitops.c -- bitops functions. This file contains not only functions for
+   getting/setting one bit at some position, but also functions for working with
+   bit range. */
 
 #include <aal/aal.h>
 

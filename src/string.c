@@ -1,9 +1,7 @@
-/*
-  string.c -- memory-working and string-working functions.
-    
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   string.c -- memory-working and string-working functions. */
 
 #include <aal/aal.h>
 
@@ -71,8 +69,7 @@ uint32_t aal_strlen(const char *s) {
 }
 
 int aal_strncmp(const char *s1, const char *s2, uint32_t n) {
-	return aal_memcmp((const void *)s1,
-			  (const void *)s2, n);
+	return aal_memcmp((const void *)s1, (const void *)s2, n);
 }
 
 char *aal_strncpy(char *dest, const char *src, uint32_t n) {
@@ -90,12 +87,11 @@ char *aal_strncpy(char *dest, const char *src, uint32_t n) {
 char *aal_strncat(char *dest, const char *src, uint32_t n) {
 	uint32_t src_len = aal_strlen(src);
 	uint32_t dest_len = aal_strlen(dest);
-
-	uint32_t len = src_len < n ? src_len : n;
+	uint32_t used_len = src_len < n ? src_len : n;
 	
-	aal_memcpy(dest + dest_len, src, len);
+	aal_memcpy(dest + dest_len, src, used_len);
 	
-	if (len < n)
+	if (used_len < n)
 		*(dest + dest_len) = '\0';
 	
 	return dest;

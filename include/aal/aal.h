@@ -1,13 +1,11 @@
-/*
-  aal.h -- the central libaal header. aal - application abstraction library. It
-  contains functions which help to work in any environment, out of the box. For
-  now libaal supports two envinments: standard (userspace, libc, etc.) and so
-  called "alone" mode - the mode, bootloaders work in (real mode of processor,
-  no libc, etc).
-    
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   aal.h -- the central libaal header. aal - application abstraction library. It
+   contains functions which help to work in any environment, out of the box. For
+   now libaal supports two envinments: standard (userspace, libc, etc.) and so
+   called "alone" mode - the mode, bootloaders work in (real mode of processor,
+   no libc, etc). */
 
 #ifndef AAL_H
 #define AAL_H

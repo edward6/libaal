@@ -1,9 +1,7 @@
-/*
-  exception.h -- exception factory functions.
-    
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   exception.h -- exception factory functions. */
 
 #ifndef AAL_EXCEPTION_H
 #define AAL_EXCEPTION_H

@@ -1,9 +1,7 @@
-/*
-  block.h -- block working functions declaration.
-    
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   block.h -- block working functions declaration. */
 
 #ifndef AAL_BLOCK_H
 #define AAL_BLOCK_H

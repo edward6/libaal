@@ -1,25 +1,24 @@
-/*
-  gauge.c -- progress-bar functions. Gauge is supporting three gauge kinds:
-  (1) percentage gauge - for operations, whose completion time may be foreseen;
-  looks like, "initializing: 14%"
-    
-  (2) indicator gauge - for operations, whose completion time may not be foreseen; 
-  for example, "traversing: /"
-    
-  (3) silent gauge - for operations, without any indication of progress; 
-  for example, "synchronizing..."
-    
-  The all kinds of gauges will report about operation result (done/failed) in maner
-  like this:
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   gauge.c -- progress-bar functions. Gauge is supporting three gauge kinds:
 
-  "initializing: done" or "initializing: failed"
-
-  In the case some exception occurs durring gauge running, it will be stoped and
-  failing report will be made.
+   (1) percentage gauge - for operations, whose completion time may be foreseen;
+   looks like, "initializing: 14%"
+  
+   (2) indicator gauge - for operations, whose completion time may not be
+   foreseen; for example, "traversing: /"
     
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+   (3) silent gauge - for operations, without any indication of progress; for
+   example, "synchronizing..."
+    
+   The all kinds of gauges will report about operation result (done/failed) in
+   maner like this:
+
+   "initializing: done" or "initializing: failed"
+
+   In the case some exception occurs durring gauge running, it will be stoped
+   and failing report will be made. */
 
 #ifndef ENABLE_STAND_ALONE
 
@@ -162,5 +161,4 @@ void aal_gauge_free(aal_gauge_t *gauge) {
 	aal_assert("umka-890", gauge != NULL);
 	aal_free(gauge);
 }
-
 #endif

@@ -1,9 +1,8 @@
-/*
-  ui.c -- callback function for using them for asking user to enter something.
-    
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   ui.c -- callback function for using them for asking user to enter
+   something. */
 
 #ifndef ENABLE_STAND_ALONE
 #include <aal/aal.h>

@@ -1,9 +1,7 @@
-/*
-  types.h -- libaal types declaration.
-  
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   types.h -- libaal types declaration. */
 
 #ifndef AAL_TYPES_H
 #define AAL_TYPES_H
@@ -46,11 +44,9 @@ typedef unsigned int            uint32_t;
 __extension__
 typedef unsigned long long int  uint64_t;
 
-/*
-  Types and macros for working with variable length params. They are needed
-  because we don't want use gcc builtins in alone mode for achive as small
-  binary size as possible.
-*/
+/* Types and macros for working with variable length params. They are needed
+   because we don't want use gcc builtins in alone mode for achive as small
+   binary size as possible. */
 
 #ifndef ENABLE_STAND_ALONE
 #include <stdarg.h>
@@ -73,10 +69,8 @@ typedef char *va_list;
 #define va_arg(ap, type) \
         ((type *)(ap += sizeof(type)))[-1]
 
-/*
-  As libaal may be used without any standard headers, we need to declare NULL
-  macro here in order to avoid compilation errors.
-*/
+/* As libaal may be used without any standard headers, we need to declare NULL
+   macro here in order to avoid compilation errors. */
 #undef NULL
 
 #if defined(__cplusplus)
@@ -85,11 +79,9 @@ typedef char *va_list;
 #  define NULL ((void *)0)
 #endif
 
-/*
-  Here we define FALSE and TRUE macros in order to make sources more clean for
-  understanding. I mean, that there where we need some boolean value, we will
-  use these two macro.
-*/
+/* Here we define FALSE and TRUE macros in order to make sources more clean for
+   understanding. I mean, that there where we need some boolean value, we will
+   use these two macro. */
 #if !defined(FALSE)
 #  define FALSE 0
 #endif
@@ -110,21 +102,14 @@ typedef enum aal_direction aal_direction_t;
 
 typedef int bool_t;
 
-/* 
-  This type is used for return of result of execution some function.
-    
-  Success - 0 (not errors),
-  Failure - negative error code
-*/
+/* This type is used for return of result of execution some function. */
 typedef int errno_t;
 
 typedef struct aal_list aal_list_t;
 
-/* 
-  This is the struct that describes one list element. It contains: pointer to
-  data assosiated with this item of list, pointer to next element of list and
-  pointer to prev element of list.
-*/
+/* This is the struct that describes one list element. It contains: pointer to
+   data assosiated with this item of list, pointer to next element of list and
+   pointer to prev element of list. */
 struct aal_list {
 	void *data;
     
@@ -144,10 +129,8 @@ struct aal_hash_node {
 /* Type for hash fucntion */
 typedef uint64_t (*hash_func_t) (const void *);
 
-/*
-  Type for callback compare function. It is used in list and hash functions for
-  comparing their items.
-*/
+/* Type for callback compare function. It is used in list and hash functions for
+   comparing their items. */
 typedef int (*comp_func_t) (const void *, const void *, void *);
 
 struct aal_hash_table {
@@ -161,21 +144,18 @@ struct aal_hash_table {
 
 typedef struct aal_hash_table aal_hash_table_t;
 
-/* 
-  Type for callback function that is called for each element of list. Usage is 
-  the same as previous one.
-*/
+/* Type for callback function that is called for each element of list. Usage is
+   the same as previous one. */
 typedef int (*foreach_func_t) (const void *, const void *);
 
-/* 
-   This types is used for keeping the block number and block count value. They
+/* This types is used for keeping the block number and block count value. They
    are needed to be increase source code maintainability.
 
    For instance, there is some function:
 
    blk_t some_func(void);
     
-   It is clear to any reader, that this function is working with block number, 
+   It is clear to any reader, that this function is working with block number,
    it returns block number.
 
    Yet another variant of this function:
@@ -183,8 +163,7 @@ typedef int (*foreach_func_t) (const void *, const void *);
    uint64_t some_func(void);
     
    This variant of the function may return anything. This may be bytes, blocks,
-   etc.
-*/
+   etc. */
 #define INVAL_BLK (~0ull)
 
 typedef uint64_t blk_t;
@@ -192,12 +171,10 @@ typedef uint64_t count_t;
 
 struct aal_device_ops;
 
-/*
-  Abstract device structure. It consists of flags device opened with, user
-  specified data, some opaque entity (for standard file it is file descriptor),
-  name of device (for instance, /dev/hda2), block size of device and device
-  operations.
-*/
+/* Abstract device structure. It consists of flags device opened with, user
+   specified data, some opaque entity (for standard file it is file descriptor),
+   name of device (for instance, /dev/hda2), block size of device and device
+   operations. */
 struct aal_device {
 	
 	int flags;
@@ -215,10 +192,8 @@ struct aal_device {
 
 typedef struct aal_device aal_device_t;
 
-/* 
-   Operations which may be performed on the device. Some of them may not
-   be implemented.
-*/
+/* Operations which may be performed on the device. Some of them may not be
+   implemented. */
 struct aal_device_ops {
 	errno_t (*open) (aal_device_t *, void *,
 			 uint32_t, int);
@@ -238,12 +213,10 @@ struct aal_device_ops {
 	void (*close) (aal_device_t *);
 };
 
-/*
-  Disk block structure. It is a replica of struct buffer_head from the linux
-  kernel. It consists of flags (dirty, clean, etc), data (pointer to data of
-  block), block size, offset (offset in bytes where block is placed on device),
-  and pointer to device, block opened on.
-*/
+/* Disk block structure. It is a replica of struct buffer_head from the linux
+   kernel. It consists of flags (dirty, clean, etc), data (pointer to data of
+   block), block size, offset (offset in bytes where block is placed on device),
+   and pointer to device, block opened on. */
 struct aal_block {
 	int flags;
 	void *data;
@@ -283,13 +256,11 @@ typedef enum aal_exception_option aal_exception_option_t;
 #define EXCEPTION_OKCANCEL	(EXCEPTION_OK | EXCEPTION_CANCEL)
 #define EXCEPTION_RETRYIGNORE	(EXCEPTION_RETRY | EXCEPTION_IGNORE)
 
-/* 
-  This is exception structure. It contains: exception message, exception type,
-  exception options. Usualy, the life cycle of exception is very short.
-  Exception instance created by aal_exception_throw function and passed t
-  exception handler. After exception processed, it is destroyed by exception
-  factory.
-*/
+/* This is exception structure. It contains: exception message, exception type,
+   exception options. Usualy, the life cycle of exception is very short.
+   Exception instance created by aal_exception_throw function and passed t
+   exception handler. After exception processed, it is destroyed by exception
+   factory. */
 struct aal_exception {
 	char *message;
 	aal_exception_type_t type;

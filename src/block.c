@@ -1,9 +1,7 @@
-/*
-  block.c -- data block functions.
-
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   block.c -- data block functions. */
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
@@ -11,11 +9,10 @@
 
 #include <aal/aal.h>
 
-/* 
-  Allocates one block on specified device. Fills its data field by specified
-  char. Marks it as ditry and returns it to caller. This function is widely used
-  in libreiser4 for working with disk blocks (node.c, almost all plugins).
-*/
+/* Allocates one block on specified device. Fills its data field by specified
+   char. Marks it as ditry and returns it to caller. This function is widely
+   used in libreiser4 for working with disk blocks (node.c, almost all
+   plugins). */
 aal_block_t *aal_block_create(
 	aal_device_t *device,	/* device block will eb allocated on */
 	uint32_t size,          /* blocksize to be used */
@@ -48,11 +45,9 @@ aal_block_t *aal_block_create(
 	return NULL;
 }
 
-/*
-  Reads one block from specified device. Marks it as clean and returns it to
-  caller. For reading is used aal_device_read routine, see above for more
-  detailed description.
-*/
+/* Reads one block from specified device. Marks it as clean and returns it to
+   caller. For reading is used aal_device_read routine, see above for more
+   detailed description. */
 aal_block_t *aal_block_read(
 	aal_device_t *device,	/* device block will be read from */
 	uint32_t size,          /* blocksize to be used */
@@ -113,11 +108,9 @@ errno_t aal_block_reread(
 	return 0;
 }
 
-/* 
-  Writes specified block onto device. Device reference, block will be wrote
-  onto, stored in block->device field. Marks it as clean and returns error code
-  to caller.
-*/
+/* Writes specified block onto device. Device reference, block will be wrote
+   onto, stored in block->device field. Marks it as clean and returns error code
+   to caller. */
 errno_t aal_block_write(
 	aal_block_t *block)		/* block for writing */
 {

@@ -1,9 +1,7 @@
-/*
-  list.c -- double-linked list implementation.
-    
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   list.c -- double-linked list implementation. */
 
 #include <aal/aal.h>
 
@@ -54,11 +52,9 @@ uint32_t aal_list_len(aal_list_t *list) {
 }
 
 #ifndef ENABLE_STAND_ALONE
-/*
-  This function walks though the @list and calls passed @func for each list
-  item. This may be used for searching something, or performing some per-item
-  actions.
-*/
+/* This function walks though the @list and calls passed @func for each list
+   item. This may be used for searching something, or performing some per-item
+   actions. */
 errno_t aal_list_foreach(aal_list_t *list,
 			 foreach_func_t func, 
 			 void *data) 
@@ -207,10 +203,8 @@ aal_list_t *aal_list_append(aal_list_t *list, void *data) {
 		return new;
 }
 
-/* 
-  Removes item from the passed @list and return reffernce to the next or prev
-  list item.
-*/
+/* Removes item from the passed @list and return reffernce to the next or prev
+   list item. */
 aal_list_t *aal_list_remove(aal_list_t *list, void *data) {
 	aal_list_t *temp;
 	aal_list_t *result = list;

@@ -1,9 +1,7 @@
-/*
-  stream.c -- simple stream implementation. 
-    
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/  
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   stream.c -- simple stream implementation. */  
 
 #ifndef ENABLE_STAND_ALONE
 #include <aal/aal.h>

@@ -1,9 +1,7 @@
-/*
-  hash.c -- simple hash implementation.
-    
-  Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
-  libaal/COPYING.
-*/
+/* Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+   libaal/COPYING.
+   
+   hash.c -- simple hash implementation. */
 
 #ifndef ENABLE_STAND_ALONE
 #include <aal/aal.h>
@@ -29,10 +27,8 @@ static void aal_hash_node_free(aal_hash_node_t *node) {
 	aal_free(node);
 }
 
-/*
-  Allocates hash table with passed @hash_func used for calculating hashes and
-  @comp_func used for comparing keys.
-*/
+/* Allocates hash table with passed @hash_func used for calculating hashes and
+   @comp_func used for comparing keys. */
 aal_hash_table_t *aal_hash_table_alloc(hash_func_t hash_func,
 				       comp_func_t comp_func)
 {
