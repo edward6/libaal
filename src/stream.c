@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <aal/aal.h>
 
+/* Creates stream and return it to caller. */
 aal_stream_t *aal_stream_create(void) {
 	aal_stream_t *stream;
 
@@ -14,9 +15,11 @@ aal_stream_t *aal_stream_create(void) {
 		return NULL;
 
 	aal_stream_init(stream);
+	
 	return stream;
 }
 
+/* Initializes @stream by flush @handler and water @mark. */
 errno_t aal_stream_init(aal_stream_t *stream) {
 	aal_assert("umka-1543", stream != NULL);
 
@@ -27,11 +30,13 @@ errno_t aal_stream_init(aal_stream_t *stream) {
 	return 0;
 }
 
+/* Releases @stream data. */
 void aal_stream_fini(aal_stream_t *stream) {
 	aal_assert("umka-1549", stream != NULL);
 	aal_free(stream->data);
 }
 
+/* Releases stream data and frees @stream. */
 void aal_stream_close(aal_stream_t *stream) {
 	aal_assert("umka-1542", stream != NULL);
 	
@@ -39,8 +44,11 @@ void aal_stream_close(aal_stream_t *stream) {
 	aal_free(stream);
 }
 
-static errno_t aal_stream_grow(aal_stream_t *stream, int size) {
-	
+/* Checks if stream is need to be expanded. If so -- expand it. */
+static errno_t aal_stream_check(aal_stream_t *stream,
+				uint32_t size)
+{
+	/* Expand stream if needed. */
 	if (stream->offset + size + 1 > stream->size) {
 		stream->size = stream->offset + size + 1;
 
@@ -50,24 +58,40 @@ static errno_t aal_stream_grow(aal_stream_t *stream, int size) {
 			return -ENOMEM;
 		}
 	}
-
+	
 	return 0;
 }
 
-int aal_stream_write(aal_stream_t *stream, void *buff, int size) {
+/* Reset stream offset to zero. */
+void aal_stream_reset(aal_stream_t *stream) {
+	aal_assert("umka-1711", stream != NULL);
+	stream->offset = 0;
+}
+
+/* Writes @size bytes of data from @buff to @stream. */
+int32_t aal_stream_write(aal_stream_t *stream,
+			 void *buff, uint32_t size)
+{
+	int32_t res;
+	
 	aal_assert("umka-1544", stream != NULL);
 	aal_assert("umka-1545", buff != NULL);
 
-	if (aal_stream_grow(stream, size))
-		return 0;
+	if ((res = aal_stream_check(stream, size)))
+		return res;
 	
-	aal_memcpy(stream->data + stream->offset, buff, size);
+	aal_memcpy(stream->data + stream->offset,
+		   buff, size);
+	
 	stream->offset += size;
 	
 	return size;
 }
 
-int aal_stream_read(aal_stream_t *stream, void *buff, int size) {
+/* Reads @size bytes of data to @buff from @stream. */
+int32_t aal_stream_read(aal_stream_t *stream,
+			void *buff, uint32_t size)
+{
 	aal_assert("umka-1546", stream != NULL);
 	aal_assert("umka-1547", buff != NULL);
 
@@ -84,13 +108,11 @@ int aal_stream_read(aal_stream_t *stream, void *buff, int size) {
 	return size;
 }
 
-void aal_stream_reset(aal_stream_t *stream) {
-	aal_assert("umka-1711", stream != NULL);
-	stream->offset = 0;
-}
-
-int aal_stream_format(aal_stream_t *stream, const char *format, ...) {
-	int len;
+/* Writes string formated by using @format and consecuent params. */
+int32_t aal_stream_format(aal_stream_t *stream,
+			  const char *format, ...)
+{
+	uint32_t len;
 	char buff[4096];
 	va_list arg_list;
 
@@ -98,8 +120,8 @@ int aal_stream_format(aal_stream_t *stream, const char *format, ...) {
 
 	va_start(arg_list, format);
 	
-	len = aal_vsnprintf(buff, sizeof(buff), format,
-			    arg_list);
+	len = aal_vsnprintf(buff, sizeof(buff),
+			    format, arg_list);
 	
 	va_end(arg_list);
 

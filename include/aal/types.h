@@ -291,6 +291,7 @@ typedef struct aal_exception aal_exception_t;
 
 typedef aal_exception_option_t (*aal_exception_handler_t) (aal_exception_t *ex);
 
+/* Gauge related types. */
 typedef struct aal_gauge aal_gauge_t;
 
 enum aal_gauge_state {
@@ -323,15 +324,16 @@ struct aal_gauge {
 	aal_gauge_state_t state;
 };
 
-struct aal_stream {
-	int size;
-	int offset;
-	void *data;
-};
-
+/* Stream types. */
 typedef struct aal_stream aal_stream_t;
 
+struct aal_stream {
+	void *data;
+	uint32_t size;
+	uint32_t offset;
+};
+
+/* Assert handler type. */
 typedef void (*assert_handler_t) (char *, int, char *,
 				  char *, int, char *);
-
 #endif
