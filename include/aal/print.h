@@ -10,7 +10,7 @@
 
 #include <aal/types.h>
 
-#if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_PRINT_FUNCTIONS)) || !defined(ENABLE_PRINT_FUNCTIONS)
+#if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_PRINT_FUNCTIONS))
 
 extern int aal_vsnprintf(char *buff, uint32_t n,
 			 const char *format, 

@@ -5,7 +5,7 @@
   libaal/COPYING.
 */
 
-#if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_PRINT_FUNCTIONS)) || !defined(ENABLE_PRINT_FUNCTIONS)
+#if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_PRINT_FUNCTIONS))
 #include <aal/aal.h>
 
 enum format_modifier {
