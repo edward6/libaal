@@ -49,7 +49,7 @@ void __actual_bug(
 	...)
 {
 #if !defined(ENABLE_STAND_ALONE) && defined(ENABLE_DEBUG)
-	char desc[256];
+	char desc[512];
 	va_list arg_list;
 	
 	va_start(arg_list, text);
@@ -58,8 +58,9 @@ void __actual_bug(
 	va_end(arg_list);
 	
 	aal_exception_throw(EXCEPTION_TYPE_BUG, EXCEPTION_OPT_OK,
-			    "%s: Bug (%s) at %s:%d in function %s(). "
-			    "%s.", hint, text, file, line, func, desc);
+			    "%s: Bug at %s:%d in function %s(). "
+			    "%s.", hint, file, line, func, desc);
+	abort();
 #endif
 }
 
