@@ -327,11 +327,28 @@ struct aal_gauge {
 /* Stream types. */
 typedef struct aal_stream aal_stream_t;
 
+/* Stream protocol. It consist of read(), write() and fini() methods and needed
+   for implementing differnt streams with the same interface. There are two
+   implementation: memory stream and file stream. */
+struct aal_proto {
+	void (*fini) (aal_stream_t *);
+	int32_t (*read) (aal_stream_t *, void *, uint32_t);
+	int32_t (*write) (aal_stream_t *, void *, uint32_t);
+};
+
+typedef struct aal_proto aal_proto_t;
+
+/* Stream itself. */
 struct aal_stream {
-	void *data;
+	void *entity;
 	uint32_t size;
 	uint32_t offset;
+	aal_proto_t *proto;
 };
+
+/* Public stream protocols. May be used for stream initializing. */
+extern aal_proto_t file_stream;
+extern aal_proto_t memory_stream;
 
 /* Assert handler type. */
 typedef void (*assert_handler_t) (char *, int, char *,
