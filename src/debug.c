@@ -11,10 +11,9 @@
 #  include <config.h>
 #endif
 
-#ifdef ENABLE_DEBUG
+#if !defined(ENABLE_STAND_ALONE) && defined(ENABLE_DEBUG)
 
 #include <aal/aal.h>
-
 #include <unistd.h>
 #include <stdlib.h>
 
@@ -28,9 +27,7 @@ static void default_assert_handler(char *hint, int cond, char *text,
 	aal_exception_bug("%s: Assertion (%s) at %s:%d in function %s() failed.",
 			  hint, text, file, line, func);
 
-#ifndef ENABLE_STAND_ALONE
-	exit(-1);
-#endif
+	exit(0xff);
 }
 
 static assert_handler_t assert_handler = default_assert_handler;
@@ -50,7 +47,7 @@ void aal_assert_set_handler(assert_handler_t handler) {
    This function is used to provide asserts via exceptions. It is used by macro
    aal_assert().
 */
-void __assert(
+void __actual_assert(
 	char *hint,	     /* person owner of assert */
 	int cond,	     /* condition of assertion */
 	char *text,	     /* text of the assertion */
@@ -64,4 +61,3 @@ void __assert(
 }
 
 #endif
-

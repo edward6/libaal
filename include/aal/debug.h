@@ -12,28 +12,26 @@
 #  include <config.h>
 #endif
 
-#ifdef ENABLE_DEBUG
+#if !defined(ENABLE_STAND_ALONE) && defined(ENABLE_DEBUG)
 
-extern void __assert(char *hint, int cond, char *text,
-		     char *file, int line, char *func);
+extern void __actual_assert(char *hint, int cond, char *text,
+			    char *file, int line, char *func);
 
 /*
   Something like standard assert, but working through exception 
   factory.
 */
 #ifdef __GNUC__
-
 #define aal_assert(hint, cond)          \
-    	__assert(hint, cond,            \
+    	__actual_assert(hint, cond,     \
 	   #cond,                       \
 	    __FILE__,                   \
 	    __LINE__,                   \
 	    __PRETTY_FUNCTION__)
 
 #else
-
 #define aal_assert(hint, cond)          \
-	__assert(hint, cond,            \
+	__actual_assert(hint, cond,     \
 	    #cond,                      \
 	    "unknown",                  \
 	    0,                          \
@@ -42,9 +40,7 @@ extern void __assert(char *hint, int cond, char *text,
 #endif
 
 #else
-
 #define aal_assert(hint, cond) while (0) {}
-
 #endif
 
 extern assert_handler_t aal_assert_get_handler(void);
