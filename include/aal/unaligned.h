@@ -9,26 +9,32 @@
 #ifndef AAL_UNALIGNED_H
 #define AAL_UNALIGNED_H
 
-#ifdef HAVE_ASM_UNALIGNED_H
-#  include <asm/unaligned.h>
-#endif
+/* unaligned access is allowed on cris, i386, ppc, ppc64, s390, x86_64 */
+#if defined(i386)    || defined (__i386__)   ||		\
+    defined(ppc)     || defined(__ppc__)     ||		\
+    defined(PPC)     || defined(__ppc)       ||		\
+    defined(__PPC__) || defined(__powerpc__) ||		\
+    defined(powerpc) || defined(__x86_64__)  ||		\
+    defined(__s390__) || defined(__cris__)
 
-#ifndef get_unaligned
+#define get_unaligned(ptr) (*(ptr))
+#define put_unaligned(val, ptr) ((void)( *(ptr) = (val) ))
+
+#else
+
 #define get_unaligned(ptr)				\
 ({							\
 	__typeof__(*(ptr)) __tmp;			\
 	aal_memcpy(&__tmp, (ptr), sizeof(*(ptr)));	\
 	__tmp;						\
 })
-#endif
 
-#ifndef put_unaligned
 #define put_unaligned(val, ptr)				\
 ({							\
 	__typeof__(*(ptr)) __tmp = (val);		\
 	aal_memcpy((ptr), &__tmp, sizeof(*(ptr)));	\
 	(void)0;					\
 })
-
 #endif
+
 #endif
