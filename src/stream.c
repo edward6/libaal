@@ -131,6 +131,10 @@ static int32_t write_memory(aal_stream_t *stream,
 	return n;
 }
 
+static int eof_memory(aal_stream_t *stream) {
+	return stream->offset >= stream->size;
+}
+
 static void fini_memory(aal_stream_t *stream) {
 	if (stream->entity) {
 		aal_free(stream->entity);
@@ -139,6 +143,7 @@ static void fini_memory(aal_stream_t *stream) {
 }
 
 aal_proto_t memory_stream = {
+	.eof   = eof_memory, 
 	.fini  = fini_memory,
 	.read  = read_memory,
 	.write = write_memory
@@ -171,8 +176,13 @@ static int32_t write_file(aal_stream_t *stream,
 	return 0;
 }
 
+static int eof_file(aal_stream_t *stream) {
+	return feof((FILE *)stream->entity);
+}
+
 aal_proto_t file_stream = {
 	.fini  = NULL,
+	.eof   = eof_file,
 	.read  = read_file,
 	.write = write_file
 };

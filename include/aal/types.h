@@ -331,6 +331,7 @@ typedef struct aal_stream aal_stream_t;
    for implementing differnt streams with the same interface. There are two
    implementation: memory stream and file stream. */
 struct aal_proto {
+	int (*eof) (aal_stream_t *);
 	void (*fini) (aal_stream_t *);
 	int32_t (*read) (aal_stream_t *, void *, uint32_t);
 	int32_t (*write) (aal_stream_t *, void *, uint32_t);
