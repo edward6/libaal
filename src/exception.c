@@ -8,6 +8,8 @@
 
 #include <aal/aal.h>
 
+#if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_EXCEPTIONS)) || !defined(ENABLE_STAND_ALONE)
+
 static aal_exception_handler_t exception_handler = NULL;
 
 /* Strings for all exception types */
@@ -161,3 +163,5 @@ void aal_exception_on(void) {
 	if (disable_count > 0)
 		disable_count--;
 }
+
+#endif

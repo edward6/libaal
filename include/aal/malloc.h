@@ -14,11 +14,9 @@
 
 #include <aal/types.h>
 
-#if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_MEMORY_MANAGER)) || !defined(ENABLE_STAND_ALONE)
 extern void aal_mem_fini(void);
 extern unsigned int aal_mem_free(void);
 extern void aal_mem_init(void *start, uint32_t len);
-#endif
 
 typedef void (*aal_free_handler_t) (void *);
 typedef void *(*aal_malloc_handler_t) (uint32_t);

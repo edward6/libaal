@@ -18,22 +18,5 @@ extern int aal_snprintf(char *buff, uint32_t n,
 			const char *format, 
 			...);
 
-#if defined(ENABLE_STAND_ALONE) && defined(ENABLE_PRINT_FUNCTIONS)
-
-extern int aal_stoa(int d, uint32_t n, char *a,
-		    int base, int flags);
-
-extern int aal_lstoa(long int d, uint32_t n, char *a,
-		     int base, int flags);
-
-
-extern int aal_utoa(unsigned int d, uint32_t n, char *a,
-		    int base, int flags);
-
-extern int aal_lutoa(unsigned long int d, uint32_t n, char *a,
-		     int base, int flags);
-
-#endif
-
 #endif
 

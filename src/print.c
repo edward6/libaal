@@ -7,7 +7,7 @@
 
 #include <aal/aal.h>
 
-#if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_PRINT_FUNCTIONS))
+#ifdef ENABLE_STAND_ALONE
 
 enum format_modifier {
 	MOD_EMPTY,
@@ -111,7 +111,9 @@ int aal_vsnprintf(
 	const char *fmt = format;
     
 	format_modifier_t modifier = MOD_EMPTY;
-    
+
+	aal_memset(buff, 0, n);
+	
 	while (*fmt) {
 		if (fmt - format + 1 >= (int)n)
 			break;
@@ -157,6 +159,8 @@ int aal_vsnprintf(
 			case 'o':
 			case 'i':
 			case 'u':
+			case 'p':
+			case 'P':
 			case 'X':
 			case 'x': {
 				char s[32];
@@ -183,9 +187,11 @@ int aal_vsnprintf(
 						case 'u':
 							aal_utoa(u, sizeof(s), s, 10, 0);
 							break;
+						case 'p':
 						case 'x':
 							aal_utoa(u, sizeof(s), s, 16, 0);
 							break;
+						case 'P':
 						case 'X':
 							aal_utoa(u, sizeof(s), s, 16, 1);
 							break;
@@ -245,16 +251,19 @@ int aal_vsnprintf(
 
 	return aal_strlen(buff);
 }
+
 #else
 
 #include <stdio.h>
-
-int aal_vsnprintf(char *buff, uint32_t n,
-		  const char *format, 
-		  va_list arg_list)
+int aal_vsnprintf(
+	char *buff,			    /* buffer string will be formed in */
+	uint32_t n,			    /* size of the buffer */
+	const char *format,		    /* format string */
+	va_list arg_list)		    /* list of parameters */
 {
 	return vsnprintf(buff, n, format, arg_list);
 }
+
 #endif
 
 /* Forms string in passed buffer by using format string */
