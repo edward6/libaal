@@ -5,7 +5,7 @@
   libaal/COPYING.
 */
 
-#if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_HASH_FUNCTIONS)) || !defined(ENABLE_STAND_ALONE)
+#ifndef ENABLE_STAND_ALONE
 #include <aal/aal.h>
 
 /* Hash table size */
