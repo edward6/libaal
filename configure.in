@@ -212,6 +212,7 @@ AC_OUTPUT([
     include/Makefile
     include/aal/Makefile
     src/Makefile
+    libaal.spec
 ])
 
 echo
