@@ -105,6 +105,12 @@ static aal_exception_option_t aal_exception_actual_throw(
 	return opt;
 }
 
+#ifndef ENABLE_STNAD_ALONE
+#  define MAX_MESSAGE_SIZE (4096)
+#else
+#  define MAX_MESSAGE_SIZE (256)
+#endif
+
 /* Public function for throw exception. It creates new exception instance and
    pass the control to aal_exception_actual_throw function for further
    handling. */
@@ -122,7 +128,7 @@ aal_exception_option_t aal_exception_throw(
 		goto error_no_memory;
 
 	/* Allocating memory for exception message */
-	if (!(exception->message = (char*)aal_calloc(256, 0)))
+	if (!(exception->message = (char*)aal_calloc(MAX_MESSAGE_SIZE, 0)))
 		goto error_no_memory;
 
 	/* Initializing exception instance by passed params */
@@ -131,7 +137,7 @@ aal_exception_option_t aal_exception_throw(
 
 	/* Forming exception message using passed format string and parameters */
 	va_start(arg_list, message);
-	aal_vsnprintf(exception->message, 256, message, arg_list);
+	aal_vsnprintf(exception->message, MAX_MESSAGE_SIZE, message, arg_list);
 	va_end(arg_list);
     
 	return aal_exception_actual_throw(exception);
