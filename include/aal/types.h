@@ -161,10 +161,6 @@ struct aal_hash_table {
 
 typedef struct aal_hash_table aal_hash_table_t;
 
-#undef  CLAMP
-#define CLAMP(x, low, high) \
-        (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
-
 /* 
   Type for callback function that is called for each element of list. Usage is 
   the same as previous one.
