@@ -45,37 +45,37 @@ AC_DEFINE_UNQUOTED(LIBAAL_MIN_INTERFACE_VERSION, $LIBAAL_INTERFACE_AGE)
 AM_ENABLE_SHARED
 
 AC_ARG_ENABLE(debug, 
-    [  --disable-debug                disable debug information in binaries [default=on]], , 
+    [  --disable-debug                disable debug information in binaries], , 
 	enable_debug=yes
 )
 
 AC_ARG_ENABLE(Werror,
-    [  --disable-Werror               disable build with gcc -Werror [default=on]], ,
+    [  --disable-Werror               disable build with gcc -Werror], ,
 	enable_Werror=yes
 )
 
 AC_ARG_ENABLE(stand_alone,
-    [  --enable-stand-alone           enable build stand alone library [default=off]], ,
+    [  --enable-stand-alone           enable build stand alone library], ,
         enable_stand_alone=no
 )
 
 AC_ARG_ENABLE(memory_manager,
-    [  --enable-memory-manager        enable memory manager in stand alone library [default=off]], ,
+    [  --enable-memory-manager        enable memory manager in stand alone library], ,
         enable_memory_manager=no
 )
 
 AC_ARG_ENABLE(exceptions,
-    [  --enable-exceptions            enable exceptions in stand alone library [default=off]], ,
+    [  --enable-exceptions            enable exceptions in stand alone library], ,
         enable_exceptions=no
 )
 
 AC_ARG_ENABLE(string_functions,
-    [  --enable-string-functions      enable strncpy and friends in stand alone library [default=off]], ,
+    [  --enable-string-functions      enable strncpy and friends in stand alone library], ,
         enable_string_functions=no
 )
 
 AC_ARG_ENABLE(hash_functions,
-    [  --enable-hash-functions        enable hash table in stand alone library [default=off]], ,
+    [  --enable-hash-functions        enable hash table in stand alone library], ,
         enable_hash_functions=no
 )
 
