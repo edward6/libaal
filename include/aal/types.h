@@ -280,33 +280,37 @@ typedef aal_exception_option_t (*aal_exception_handler_t) (aal_exception_t *ex);
 typedef struct aal_gauge aal_gauge_t;
 
 enum aal_gauge_state {
-	GAUGE_STARTED,
-	GAUGE_RUNNING,
-	GAUGE_PAUSED,
-	GAUGE_DONE,
+	GS_START,
+	GS_ACTIVE,
+	GS_PAUSE,
+	GS_RESUME,
+	GS_DONE,
+	GS_LAST
 };
 
 typedef enum aal_gauge_state aal_gauge_state_t;
 
 typedef void (*aal_gauge_handler_t)(aal_gauge_t *);
 
-struct aal_gauge_type {
-	uint32_t type;
-	aal_gauge_handler_t handler;
+struct aal_gauge_time {
+	/* Time in microseconds. */
+	uint64_t shown;
+	/* Interval in milliseconds gauge should be shown once. */
+	uint64_t gap;
 };
 
-typedef struct aal_gauge_type aal_gauge_type_t;
-
-#define MAX_GAUGES 10
+typedef struct aal_gauge_time aal_gauge_time_t;
 
 struct aal_gauge {
-	void *data;
-    
-	uint32_t type;
-	uint32_t value;
-	char name[256];
-
+	aal_gauge_handler_t handler;
 	aal_gauge_state_t state;
+	char label[80];
+	
+	/* Prepare the value if needed. */
+	aal_gauge_handler_t value_func;
+	aal_gauge_time_t time;
+	int64_t value;
+	void *data;
 };
 
 /* Stream types. */

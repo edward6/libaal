@@ -22,143 +22,114 @@
 
 #ifndef ENABLE_STAND_ALONE
 
-#include <stdio.h>
 #include <aal/libaal.h>
 
-static aal_gauge_type_t handlers[MAX_GAUGES];
-
-aal_gauge_handler_t aal_gauge_get_handler(uint32_t type) {
-	
-	if (type >= MAX_GAUGES)
-		return NULL;
-	
-	return handlers[type].handler;
-}
-
-void aal_gauge_set_handler(uint32_t type,
-			   aal_gauge_handler_t handler)
-{
-	handlers[type].handler = handler;
-}
-
-/* Gauge creating function */
-aal_gauge_t *aal_gauge_create(
-	uint32_t type,               /* gauge handler */
-	void *data)		     /* user-specific data */
+/* Gauge constructor. */
+aal_gauge_t *aal_gauge_create(aal_gauge_handler_t handler,
+			      aal_gauge_handler_t value_func,
+			      void *data, uint64_t gap, 
+			      char *label, ...) 
 {
 	aal_gauge_t *gauge;
+	va_list arg_list;
 	
-	aal_assert("umka-889", type < MAX_GAUGES);
+	if (!handler) 
+		return NULL;
     
 	if (!(gauge = aal_calloc(sizeof(*gauge), 0)))
 		return NULL;
-    
-	gauge->value = 0;
-	gauge->data = data;
-	gauge->type = type;
-	gauge->state = GAUGE_STARTED;
 
+	gauge->handler = handler;
+	gauge->value_func = value_func;
+	gauge->data = data;
+	gauge->value = -1;
+	gauge->time.gap = gap;
+
+	va_start(arg_list, label);
+	aal_gauge_rename(gauge, label, arg_list);
+	va_end(arg_list);
+	
 	return gauge;
 }
 
-/* Resets gauge and forces it to redraw itself */
-void aal_gauge_start(aal_gauge_t *gauge) {
-	aal_assert("umka-892", gauge != NULL);
+/* Init guage parameters. */
+void aal_gauge_rename(aal_gauge_t *gauge, char *label, ...) {
+	va_list arg_list;
+	int len;
 
-	gauge->value = 0;
-	gauge->state = GAUGE_STARTED;
-
-	aal_gauge_touch(gauge);
-    
-	gauge->state = GAUGE_RUNNING;
-}
-
-/* Private function for changing gauge state */
-static void aal_gauge_change(aal_gauge_t *gauge,
-			     aal_gauge_state_t state) {
-	if (!gauge) return;
+	if (!gauge || !label) return;
 	
-	if (gauge->state == state)
-		return;
-    
-	gauge->state = state;
-	aal_gauge_touch(gauge);
+	gauge->state = GS_DONE;
+	
+	va_start(arg_list, label);
+	len = aal_vsnprintf(gauge->label, sizeof(gauge->label), 
+			    label, arg_list);
+	va_end(arg_list);
+	
+	gauge->label[len] = '\0';
 }
 
-void aal_gauge_resume(aal_gauge_t *gauge) {
+/* Gauge is running. Next step. */
+void aal_gauge_touch(aal_gauge_t *gauge) {
 	if (!gauge) return;
-    
-	if (gauge->state == GAUGE_PAUSED)
-		aal_gauge_change(gauge, GAUGE_STARTED);
-}
 
-void aal_gauge_done(aal_gauge_t *gauge) {
-	if (!gauge) return;
-    
-	if (gauge->state == GAUGE_RUNNING ||
-	    gauge->state == GAUGE_STARTED)
-	{
-		aal_gauge_resume(gauge);
-		aal_gauge_change(gauge, GAUGE_DONE);
+	if (gauge->state == GS_DONE) {
+		gauge->state = GS_START;
+	} else if (gauge->state == GS_PAUSE) {
+		gauge->state = GS_RESUME;
 	}
+
+	gauge->handler(gauge);
+	gauge->state = GS_ACTIVE;
 }
 
+/* Finish. */
+void aal_gauge_done(aal_gauge_t *gauge) {
+	if (!gauge || gauge->state == GS_DONE)
+		return;
+	
+	if (gauge->state == GS_PAUSE)
+		aal_gauge_touch(gauge);
+
+	gauge->state = GS_DONE;
+	gauge->handler(gauge);
+}
+
+/* Pause the gauge. Will be resumed later. */
 void aal_gauge_pause(aal_gauge_t *gauge) {
 	if (!gauge) return;
     
-	if (gauge->state == GAUGE_RUNNING)
-		aal_gauge_change(gauge, GAUGE_PAUSED);
-}
-
-/* Updates gauge value */
-void aal_gauge_update(aal_gauge_t *gauge, uint32_t value) {
-	aal_assert("umka-895", gauge != NULL);
-
-	gauge->value = value;
-
-	aal_gauge_resume(gauge);
-	gauge->state = GAUGE_RUNNING;
-	
-	aal_gauge_touch(gauge);
-}
-
-/* Renames gauge */
-void aal_gauge_rename(aal_gauge_t *gauge,
-		      char *name, ...)
-{
-	int len;
-	va_list arg_list;
-	
-	aal_assert("umka-896", gauge != NULL);
-	aal_assert("umka-2193", name != NULL);
-    
-	if (!name) return;
-    
-	va_start(arg_list, name);
-    
-	len = aal_vsnprintf(gauge->name, sizeof(gauge->name), 
-			    name, arg_list);
-    
-	va_end(arg_list);
-    
-	gauge->name[len] = '\0';
-}
-
-/* Calls gauge handler */
-void aal_gauge_touch(aal_gauge_t *gauge) {
-	aal_gauge_handler_t gauge_func;
-
-	aal_assert("umka-891", gauge != NULL);
-
-	if (!(gauge_func = handlers[gauge->type].handler))
+	if (gauge->state != GS_ACTIVE && 
+	    gauge->state != GS_START) 
+	{
 		return;
-
-	gauge_func(gauge);
+	}
+	
+	gauge->state = GS_PAUSE;
+	gauge->handler(gauge);
 }
 
-/* Frees gauge */
+/* Gauge destructor. */
 void aal_gauge_free(aal_gauge_t *gauge) {
-	aal_assert("umka-890", gauge != NULL);
+	if (!gauge) return;
 	aal_free(gauge);
 }
+
+void aal_gauge_set_value(aal_gauge_t *gauge, int64_t value) {
+	if (!gauge) return;
+	gauge->value = value;
+}
+
+int64_t aal_gauge_get_value(aal_gauge_t *gauge) {
+	if (!gauge) 
+		return -EINVAL;
+
+	return gauge->value;
+}
+
+void aal_gauge_set_data(aal_gauge_t *gauge, void *data) {
+	if (!gauge) return;
+	gauge->data = data;
+}
+
 #endif
