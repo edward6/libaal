@@ -293,8 +293,8 @@ typedef enum aal_gauge_state aal_gauge_state_t;
 typedef void (*aal_gauge_handler_t)(aal_gauge_t *);
 
 struct aal_gauge_time {
-	/* Time in microseconds. */
-	uint64_t shown;
+	/* Time in sec, millisec. */
+	uint64_t sec, misec;
 	/* Interval in milliseconds gauge should be shown once. */
 	uint64_t gap;
 };
