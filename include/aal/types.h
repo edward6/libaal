@@ -186,7 +186,7 @@ struct aal_device {
 	char name[256];
 	char error[256];
 
-	uint32_t blocksize;
+	uint32_t blksize;
 	struct aal_device_ops *ops;
 };
 

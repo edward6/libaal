@@ -39,7 +39,7 @@
 aal_device_t *aal_device_open(
 	struct aal_device_ops *ops, /* pointer to device operations */
 	void *person,               /* device personality (filename, etc) */
-	uint32_t blocksize,         /* block size device is working with */
+	uint32_t blksize,           /* block size device is working with */
 	int flags)		    /* flags device opened with (O_RDONLY, etc) */
 {
 	aal_device_t *device;
@@ -48,13 +48,13 @@ aal_device_t *aal_device_open(
     
 #ifndef ENABLE_STAND_ALONE
 	/* Rough check for blocksize validness */
-	if (!aal_pow2(blocksize)) {
+	if (!aal_pow2(blksize)) {
 		aal_exception_error("Block size %u isn't power "
-				    "of two.", blocksize);
+				    "of two.", blksize);
 		return NULL;
 	}	
     
-	if (blocksize < 512) {
+	if (blksize < 512) {
 		aal_exception_error("Block size can't be less than "
 				    "512 bytes.");
 		return NULL;
@@ -66,13 +66,13 @@ aal_device_t *aal_device_open(
 		return NULL;
 
 	device->ops = ops;
-	device->blocksize = blocksize;
+	device->blksize = blksize;
 	
 	device->flags = flags;
 	device->person = person;
 
 	if (ops->open) {
-		if (ops->open(device, person, blocksize, flags))
+		if (ops->open(device, person, blksize, flags))
 			goto error_free_device;
 	}
 
@@ -86,14 +86,14 @@ aal_device_t *aal_device_open(
 #ifndef ENABLE_STAND_ALONE
 errno_t aal_device_reopen(
 	aal_device_t *device,       /* device for reopening */
-	uint32_t blocksize,         /* block size device is working with */
+	uint32_t blksize,           /* block size device is working with */
 	int flags)		    /* flags device opened with (O_RDONLY...) */
 {
 	device->flags = flags;
-	device->blocksize = blocksize;
+	device->blksize = blksize;
 
 	return device->ops->open(device, device->person,
-				 blocksize, flags);
+				 blksize, flags);
 }
 
 bool_t aal_device_readonly(aal_device_t *device) {
@@ -172,25 +172,25 @@ int aal_device_flags(
    aal.h for more detailed description of errno_t. */
 errno_t aal_device_set_bs(
 	aal_device_t *device,	/* device to be set with passed blocksize */
-	uint32_t blocksize)	/* new blocksize value */
+	uint32_t blksize)       /* new blocksize value */
 {
 	aal_assert("umka-431", device != NULL);
 
 #ifndef ENABLE_STAND_ALONE
-	if (!aal_pow2(blocksize)) {
+	if (!aal_pow2(blksize)) {
 		aal_exception_error("Block size %u isn't power "
-				    "of two.", blocksize);
+				    "of two.", blksize);
 		return -EINVAL;
 	}	
     
-	if (blocksize < 512) {
+	if (blksize < 512) {
 		aal_exception_error("Block size can't be less "
 				    "than 512 bytes.");
 		return -EINVAL;
 	}
 #endif
 
-	device->blocksize = blocksize;
+	device->blksize = blksize;
 	return 0;
 }
 
@@ -208,10 +208,10 @@ void aal_device_close(
 
 /* Returns current block size from specified device */
 uint32_t aal_device_get_bs(
-	aal_device_t *device)	/* device instance blocksize will be received from */
+	aal_device_t *device)	/* device blocksize will be received from */
 {
 	aal_assert("umka-432", device != NULL);
-	return device->blocksize;
+	return device->blksize;
 }
 
 /* Performs read operation on specified device. Actualy it calls corresponding

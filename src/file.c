@@ -38,7 +38,7 @@ static void file_error(
 errno_t file_open(
 	aal_device_t *device,
 	void *person,               /* name of file to be used as file device */
-	uint32_t blocksize,	    /* used blocksize */
+	uint32_t blksize,	    /* used blocksize */
 	int flags)		    /* flags file will be opened with */
 {
 	int fd;
@@ -107,7 +107,7 @@ static errno_t file_read(
 	/* Positioning inside file. As configure script defines
 	   __USE_FILE_OFFSET64 macro inside config.h file, lseek function will
 	   be mapped into lseek64 one. */
-	off = (off_t)block * (off_t)device->blocksize;
+	off = (off_t)block * (off_t)device->blksize;
 	
 	if (lseek(*((int *)device->entity), off, SEEK_SET) == (off_t)-1) {
 		file_error(device);
@@ -115,7 +115,7 @@ static errno_t file_read(
 	}
 
 	/* Reading data form file */
-	len = (off_t)count * (off_t)device->blocksize;
+	len = (off_t)count * (off_t)device->blksize;
 	
 	if (read(*((int *)device->entity), buff, len) <= 0) {
 		file_error(device);
@@ -139,7 +139,7 @@ static errno_t file_write(
 		return -EINVAL;
 	
 	/* Positioning inside file */
-	off = (off_t)block * (off_t)device->blocksize;
+	off = (off_t)block * (off_t)device->blksize;
 	
 	if (lseek(*((int *)device->entity), off, SEEK_SET) == (off_t)-1) {
 		file_error(device);
@@ -147,7 +147,7 @@ static errno_t file_write(
 	}
     
 	/* Writing into file */
-	len = (off_t)count * (off_t)device->blocksize;
+	len = (off_t)count * (off_t)device->blksize;
 	
 	if (write((*(int *)device->entity), buff, len) <= 0) {
 		file_error(device);
@@ -213,7 +213,7 @@ static count_t file_len(
 	if (ioctl(*((int *)device->entity), BLKGETSIZE64, &size) >= 0) {
 		uint32_t block_count;
 		
-		size = (size / 4096) * 4096 / device->blocksize;
+		size = (size / 4096) * 4096 / device->blksize;
 		block_count = size;
 		
 		if ((uint64_t)block_count != size) {
@@ -232,7 +232,8 @@ static count_t file_len(
 		
 		if (ioctl(*((int *)device->entity), BLKGETSIZE, &l_size) >= 0) {
 			size = l_size;
-			return (count_t)((size * 512 / 4096) * 4096 / device->blocksize);
+			return (count_t)((size * 512 / 4096) * 4096 / 
+				device->blksize);
 		}
 	}
     
@@ -245,7 +246,7 @@ static count_t file_len(
 		return INVAL_BLK;
 	}
     
-	return (count_t)(max_off / device->blocksize);
+	return (count_t)(max_off / device->blksize);
 }
 
 /* Initializing the file device operations. They are used when any operation of

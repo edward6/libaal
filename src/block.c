@@ -22,7 +22,7 @@ aal_block_t *aal_block_create(
 	aal_block_t *block;
 
 	aal_assert("umka-443", device != NULL);
-	aal_assert("umka-2221", size >= device->blocksize);
+	aal_assert("umka-2221", size >= device->blksize);
     
 	if (!(block = aal_calloc(sizeof(*block), 0))) {
 		aal_exception_error("Out of memory!");
@@ -57,13 +57,13 @@ aal_block_t *aal_block_read(
 	aal_block_t *block;
 
 	aal_assert("umka-444", device != NULL);
-	aal_assert("umka-2220", size >= device->blocksize);
+	aal_assert("umka-2220", size >= device->blksize);
 
 	/* Allocating new block at passed position blk */    
 	if (!(block = aal_block_create(device, size, number, 0)))
 		return NULL;
 
-	count = size / device->blocksize;
+	count = size / device->blksize;
 	
 	if (aal_device_read(device, block->data,
 			    number * count, count))
@@ -82,7 +82,7 @@ aal_block_t *aal_block_read(
 /* Makes reread of specified block */
 errno_t aal_block_reread(
 	aal_block_t *block, 	/* block to be reread */
-	aal_device_t *device,	/* device, new block should be reread from */
+	aal_device_t *device,	/* device, new block to be reread from */
 	blk_t number)           /* block number for rereading */
 {
 	errno_t res;
@@ -90,11 +90,11 @@ errno_t aal_block_reread(
 	
 	aal_assert("umka-631", block != NULL);
 	aal_assert("umka-632", device != NULL);
+	
+	aal_assert("umka-2222", 
+		   block->size >= device->blksize);
 
-	aal_assert("umka-2222", block->size >=
-		   device->blocksize);
-
-	count = block->size / device->blocksize;
+	count = block->size / device->blksize;
 	
 	if ((res = aal_device_read(device, block->data,
 				   number * count, count)))
@@ -122,7 +122,7 @@ errno_t aal_block_write(
 
 	device = block->device;
 
-	count = block->size / device->blocksize;
+	count = block->size / device->blksize;
 	
 	return aal_device_write(device, block->data,
 				block->number * count, count);
