@@ -35,6 +35,8 @@ errno_t aal_lru_adjust(aal_lru_t *lru) {
 aal_lru_t *aal_lru_create(lru_ops_t *ops) {
 	aal_lru_t *lru;
 
+	aal_assert("umka-2207", ops != NULL);
+	
 	if (!(lru = aal_calloc(sizeof(*lru), 0)))
 		return NULL;
 
@@ -58,6 +60,7 @@ errno_t aal_lru_attach(aal_lru_t *lru, void *data) {
 	aal_assert("umka-1525", lru != NULL);
 	aal_assert("umka-1526", data != NULL);
 
+#ifndef ENABLE_STAND_ALONE
 	lru->ops->set_prev(data, lru->list);
 
 	lru->ops->set_next(data, lru->list ?
@@ -65,14 +68,20 @@ errno_t aal_lru_attach(aal_lru_t *lru, void *data) {
 	
 	lru->list = aal_list_append(lru->list, data);
 
-	if ((prev = lru->ops->get_prev(data)))
-		lru->ops->set_next(prev->data, lru->list->next);
+	if ((prev = lru->ops->get_prev(data))) {
+		lru->ops->set_next(prev->data,
+				   lru->list->next);
+	}
 
-	if ((next = lru->ops->get_next(data)))
-		lru->ops->set_prev(next->data, lru->list->next);
+	if ((next = lru->ops->get_next(data))) {
+		lru->ops->set_prev(next->data,
+				   lru->list->next);
+	}
+#else
+	lru->list = aal_list_append(lru->list, data);
+#endif
 
 	lru->adjust++;
-
 	return 0;
 }
 
@@ -81,7 +90,11 @@ errno_t aal_lru_detach(aal_lru_t *lru, void *data) {
 	
 	aal_assert("umka-1528", lru != NULL);
 	aal_assert("umka-1527", data != NULL);
+	
+	aal_assert("umka-2206", lru->adjust > 0);
+	aal_assert("umka-2208", lru->list != NULL);
 
+#ifndef ENABLE_STAND_ALONE
 	next = lru->ops->get_next(data);
 	prev = lru->ops->get_prev(data);
 	
@@ -95,9 +108,11 @@ errno_t aal_lru_detach(aal_lru_t *lru, void *data) {
 		aal_list_remove(prev, data);
 	else
 		lru->list = aal_list_remove(lru->list, data);
-
-	if (lru->adjust > 0)
-		lru->adjust--;
+#else
+	lru->list = aal_list_remove(aal_list_first(lru->list), data);
+#endif
+	
+	lru->adjust--;
 	
 	return 0;
 }
