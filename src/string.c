@@ -70,6 +70,19 @@ int aal_strncmp(const char *s1, const char *s2, uint32_t n) {
 	return aal_memcmp((const void *)s1, (const void *)s2, n);
 }
 
+int aal_strcmp(const char *s1, const char *s2) {
+	uint32_t len1 = aal_strlen(s1);
+	uint32_t len2 = aal_strlen(s2);
+	
+	if (len1 > len2)
+		return 1;
+
+	if (len1 < len2)
+		return -1;
+	
+	return aal_memcmp((const void *)s1, (const void *)s2, len1);
+}
+
 char *aal_strncpy(char *dest, const char *src, uint32_t n) {
 	uint32_t src_len = aal_strlen(src);
 	uint32_t len = src_len < n ? src_len : n;
@@ -193,6 +206,10 @@ uint32_t aal_strlen(const char *s) {
 
 int aal_strncmp(const char *s1, const char *s2, uint32_t n) {
 	return strncmp(s1, s2, n);
+}
+
+int aal_strcmp(const char *s1, const char *s2) {
+	return strcmp(s1, s2);
 }
 
 char *aal_strncpy(char *dest, const char *src, uint32_t n) {

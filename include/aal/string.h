@@ -19,6 +19,7 @@ extern int aal_memcmp(const void *s1, const void *s2, uint32_t n);
 extern char *aal_strncpy(char *dest, const char *src, uint32_t n);
 extern char *aal_strncat(char *dest, const char *src, uint32_t n);
 extern int aal_strncmp(const char *s1, const char *s2, uint32_t n);
+extern int aal_strcmp(const char *s1, const char *s2);
 extern uint32_t aal_strlen(const char *s);
 
 extern char *aal_strpbrk(const char *s, const char *accept);
