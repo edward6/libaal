@@ -23,7 +23,7 @@ extern void __actual_assert(char *hint, int cond, char *text,
 		     __FILE__,		     \
 		     __LINE__,		     \
 		     __PRETTY_FUNCTION__,    \
-		     #text,		     \
+		     text,		     \
 		     ##list)
 
 #define aal_assert(hint, cond)               \
@@ -40,7 +40,7 @@ extern void __actual_assert(char *hint, int cond, char *text,
 		     "unknown",		     \
 		     0,		             \
 		     "unknown",              \
-		     #text,		     \
+		     text,		     \
 		     ##list)
 
 #define aal_assert(hint, cond)               \
@@ -59,6 +59,5 @@ extern void __actual_assert(char *hint, int cond, char *text,
 
 extern assert_handler_t aal_assert_get_handler(void);
 extern void aal_assert_set_handler(assert_handler_t handler);
-
 #endif
 
