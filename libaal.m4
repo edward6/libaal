@@ -74,7 +74,7 @@ int main() {
             "equal to %d.%d.%d.\n", $libaal_config_major_version, 
 	    $libaal_config_minor_version, $libaal_config_micro_version);
 
-	printf("You can get it at http://www.namesys.com/pub/libaal\n");
+	printf("You can get it at ftp://ftp.namesys.com/pub/libaal\n");
 	return 1;
     }
 }
