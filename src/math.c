@@ -20,3 +20,8 @@ int aal_log2(unsigned long n) {
 int aal_pow2(unsigned long n) {
 	return (n & -n) == n;
 }
+
+/* Returns absolute value of passed @n */
+unsigned long aal_abs(long n) {
+	return (n > 0) ? n : -n;
+}

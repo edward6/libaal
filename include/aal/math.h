@@ -8,10 +8,9 @@
 #ifndef AAL_MATH_H
 #define AAL_MATH_H
 
-#include <aal/types.h>
-
 extern int aal_log2(unsigned long n);
 extern int aal_pow2(unsigned long n);
+extern unsigned long aal_abs(long n);
 
 #endif
 
