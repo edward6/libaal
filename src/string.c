@@ -26,20 +26,20 @@ void *aal_memcpy(void *dest, const void *src, uint32_t n) {
 	char *src_p;
 	char *dest_p; 
 
-//	if (dest > src) {
+	if (dest > src) {
 		src_p = (char *)src;
 		dest_p = (char *)dest; 
 
 		for (; (int)src_p - (int)src < (int)n; src_p++, dest_p++)
 			*dest_p = *src_p;
 		
-/*	} else {
+	} else {
 		src_p = (char *)src + n - 1;
 		dest_p = (char *)dest + n - 1;
 
 		for (; (int)src_p - (int)src >= 0; src_p--, dest_p--)
 			*dest_p = *src_p;
-	}*/
+	}
     
 	return dest;
 }
