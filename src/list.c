@@ -118,12 +118,15 @@ aal_list_t *aal_list_at(aal_list_t *list, uint32_t n) {
 aal_list_t *aal_list_insert(aal_list_t *list, 
 			    void *data, uint32_t n) 
 {
-	aal_list_t *at = aal_list_at(list, n);
+	aal_list_t *at; 
+	
+	if (n == 0)
+		return aal_list_prepend(list, data);
+	
+	at = aal_list_at(list, n - 1);
+	at = aal_list_append(at, data);
 
-	if (at && !at->next)
-		return aal_list_append(at, data);
-		
-	return aal_list_prepend(at, data);
+	return (list == NULL ? at ; list);
 }
 
 /* Inserts new item in sorted maner */
