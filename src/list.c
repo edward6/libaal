@@ -126,7 +126,7 @@ aal_list_t *aal_list_insert(aal_list_t *list,
 	at = aal_list_at(list, n - 1);
 	at = aal_list_append(at, data);
 
-	return (list == NULL ? at ; list);
+	return (list == NULL ? at : list);
 }
 
 /* Inserts new item in sorted maner */
