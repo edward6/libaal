@@ -12,38 +12,31 @@
 #ifndef AAL_MALLOC_H
 #define AAL_MALLOC_H
 
-#ifdef HAVE_CONFIG_H
-#  include <config.h>
-#endif
-
 #include <aal/types.h>
 
-#ifndef ENABLE_MEMORY_MANAGER
+#if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_MEMORY_MANAGER)) || !defined(ENABLE_STAND_ALONE)
 extern void aal_mem_fini(void);
-
 extern unsigned int aal_mem_free(void);
-
-extern void aal_mem_init(void *start,
-			 unsigned int len);
+extern void aal_mem_init(void *start, uint32_t len);
 #endif
 
-typedef void *(*aal_malloc_handler_t) (unsigned int);
-typedef void *(*aal_realloc_handler_t) (void *, unsigned int);
 typedef void (*aal_free_handler_t) (void *);
+typedef void *(*aal_malloc_handler_t) (uint32_t);
+typedef void *(*aal_realloc_handler_t) (void *, uint32_t);
 
 extern void aal_malloc_set_handler(aal_malloc_handler_t handler);
 extern aal_malloc_handler_t aal_malloc_get_handler(void);
 
-extern void *aal_malloc(unsigned int size);
-extern void *aal_calloc(unsigned int size, char c);
+extern void *aal_malloc(uint32_t size);
+extern void *aal_calloc(uint32_t size, char c);
 
-extern void aal_realloc_set_handler(aal_realloc_handler_t handler);
+extern int aal_realloc(void** old, uint32_t size);
 extern aal_realloc_handler_t aal_realloc_get_handler(void);
-extern int aal_realloc(void** old, unsigned int size);
+extern void aal_realloc_set_handler(aal_realloc_handler_t handler);
 
-extern void aal_free_set_handler(aal_free_handler_t handler);
-extern aal_free_handler_t aal_free_get_handler(void);
 extern void aal_free(void *ptr);
+extern aal_free_handler_t aal_free_get_handler(void);
+extern void aal_free_set_handler(aal_free_handler_t handler);
 
 #endif
 

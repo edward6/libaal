@@ -5,10 +5,7 @@
   libaal/COPYING.
 */
 
-#ifdef HAVE_CONFIG_H
-#  include <config.h>
-#endif
-
+#if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_LRU_FUNCTIONS)) || !defined(ENABLE_STRING_FUNCTIONS)
 #include <aal/aal.h>
 
 errno_t aal_lru_adjust(aal_lru_t *lru) {
@@ -114,3 +111,4 @@ errno_t aal_lru_touch(aal_lru_t *lru, void *data) {
 	aal_lru_detach(lru, data);
 	return aal_lru_attach(lru, data);
 }
+#endif

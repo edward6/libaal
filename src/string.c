@@ -5,13 +5,8 @@
   libaal/COPYING.
 */
 
-#ifdef HAVE_CONFIG_H
-#  include <config.h>
-#endif
-
+#if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_STRING_FUNCTIONS)) || !defined(ENABLE_STRING_FUNCTIONS)
 #include <aal/aal.h>
-
-#ifdef ENABLE_STAND_ALONE
 
 /* 
   Memory and string working functions. They are full analog of standard ones.
@@ -232,76 +227,3 @@ char *aal_strndup(const char *s, uint32_t n) {
 
 	return str;
 }
-
-#if 0
-
-/* Converts string denoted as size into digits */
-#define DCONV_RANGE_DEC (1000000000)
-#define DCONV_RANGE_HEX (0x10000000)
-#define DCONV_RANGE_OCT (01000000000)
-
-/* 
-   Macro for providing function for converting the passed digital into string.
-   It supports converting of decimal, hexadecimal and octal digits. It is used
-   by aal_vsnprintf function.
-*/
-#define DEFINE_DCONV(name, type)			                \
-int aal_##name##toa(type d, uint32_t n, char *a, int base, int flags) { \
-    type s;							        \
-    type range;							        \
-    char *p = a;						        \
-				                                        \
-    switch (base) {						        \
-	    case 10: range = DCONV_RANGE_DEC; break;			\
-	    case 16: range = DCONV_RANGE_HEX; break;			\
-	    case 8: range = DCONV_RANGE_OCT; break;			\
-	    default: return 0;					        \
-    }								        \
-    aal_memset(p, 0, n);					        \
-								        \
-    if (d == 0) {						        \
-	    *p++ = '0';						        \
-	    return 1;						        \
-    }								        \
-								        \
-    for (s = range; s > 0; s /= base) {                                 \
-	    type v = d / s;                                             \
-								        \
-	    if ((uint32_t)(p - a) >= n)				        \
-	            break;			                        \
-                                                                        \
-	    if (v <= 0)                                                 \
-		    continue;                                           \
-								        \
-	    if (v >= (type)base) {				        \
-                    type ds = d / s;                                    \
-                    type vb = v / base;                                 \
-		    v = ds - (vb * base);		                \
-            }                                                           \
-	    switch (base) {					        \
-		    case 10:                                            \
-	            case 8:                                             \
-			    *p++ = '0' + v;                             \
-			    break;		                        \
-		    case 16:					        \
-		            if (flags == 0)				\
-		                    *p++ = '0' + (v > 9 ? 39 : 0) + v;	\
-		            else					\
-			            *p++ = '0' + (v > 9 ? 7 : 0) + v;	\
-		            break;					\
-            }							        \
-    }								        \
-    return p - a;						        \
-}
-
-/*
-  Defining the digital to alpha convertiion functions for all supported types
-  (%u, %lu, %llu)
-*/
-DEFINE_DCONV(u, unsigned int)
-DEFINE_DCONV(lu, unsigned long int)
-
-DEFINE_DCONV(s, int)
-DEFINE_DCONV(ls, long int)
-
-#endif

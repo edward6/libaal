@@ -21,9 +21,7 @@
   libaal/COPYING.
 */
 
-#ifdef HAVE_CONFIG_H
-#  include <config.h>
-#endif
+#ifndef ENABLE_STAND_ALONE
 
 #include <stdio.h>
 #include <aal/aal.h>
@@ -176,3 +174,5 @@ void aal_gauge_free(aal_gauge_t *gauge) {
 	aal_assert("umka-890", gauge != NULL);
 	aal_free(gauge);
 }
+
+#endif

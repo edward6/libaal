@@ -7,26 +7,20 @@
 
 #include <aal/aal.h>
 
-#ifdef HAVE_CONFIG_H
-#  include <config.h>
-#endif
-
 /*
   Checking whether allone mode is in use. If so, initializes memory working
   handlers as NULL, because application that is use libreiser4 and libaal must
   set it up.
 */
-#ifndef ENABLE_MEMORY_MANAGER
-#include <stdlib.h>
-
-static aal_malloc_handler_t malloc_handler = malloc;
-static aal_realloc_handler_t realloc_handler = realloc;
-static aal_free_handler_t free_handler = free;
-#else
-
+#if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_MEMORY_MANAGER)) || !defined(ENABLE_STAND_ALONE)
 static aal_malloc_handler_t malloc_handler = NULL;
 static aal_realloc_handler_t realloc_handler = NULL;
 static aal_free_handler_t free_handler = NULL;
+#else
+#include <stdlib.h>
+static aal_malloc_handler_t malloc_handler = malloc;
+static aal_realloc_handler_t realloc_handler = realloc;
+static aal_free_handler_t free_handler = free;
 #endif
 
 /* 
@@ -79,7 +73,7 @@ aal_free_handler_t aal_free_get_handler(void) {
   Memory manager stuff. Simple memory manager is needed for appliances where
   libc cannot be used but libreiser4 must be working.
 */
-#ifdef ENABLE_MEMORY_MANAGER
+#if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_MEMORY_MANAGER)) || !defined(ENABLE_STAND_ALONE)
 typedef struct chunk chunk_t;
 typedef enum chunk_state chunk_state_t;
 
@@ -92,18 +86,18 @@ enum chunk_state {
 };
 
 struct chunk {
-	unsigned len;
+	uint32_t len;
 	chunk_t *next;
 	chunk_t *prev;
 
 	chunk_state_t state;
 } __attribute__((packed));
 
+static uint32_t mem_len = 0;
+static uint32_t mem_free = 0;
 static void *mem_start = NULL;
-static unsigned int mem_len = 0;
-static unsigned int mem_free = 0;
 
-static void __chunk_init(void *ptr, int len,
+static void __chunk_init(void *ptr, uint32_t len,
 			 chunk_state_t state,
 			 void *prev, void *next)
 {
@@ -144,7 +138,7 @@ static void __chunk_fuse(chunk_t *chunk) {
 	}
 }
 
-static void *__chunk_split(chunk_t *chunk, unsigned int size) {
+static void *__chunk_split(chunk_t *chunk, uint32_t size) {
 	chunk_t *first = (chunk_t *)mem_start;
 
 	void *new = (void *)((int)chunk + size +
@@ -175,13 +169,13 @@ static void *__chunk_split(chunk_t *chunk, unsigned int size) {
 }
 
 static inline int __chunk_exact(chunk_t *chunk,
-				unsigned int size)
+				uint32_t size)
 {
 	return chunk->len == size;
 }
 
 static inline int __chunk_proper(chunk_t *chunk,
-				 unsigned int size)
+				 uint32_t size)
 {
 	if (chunk->state != ST_FREE)
 		return 0;
@@ -196,7 +190,7 @@ static inline int __chunk_proper(chunk_t *chunk,
   Makes search for proper memory chunk in list of chunks. If found, split it in
   order to allocate requested amount of memory.
 */
-static void *__chunk_alloc(unsigned int size) {
+static void *__chunk_alloc(uint32_t size) {
 	chunk_t *walk;
 
 	if (size == 0)
@@ -241,7 +235,7 @@ static void __chunk_free(void *ptr) {
 }
 
 /* Initializes memory manager on passed memory area */
-void aal_mem_init(void *start, unsigned int len) {
+void aal_mem_init(void *start, uint32_t len) {
 	uint32_t size = len - sizeof(chunk_t);
 
 	__chunk_init(start, size, ST_FREE,
@@ -261,7 +255,7 @@ void aal_mem_fini(void) {
 	mem_start = NULL;
 }
 
-unsigned int aal_mem_free(void) {
+uint32_t aal_mem_free(void) {
 	return mem_free;
 }
 #endif
@@ -272,7 +266,7 @@ unsigned int aal_mem_free(void) {
 */
 errno_t aal_realloc(
 	void **old,		    /* pointer to previously allocated piece */
-	unsigned int size)	    /* new size */
+	uint32_t size)              /* new size */
 {
 	void *mem;
 
@@ -304,7 +298,7 @@ void aal_free(
   it failed then reports about this.
 */
 void *aal_malloc(
-	unsigned int size)          /* size of memory piece to be allocated */
+	uint32_t size)              /* size of memory piece to be allocated */
 {
 	void *mem;
 
@@ -324,7 +318,7 @@ void *aal_malloc(
 
 /* Allocates memory piese and fills it by specified byte */
 void *aal_calloc(
-	unsigned int size,	    /* size of memory piece to be allocated */
+	uint32_t size,              /* size of memory piece to be allocated */
 	char c)
 {
 	void *mem;

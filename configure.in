@@ -54,9 +54,29 @@ AC_ARG_ENABLE(Werror,
 	enable_Werror=yes
 )
 
+AC_ARG_ENABLE(stand_alone,
+    [  --enable-stand-alone           enable build stand alone library [default=off]], ,
+        enable_stand_alone=no
+)
+
 AC_ARG_ENABLE(memory_manager,
-    [  --enable-memory-manager        enable memory manager in libaal [default=off]], ,
+    [  --enable-memory-manager        enable memory manager in stand alone library [default=off]], ,
         enable_memory_manager=no
+)
+
+AC_ARG_ENABLE(print_functions,
+    [  --enable-print-functions       enable printf functions in stand alone library [default=off]], ,
+        enable_print_functions=no
+)
+
+AC_ARG_ENABLE(string_functions,
+    [  --enable-string-functions      enable strncpy and friends in stand alone library [default=off]], ,
+        enable_string_functions=no
+)
+
+AC_ARG_ENABLE(lru_functions,
+    [  --enable-lru-functions         enable lru functions in stand alone library [default=off]], ,
+        enable_lru_functions=no
 )
 
 # Checks for programs.
@@ -82,9 +102,14 @@ AC_FUNC_MEMCMP
 AC_HEADER_STDC
 AC_CHECK_FUNCS([memmove memset strchr strerror strpbrk strrchr])
 
+CFLAGS=""
+ALONE_CFLAGS=""
+GENERIC_CFLAGS=""
+
 dnl make libc threadsafe (not required for us for awhile, but useful other users of
 dnl libaal)
-CFLAGS="$CFLAGS -D_REENTRANT"
+
+GENERIC_CFLAGS="$GENERIC_CFLAGS -D_REENTRANT"
 
 AC_SYS_LARGEFILE
 
@@ -94,7 +119,7 @@ Can't detect right _FILE_OFFSET_BITS. Will be forced to 64bit.)
 	ac_cv_sys_file_offset_bits=64
 fi
 
-CFLAGS="$CFLAGS -D_FILE_OFFSET_BITS=${ac_cv_sys_file_offset_bits}"
+GENERIC_CFLAGS="$GENERIC_CFLAGS -D_FILE_OFFSET_BITS=${ac_cv_sys_file_offset_bits}"
 AC_CHECK_SIZEOF(off_t, 64, [
 	#include <stdio.h>
 	#include <sys/types.h>
@@ -103,10 +128,34 @@ AC_CHECK_SIZEOF(off_t, 64, [
 
 AM_PROG_LIBTOOL
 
+if test x$enable_stand_alone = xyes; then
+    if test x$enable_memory_manager = xyes; then
+	MEMORY_MANAGER_CFLAGS="-DENABLE_MEMORY_MANAGER"
+    fi
+
+    if test x$enable_print_functions = xyes; then
+	PRINT_FUNCTIONS_CFLAGS="-DENABLE_PRINT_FUNCTIONS"
+    fi
+
+    if test x$enable_string_functions = xyes; then
+	STRING_FUNCTIONS_CFLAGS="-DENABLE_STRING_FUNCTIONS"
+    fi
+
+    if test x$enable_lru_functions = xyes; then
+	LRU_FUNCTIONS_CFLAGS="-DENABLE_LRU_FUNCTIONS"
+    fi
+
+    ALONE_CFLAGS="$ALONE_CFLAGS -Wl,-N -DENABLE_STAND_ALONE $MEMORY_MANAGER_CFLAGS \
+$PRINT_FUNCTIONS_CFLAGS $STRINGS_FUNCTIONS_CFLAGS $LRU_FUNCTIONS_CFLAGS \ 
+-fno-builtin -malign-jumps=1 -malign-loops=1 -malign-functions=1"
+fi
+
 if test x$enable_debug = xyes; then
-    CFLAGS="$CFLAGS -O0 -g"
+    GENERIC_CFLAGS="$GENERIC_CFLAGS -O0 -g"
+    ALONE_CFLAGS="$ALONE_CFLAGS -O0 -g"
 else
-    CFLAGS="$CFLAGS -O2"
+    GENERIC_CFLAGS="$GENERIC_CFLAGS -O2"
+    ALONE_CFLAGS="$ALONE_CFLAGS -Os"
 fi
 
 CFLAGS="$CFLAGS -W -Wall -Wno-unused"
@@ -114,15 +163,15 @@ if test x$enable_Werror = xyes; then
     CFLAGS="$CFLAGS -Werror"
 fi
 
-if test x$enable_memory_manager = xyes; then
-    AC_DEFINE(ENABLE_MEMORY_MANAGER)
-fi
-
+AM_CONDITIONAL(ENABLE_STAND_ALONE, test x$enable_stand_alone = xyes)
 AM_CONDITIONAL(ENABLE_DEBUG, test x$enable_debug = xyes)
 
 if test x$enable_debug = xyes; then
     AC_DEFINE(ENABLE_DEBUG)
 fi
+
+AC_SUBST(ALONE_CFLAGS)
+AC_SUBST(GENERIC_CFLAGS)
 
 AC_OUTPUT([
     Makefile

@@ -8,6 +8,7 @@
 #ifndef AAL_STREAM_H
 #define AAL_STREAM_H
 
+#ifndef ENABLE_STAND_ALONE
 #include <aal/types.h>
 
 extern aal_stream_t *aal_stream_create(void);
@@ -28,5 +29,6 @@ extern int aal_stream_read(aal_stream_t *stream,
 
 extern int aal_stream_format(aal_stream_t *stream,
 			     const char *format, ...);
+#endif
 
 #endif

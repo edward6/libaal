@@ -5,20 +5,85 @@
   libaal/COPYING.
 */
 
-#ifdef HAVE_CONFIG_H
-#  include <config.h>
-#endif
-
+#if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_PRINT_FUNCTIONS)) || !defined(ENABLE_PRINT_FUNCTIONS)
 #include <aal/aal.h>
 
-#ifdef ENABLE_PRINT_FUNCTIONS
 enum format_modifier {
-	mod_empty,
-	mod_long,
-	mod_longer
+	MOD_EMPTY,
+	MOD_LONG,
+	MOD_LONGER
 };
 
 typedef enum format_modifier format_modifier_t;
+
+/* Converts string denoted as size into digits */
+#define DCONV_RANGE_DEC (1000000000)
+#define DCONV_RANGE_HEX (0x10000000)
+#define DCONV_RANGE_OCT (01000000000)
+
+/* 
+  Macro for providing function for converting the passed digital into string.
+  It supports converting of decimal, hexadecimal and octal digits. It is used by
+  aal_vsnprintf function.
+*/
+#define DEFINE_DCONV(name, type)			                \
+int aal_##name##toa(type d, uint32_t n, char *a, int base, int flags) { \
+    type s;							        \
+    type range;							        \
+    char *p = a;						        \
+				                                        \
+    switch (base) {						        \
+	    case 10: range = DCONV_RANGE_DEC; break;			\
+	    case 16: range = DCONV_RANGE_HEX; break;			\
+	    case 8: range = DCONV_RANGE_OCT; break;			\
+	    default: return 0;					        \
+    }								        \
+    aal_memset(p, 0, n);					        \
+								        \
+    if (d == 0) {						        \
+	    *p++ = '0';						        \
+	    return 1;						        \
+    }								        \
+								        \
+    for (s = range; s > 0; s /= base) {                                 \
+	    type v = d / s;                                             \
+								        \
+	    if ((uint32_t)(p - a) >= n)				        \
+	            break;			                        \
+                                                                        \
+	    if (v <= 0)                                                 \
+		    continue;                                           \
+								        \
+	    if (v >= (type)base) {				        \
+                    type ds = d / s;                                    \
+                    type vb = v / base;                                 \
+		    v = ds - (vb * base);		                \
+            }                                                           \
+	    switch (base) {					        \
+		    case 10:                                            \
+	            case 8:                                             \
+			    *p++ = '0' + v;                             \
+			    break;		                        \
+		    case 16:					        \
+		            if (flags == 0)				\
+		                    *p++ = '0' + (v > 9 ? 39 : 0) + v;	\
+		            else					\
+			            *p++ = '0' + (v > 9 ? 7 : 0) + v;	\
+		            break;					\
+            }							        \
+    }								        \
+    return p - a;						        \
+}
+
+/*
+  Defining the digital to alpha convertiion functions for all supported types
+  (%u, %lu, %llu)
+*/
+DEFINE_DCONV(u, unsigned int)
+DEFINE_DCONV(lu, unsigned long int)
+
+DEFINE_DCONV(s, int)
+DEFINE_DCONV(ls, long int)
 
 /*
   This function is used for forming a string by passed format string and
@@ -44,13 +109,13 @@ int aal_vsnprintf(
 	const char *old = format;
 	const char *fmt = format;
     
-	format_modifier_t modifier = mod_empty;
+	format_modifier_t modifier = MOD_EMPTY;
     
 	while (*fmt) {
 		if (fmt - format + 1 >= (int)n)
 			break;
 
-		modifier = mod_empty;
+		modifier = MOD_EMPTY;
 		switch (*fmt) {
 		case '%': {
 			if (aal_strlen(fmt) < 2)
@@ -64,7 +129,7 @@ int aal_vsnprintf(
 			case 's': {
 				char *s;
 			
-				if (modifier != mod_empty)
+				if (modifier != MOD_EMPTY)
 					break;
 			
 				s = va_arg(arg_list, char *);
@@ -83,7 +148,7 @@ int aal_vsnprintf(
 				break;
 			}
 			case 'l': {
-				modifier = (modifier == mod_long ? mod_longer : mod_long);
+				modifier = (modifier == MOD_LONG ? MOD_LONGER : MOD_LONG);
 				old++;
 				goto repeat;
 			}
@@ -98,10 +163,10 @@ int aal_vsnprintf(
 				aal_memset(s, 0, sizeof(s));
 			
 				if (*fmt == 'd' || *fmt == 'i') {
-					if (modifier == mod_empty) {
+					if (modifier == MOD_EMPTY) {
 						i = va_arg(arg_list, int);
 						aal_stoa(i, sizeof(s), s, 10, 0);
-					} else if (modifier == mod_long) {
+					} else if (modifier == MOD_LONG) {
 						li = va_arg(arg_list, long int);
 						aal_lstoa(li, sizeof(s), s, 10, 0);
 					} else {
@@ -110,68 +175,56 @@ int aal_vsnprintf(
 					}
 					aal_strncat(buff, s, n - aal_strlen(buff));
 				} else {
-					if (modifier == mod_empty) {
+					if (modifier == MOD_EMPTY) {
 						u = va_arg(arg_list, unsigned int);
 						
 						switch (*fmt) {
-						case 'u': {
+						case 'u':
 							aal_utoa(u, sizeof(s), s, 10, 0);
 							break;
-						}
-						case 'x': {
+						case 'x':
 							aal_utoa(u, sizeof(s), s, 16, 0);
 							break;
-						}
-						case 'X': {
+						case 'X':
 							aal_utoa(u, sizeof(s), s, 16, 1);
 							break;
-						}
-						case 'o': {
+						case 'o':
 							aal_utoa(u, sizeof(s), s, 8, 0);
 							break;
 						}
-						}
-					} else if (modifier == mod_long) {
+					} else if (modifier == MOD_LONG) {
 						lu = va_arg(arg_list, unsigned long int);
 						
 						switch (*fmt) {
-						case 'u': {
+						case 'u':
 							aal_lutoa(lu, sizeof(s), s, 10, 0);
 							break;
-						}
-						case 'x': {
+						case 'x':
 							aal_lutoa(lu, sizeof(s), s, 16, 0);
 							break;
-						}
-						case 'X': {
+						case 'X':
 							aal_lutoa(lu, sizeof(s), s, 16, 1);
 							break;
-						}
-						case 'o': {
+						case 'o':
 							aal_lutoa(lu, sizeof(s), s, 8, 0);
 							break;
-						}
 						}
 					} else {
 						llu = va_arg(arg_list, unsigned long long);
 						
 						switch (*fmt) {
-						case 'u': {
+						case 'u':
 							aal_lutoa(llu, sizeof(s), s, 10, 0);
 							break;
-						}
-						case 'x': {
+						case 'x':
 							aal_lutoa(llu, sizeof(s), s, 16, 0);
 							break;
-						}
-						case 'X': {
+						case 'X':
 							aal_lutoa(llu, sizeof(s), s, 16, 1);
 							break;
-						}
-						case 'o': {
+						case 'o':
 							aal_lutoa(llu, sizeof(s), s, 8, 0);
 							break;
-						}
 						}
 					}
 					aal_strncat(buff, s, n - aal_strlen(buff));

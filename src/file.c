@@ -6,6 +6,8 @@
   libaal/COPYING.
 */
 
+#ifndef ENABLE_STAND_ALONE
+
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
@@ -283,3 +285,5 @@ struct aal_device_ops file_ops = {
 	.equals = file_equals,	    /* handler for comparing two devices */
 	.len    = file_len	    /* handler for length obtaining */
 };
+
+#endif

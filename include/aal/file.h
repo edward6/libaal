@@ -8,9 +8,12 @@
 #ifndef AAL_FILE_H
 #define AAL_FILE_H
 
-#include <aal/types.h>
+#ifndef ENABLE_STAND_ALONE
 
+#include <aal/types.h>
 extern struct aal_device_ops file_ops;
+
+#endif
 
 #endif
 

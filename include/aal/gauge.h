@@ -8,6 +8,7 @@
 #ifndef AAL_GAUGE_H
 #define AAL_GAUGE_H
 
+#ifndef ENABLE_STAND_ALONE
 #include <aal/types.h>
 
 extern void aal_gauge_reset(aal_gauge_t *gauge);
@@ -32,6 +33,7 @@ extern void aal_gauge_set_handler(uint32_t type,
 				  aal_gauge_handler_t handler);
 
 extern aal_gauge_handler_t aal_gauge_get_handler(uint32_t type);
+#endif
 
 #endif
 

@@ -30,20 +30,5 @@ extern char *aal_strsep(char **stringp, const char *delim);
 
 extern char *aal_strndup(const char *s, uint32_t n);
 
-#if 0
-extern int aal_stoa(int d, uint32_t n, char *a,
-		    int base, int flags);
-
-extern int aal_lstoa(long int d, uint32_t n, char *a,
-		     int base, int flags);
-
-
-extern int aal_utoa(unsigned int d, uint32_t n, char *a,
-		    int base, int flags);
-
-extern int aal_lutoa(unsigned long int d, uint32_t n, char *a,
-		     int base, int flags);
-#endif
-
 #endif
 
