@@ -91,9 +91,7 @@ static int __chunk_fuse(chunk_t *chunk, chunk_t *right) {
 		return 0;
 	
 	chunk->next = right->next;
-
-	if (right->next != area_start)
-		right->next->prev = chunk;
+	right->next->prev = chunk;
 
 	area_free += sizeof(chunk_t);
 	chunk->len += (right->len + sizeof(chunk_t));
@@ -101,34 +99,48 @@ static int __chunk_fuse(chunk_t *chunk, chunk_t *right) {
 	return 1;
 }
 
-static void *__chunk_split(chunk_t *chunk, uint32_t size) {
-	void *new = (void *)((int)chunk + sizeof(chunk_t) + size);
+static void *__chunk_split(chunk_t *chunk, uint32_t size, int forw) {
+	uint32_t s;
+	void *new;
 
+	s = chunk->len - size - sizeof(chunk_t);
+	new = forw ? 
+		(void *)((int)chunk + sizeof(chunk_t) + size) :
+		(void *)((int)chunk + sizeof(chunk_t) + s);
+	
 	/* Okay, we have found chunk good enough. And now we split it onto two
 	   chunks. */
-	__chunk_init(new, chunk->len - size - sizeof(chunk_t),
-		     ST_FREE, chunk, chunk->next);
+	__chunk_init(new, forw ? s : size, forw ? ST_FREE : ST_USED, 
+		     chunk, chunk->next);
 
 	/* Setting up prev, next pointers */
-	if (chunk->next != area_start)
-		chunk->next->prev = new;
+	chunk->next->prev = new;
 			
-	__chunk_init(chunk, size, ST_USED, chunk->prev, new);
+	__chunk_init(chunk, forw ? size : s, forw ? ST_USED : ST_FREE, 
+		     chunk->prev, new);
 
 	area_free -= (size + sizeof(chunk_t));
-	return (void *)((int)chunk + sizeof(chunk_t));
+	return forw ?
+		(void *)((int)chunk + sizeof(chunk_t)):
+		(void *)((int)new + sizeof(chunk_t));
 }
 
 /* Makes search for proper memory chunk in list of chunks. If found, split it in
    order to allocate requested amount of memory. */
 static void *__chunk_alloc(uint32_t size) {
 	chunk_t *walk = (chunk_t *)area_start;
+	int forw = 1;
 	
+	if (size >= 4096) {
+		forw = 0;
+		walk = walk->prev;
+	}
+		
 	/* The loop though the all chunks in list */
 	while (1) {
 		if (walk->state == ST_FREE) {
 			if (walk->len >= size + sizeof(chunk_t) + 1) {
-				return __chunk_split(walk, size);
+				return __chunk_split(walk, size, forw);
 			} else if (walk->len == size) {
 				walk->state = ST_USED;
 				area_free -= walk->len;
@@ -137,7 +149,7 @@ static void *__chunk_alloc(uint32_t size) {
 		}
 
 		/* Getting next chunk from list */
-		if ((walk = walk->next) == area_start)
+		if ((walk = forw ? walk->next : walk->prev) == area_start)
 			break;
 	};
 
