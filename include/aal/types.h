@@ -55,11 +55,9 @@ typedef unsigned long long int  uint64_t;
 
 #ifndef ENABLE_STAND_ALONE
 #include <stdarg.h>
-#endif
+#else
 
-#if !defined(_VA_LIST_) && !defined(_VA_LIST) && !defined(__VA_LIST)
 typedef char *va_list;
-#endif
 
 #undef va_arg
 #undef va_end
@@ -73,6 +71,8 @@ typedef char *va_list;
 
 #define va_arg(ap, type) \
         ((type *)(ap += sizeof(type)))[-1]
+
+#endif
 
 /* As libaal may be used without any standard headers, we need to declare NULL
    macro here in order to avoid compilation errors. */
