@@ -5,8 +5,9 @@
   libaal/COPYING.
 */
 
-#if defined(ENABLE_STAND_ALONE) && defined(ENABLE_STRING_FUNCTIONS)
 #include <aal/aal.h>
+
+#if defined(ENABLE_STAND_ALONE) && defined(ENABLE_STRING_FUNCTIONS)
 
 /* 
   Memory and string working functions. They are full analog of standard ones.
@@ -62,7 +63,6 @@ uint32_t aal_strlen(const char *s) {
 	uint32_t len = 0;
 
 	while (*s++) len++;
-    
 	return len;
 }
 
@@ -74,14 +74,23 @@ char *aal_strncpy(char *dest, const char *src, uint32_t n) {
 	uint32_t len = aal_strlen(src) < n ? aal_strlen(src) : n;
 	
 	aal_memcpy((void *)dest, (const void *)src, len);
+
+	if (len < n)
+		*(dest + len) = '\0';
 	
 	return dest;
 }
 
 char *aal_strncat(char *dest, const char *src, uint32_t n) {
-	uint32_t len = aal_strlen(src) < n ? aal_strlen(src) : n;
+	uint32_t dest_len = aal_strlen(dest);
+
+	uint32_t len = aal_strlen(src) < n ?
+		aal_strlen(src) : n;
 	
-	aal_memcpy(dest + aal_strlen(dest), src, len);
+	aal_memcpy(dest + dest_len, src, len);
+	
+	if (len < n)
+		*(dest + dest_len) = '\0';
 	
 	return dest;
 }
