@@ -101,6 +101,14 @@ AC_CACHE_CHECK([whether -falign-loops works], [falign_loop_flag], [
   CPPFLAGS="$saved_CPPFLAGS"
 ])
  
+# Checking for compiler warning options
+AC_CACHE_CHECK([whether -Wuninitialized and friends work], [uninitialized], [
+  saved_CPPFLAGS="$CPPFLAGS"
+  CPPFLAGS="-Wuninitialized"
+  AC_TRY_COMPILE(, , [uninitialized=yes], [uninitialized=no])
+  CPPFLAGS="$saved_CPPFLAGS"
+])
+ 
 # Force no alignment to save space.
 if test "x$falign_loop_flag" = xyes; then
   ALIGN_FLAGS="-falign-jumps=1 -falign-loops=1 -falign-functions=1 -falign-labels=1 -fomit-frame-pointer -fno-inline -fstrength-reduce"
@@ -148,14 +156,19 @@ $STRING_FUNCTIONS_CFLAGS $ALIGN_FLAGS"
 fi
 
 if test x$enable_debug = xyes; then
-    GENERIC_CFLAGS="$GENERIC_CFLAGS -O0 -g"
-    ALONE_CFLAGS="$ALONE_CFLAGS -O0 -g"
+    GENERIC_CFLAGS="$GENERIC_CFLAGS -O1 -g"
+    ALONE_CFLAGS="$ALONE_CFLAGS -O1 -g"
 else
     GENERIC_CFLAGS="$GENERIC_CFLAGS -O2"
     ALONE_CFLAGS="$ALONE_CFLAGS -Os"
 fi
 
-CFLAGS="$CFLAGS -W -Wall -Wno-unused"
+if test "x$uninitialized" = xyes; then
+    CFLAGS="$CFLAGS -W -Wall -Wno-unused-parameter -Wuninitialized -Wredundant-decls"
+else
+    CFLAGS="$CFLAGS -W -Wall"
+fi
+
 if test x$enable_Werror = xyes; then
     CFLAGS="$CFLAGS -Werror"
 fi

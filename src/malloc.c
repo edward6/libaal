@@ -11,12 +11,10 @@
 #if defined(ENABLE_STAND_ALONE) && defined(ENABLE_MEMORY_MANAGER)
 static aal_free_handler_t free_handler = NULL;
 static aal_malloc_handler_t malloc_handler = NULL;
-static aal_realloc_handler_t realloc_handler = NULL;
 #else
 #include <stdlib.h>
 static aal_free_handler_t free_handler = (aal_free_handler_t)free;
 static aal_malloc_handler_t malloc_handler = (aal_malloc_handler_t)malloc;
-static aal_realloc_handler_t realloc_handler = (aal_realloc_handler_t)realloc;
 #endif
 
 #ifndef ENABLE_STAND_ALONE
@@ -35,19 +33,6 @@ void aal_malloc_set_handler(
 /* Returns allocation handler */
 aal_malloc_handler_t aal_malloc_get_handler(void) {
 	return malloc_handler;
-}
-
-/* Sets new handler for "realloc" operation. The same as in malloc case. See
-   above for details. */
-void aal_realloc_set_handler(
-	aal_realloc_handler_t handler)   /* new handler for realloc */
-{
-	realloc_handler = handler;
-}
-
-/* Returns realloc handler */
-aal_realloc_handler_t aal_realloc_get_handler(void) {
-	return realloc_handler;
 }
 
 /* Sets new handle for "free" operation */
@@ -208,26 +193,6 @@ void aal_mem_fini(void) {
 }
 
 uint32_t aal_mem_free(void) {
-	return 0;
-}
-#endif
-
-#ifndef ENABLE_STAND_ALONE
-/* The wrapper for realloc function. It checks for result memory allocation and
-   if it failed then reports about this. */
-errno_t aal_realloc(
-	void **old,		    /* pointer to previously allocated piece */
-	uint32_t size)              /* new size */
-{
-	void *mem;
-
-	if (!realloc_handler)
-		return -EINVAL;
-
-	if (!(mem = (void *)realloc_handler(*old, size)))
-		return -ENOMEM;
-    
-	*old = mem;
 	return 0;
 }
 #endif

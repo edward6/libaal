@@ -237,24 +237,6 @@ inline bit_t aal_find_set_bits(void *map,
 			       bit_t *start,
 			       bit_t count)
 {
-	bit_t beg, end, search_end;
-
-	aal_find_next_set_bit(map, size, *start);
-	search_end = (beg + count > size) ? size : beg + count;
-	end = aal_find_next_zero_bit(map, search_end, beg);
-
-	if (end > beg) {
-		*start = beg;
-		return end - beg;
-	}
-	return 0;
-}
-
-/*inline bit_t aal_find_set_bits(void *map,
-			       bit_t size,
-			       bit_t *start,
-			       bit_t count)
-{
 	bit_t set, zero;
 
 	set = aal_find_next_set_bit(map, size, *start);
@@ -266,4 +248,4 @@ inline bit_t aal_find_set_bits(void *map,
 		count = zero - set;
 		
 	return count;
-}*/
+}

@@ -164,7 +164,6 @@ aal_list_t *aal_list_insert_sorted(aal_list_t *list, void *data,
 /* Inserts new item just before passed @list */
 aal_list_t *aal_list_prepend(aal_list_t *list, void *data) {
 	aal_list_t *new;
-	aal_list_t *last;
     
 	if (!(new = aal_list_alloc(data)))
 		return 0;

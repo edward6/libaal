@@ -4,6 +4,7 @@
    stream.c -- simple stream implementation. */  
 
 #ifndef ENABLE_STAND_ALONE
+#include <stdlib.h>
 #include <aal/aal.h>
 
 aal_stream_t *aal_stream_create(void) {
@@ -14,10 +15,6 @@ aal_stream_t *aal_stream_create(void) {
 
 	aal_stream_init(stream);
 	return stream;
-	
- error_free_stream:
-	aal_free(stream);
-	return NULL;
 }
 
 errno_t aal_stream_init(aal_stream_t *stream) {
@@ -47,8 +44,11 @@ static errno_t aal_stream_grow(aal_stream_t *stream, int size) {
 	if (stream->offset + size + 1 > stream->size) {
 		stream->size = stream->offset + size + 1;
 
-		if (aal_realloc((void **)&stream->data, stream->size))
+		if (!(stream->data = realloc(stream->data,
+					     stream->size)))
+		{
 			return -ENOMEM;
+		}
 	}
 
 	return 0;
