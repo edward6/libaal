@@ -54,7 +54,7 @@ extern void aal_exception_off(void);
         aal_exception_throw(EXCEPTION_ERROR, EXCEPTION_RETRYIGNORE, msg, ##list)
 
 #else
-#define aal_exception_fatal(msg, list...) \
+#define aal_exception_fatal(msg, list...)       \
         do {} while (0)
 	
 #define aal_exception_bug(msg, list...)	        \

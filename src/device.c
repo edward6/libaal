@@ -49,7 +49,7 @@ aal_device_t *aal_device_open(
 	aal_assert("umka-429", ops != NULL);
     
 	/* Rough check for blocksize validness */
-	if (!aal_pow_of_two(blocksize)) {
+	if (!aal_pow2(blocksize)) {
 		aal_exception_error("Block size %u isn't power "
 				    "of two.", blocksize);
 		return NULL;
@@ -202,7 +202,7 @@ errno_t aal_device_set_bs(
 {
 	aal_assert("umka-431", device != NULL);
 
-	if (!aal_pow_of_two(blocksize)) {
+	if (!aal_pow2(blocksize)) {
 		aal_exception_error("Block size %u isn't power "
 				    "of two.", blocksize);
 		return -EINVAL;
