@@ -45,19 +45,14 @@ void aal_gauge_set_handler(uint32_t type,
 /* Gauge creating function */
 aal_gauge_t *aal_gauge_create(
 	uint32_t type,               /* gauge handler */
-	const char *name,	     /* gauge name */
 	void *data)		     /* user-specific data */
 {
 	aal_gauge_t *gauge;
 	
-	aal_assert("umka-889", name != NULL);
 	aal_assert("umka-889", type < MAX_GAUGES);
     
 	if (!(gauge = aal_calloc(sizeof(*gauge), 0)))
 		return NULL;
-    
-	aal_strncpy(gauge->name, name,
-		    sizeof(gauge->name));
     
 	gauge->value = 0;
 	gauge->data = data;
@@ -129,12 +124,13 @@ void aal_gauge_update(aal_gauge_t *gauge, uint32_t value) {
 
 /* Renames gauge */
 void aal_gauge_rename(aal_gauge_t *gauge,
-		      const char *name, ...)
+		      char *name, ...)
 {
 	int len;
 	va_list arg_list;
 	
 	aal_assert("umka-896", gauge != NULL);
+	aal_assert("umka-2193", name != NULL);
     
 	if (!name) return;
     

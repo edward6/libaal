@@ -22,10 +22,9 @@ extern void aal_gauge_update(aal_gauge_t *gauge,
 			     uint32_t value);
 
 extern void aal_gauge_rename(aal_gauge_t *gauge,
-			     const char *name, ...);
+			     char *name, ...);
 
 extern aal_gauge_t *aal_gauge_create(uint32_t type,
-				     const char *name,
 				     void *data);
 
 extern void aal_gauge_set_handler(uint32_t type,

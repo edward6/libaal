@@ -104,7 +104,11 @@ int32_t aal_list_pos(aal_list_t *list, void *data) {
 
 /* Gets list item at @n position */
 aal_list_t *aal_list_at(aal_list_t *list, uint32_t n) {
-	while ((n-- > 0) && list)
+
+	if (!list)
+		return NULL;
+	
+	while ((n-- > 0) && list->next)
 		list = list->next;
 
 	return list;
@@ -114,17 +118,8 @@ aal_list_t *aal_list_at(aal_list_t *list, uint32_t n) {
 aal_list_t *aal_list_insert(aal_list_t *list, 
 			    void *data, uint32_t n) 
 {
-	aal_list_t *new = list;
-    
-	if (n == 0)
-		return aal_list_prepend(list, data);
-	
-	while (new && new->next && (--n > 0))
-		new = new->next;
-	
-	new = aal_list_append(new, data);
-
-	return list == NULL ? new : list;
+	aal_list_t *at = aal_list_at(list, n);
+	return aal_list_prepend(at, data);
 }
 
 /* Inserts new item in sorted maner */
