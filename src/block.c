@@ -25,7 +25,7 @@ aal_block_t *aal_block_create(
 
 	aal_assert("umka-443", device != NULL);
     
-	if (!(block = (aal_block_t *)aal_calloc(sizeof(*block), 0))) {
+	if (!(block = aal_calloc(sizeof(*block), 0))) {
 		aal_exception_error("Out of memory!");
 		return NULL;
 	}
@@ -78,6 +78,7 @@ aal_block_t *aal_block_open(
 	return block;
 }
 
+#ifndef ENABLE_STAND_ALONE
 /* Makes reread of specified block */
 errno_t aal_block_reopen(
 	aal_block_t *block, 	/* block to be reread */
@@ -129,6 +130,7 @@ void aal_block_relocate(
     
 	block->blk = blk;
 }
+#endif
 
 /*  Returns block number of specified block */
 blk_t aal_block_number(

@@ -25,14 +25,19 @@
   This macro was introdused to decrease source code by removing a lot of common
   pieces and replace them by just one line of macro.
 */
-#define aal_device_check_routine(device, routine, action)		         \
-    do {								         \
-	    if (!device->ops->routine) {					 \
-	        aal_exception_fatal("Device operation \""                        \
-                                    #routine "\" isn't implemented.");           \
-	        action;							         \
-	    }								         \
+#ifndef ENABLE_STAND_ALONE
+#define aal_device_check_routine(device, routine, action)		\
+    do {								\
+	    if (!device->ops->routine) {				\
+	        aal_exception_fatal("Device operation \""               \
+                                    #routine "\" isn't implemented.");  \
+	        action;							\
+	    }								\
     } while (0)
+#else
+#define aal_device_check_routine(device, routine, action)               \
+    do {} while (0)
+#endif
 
 /*
   Initializes device instance, checks and sets all device attributes (blocksize,
@@ -48,6 +53,7 @@ aal_device_t *aal_device_open(
 
 	aal_assert("umka-429", ops != NULL);
     
+#ifndef ENABLE_STAND_ALONE
 	/* Rough check for blocksize validness */
 	if (!aal_pow2(blocksize)) {
 		aal_exception_error("Block size %u isn't power "
@@ -59,7 +65,8 @@ aal_device_t *aal_device_open(
 		aal_exception_error("Block size can't be less than "
 				    "512 bytes.");
 		return NULL;
-	}	
+	}
+#endif
 	
 	/* Allocating memory for device instance and initializing all fields */
 	if (!(device = (aal_device_t *)aal_calloc(sizeof(*device), 0)))
@@ -83,6 +90,7 @@ aal_device_t *aal_device_open(
 	return NULL;
 }
 
+#ifndef ENABLE_STAND_ALONE
 errno_t aal_device_reopen(
 	aal_device_t *device,       /* device for reopening */
 	uint32_t blocksize,         /* block size device is working with */
@@ -172,26 +180,6 @@ int aal_device_flags(
 	return device->flags;
 }
 
-/* Closes device. Frees all assosiated memory */
-void aal_device_close(
-	aal_device_t *device)	/* device to be closed */
-{
-	aal_assert("umka-430", device != NULL);
-
-	if (device->ops->close)
-		device->ops->close(device);
-	
-	aal_free(device);
-}
-
-/* Returns current block size from specified device */
-uint32_t aal_device_get_bs(
-	aal_device_t *device)	/* device instance blocksize will be received from */
-{
-	aal_assert("umka-432", device != NULL);
-	return device->blocksize;
-}
-
 /* 
   Checks and sets new block size for specified device. Returns error code, see
   aal.h for more detailed description of errno_t.
@@ -217,6 +205,27 @@ errno_t aal_device_set_bs(
 	device->blocksize = blocksize;
 	return 0;
 }
+#endif
+
+/* Closes device. Frees all assosiated memory */
+void aal_device_close(
+	aal_device_t *device)	/* device to be closed */
+{
+	aal_assert("umka-430", device != NULL);
+
+	if (device->ops->close)
+		device->ops->close(device);
+	
+	aal_free(device);
+}
+
+/* Returns current block size from specified device */
+uint32_t aal_device_get_bs(
+	aal_device_t *device)	/* device instance blocksize will be received from */
+{
+	aal_assert("umka-432", device != NULL);
+	return device->blocksize;
+}
 
 /* 
   Performs read operation on specified device. Actualy it calls corresponding
@@ -241,6 +250,8 @@ count_t aal_device_len(
 {
 	aal_assert("vpf-216", device != NULL);
 
-	aal_device_check_routine(device, len, return INVAL_BLK);
+	aal_device_check_routine(device, len,
+				 return INVAL_BLK);
+	
 	return device->ops->len(device);
 }
