@@ -2,7 +2,7 @@ aalincludedir 		 = -I$(top_srcdir)/include
 
 libaal_sources  	 = device.c file.c exception.c list.c malloc.c \
 			   print.c string.c math.c debug.c bitops.c \
-			   gauge.c block.c ui.c stream.c libaal.c
+			   gauge.c block.c ui.c stream.c hash.c libaal.c
 
 if ENABLE_STAND_ALONE
 ALONE_LIBS               = libaal-alone.la 

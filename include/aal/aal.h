@@ -21,6 +21,7 @@ extern "C" {
 #include "file.h"
 #include "exception.h"
 #include "list.h"
+#include "hash.h"
 #include "malloc.h"
 #include "print.h"
 #include "string.h"

@@ -132,11 +132,38 @@ struct aal_list {
 	aal_list_t *prev;
 };
 
+typedef struct aal_hash_node aal_hash_node_t;
+
+struct aal_hash_node {
+	void *key;
+	void *value;
+	
+	aal_hash_node_t *next;
+};
+
+/* Type for hash fucntion */
+typedef uint32_t (*hash_func_t) (const void *);
+
 /*
-  Type for callback compare function. It is used in list functions and in 
-  other places.
+  Type for callback compare function. It is used in list and hash functions for
+  comparing their items.
 */
 typedef int (*comp_func_t) (const void *, const void *, void *);
+
+struct aal_hash_table {
+	uint32_t size;
+	uint32_t real;
+
+	hash_func_t hash_func;
+	comp_func_t comp_func;
+	aal_hash_node_t **nodes;
+};
+
+typedef struct aal_hash_table aal_hash_table_t;
+
+#undef  CLAMP
+#define CLAMP(x, low, high) \
+        (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
 
 /* 
   Type for callback function that is called for each element of list. Usage is 
@@ -159,7 +186,8 @@ typedef int (*foreach_func_t) (const void *, const void *);
 
    uint64_t some_func(void);
     
-   This function may return anything. This is may be bytes, blocks, etc.
+   This variant of the function may return anything. This may be bytes, blocks,
+   etc.
 */
 #define INVAL_BLK (~0ull)
 

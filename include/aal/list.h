@@ -1,6 +1,5 @@
 /*
-  list.h -- double-linked list implementation. It is used for plugins cache, for
-  tree cache, etc.
+  list.h -- double-linked list implementation.
     
   Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
   libaal/COPYING.
