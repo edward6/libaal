@@ -18,7 +18,7 @@ LIBAAL_MICRO_VERSION=2
 
 LIBAAL_INTERFACE_AGE=0
 LIBAAL_BINARY_AGE=0
-LIBAAL_VERSION=$LIBAAL_MAJOR_VERSION.$LIBAAL_MINOR_VERSION.$LIBAAL_MICRO_VERSION-pre1
+LIBAAL_VERSION=$LIBAAL_MAJOR_VERSION.$LIBAAL_MINOR_VERSION.$LIBAAL_MICRO_VERSION
 
 LT_RELEASE=$LIBAAL_MAJOR_VERSION.$LIBAAL_MINOR_VERSION
 
@@ -61,8 +61,8 @@ AC_ARG_ENABLE(libminimal,
 )
 
 AC_ARG_ENABLE(memory_manager,
-    [  --enable-memory-manager       enable memory manager in minimal library], ,
-        enable_memory_manager=no
+    [  --disable-memory-manager      disable memory manager in minimal library], ,
+	enable_memory_manager=yes
 )
 
 # Checks for programs.
