@@ -42,11 +42,14 @@ extern void aal_exception_off(void);
 #define aal_exception_info(msg, list...)        \
         aal_exception_throw(EXCEPTION_INFORMATION, EXCEPTION_OK, msg, ##list)
 
+#define aal_exception_mess(msg, list...)        \
+        aal_exception_throw(EXCEPTION_MESSAGE, EXCEPTION_OK, msg, ##list)
+
 #define aal_exception_yesno(msg, list...)       \
-        aal_exception_throw(EXCEPTION_INFORMATION, EXCEPTION_YESNO, msg, ##list)
+        aal_exception_throw(EXCEPTION_MESSAGE, EXCEPTION_YESNO, msg, ##list)
 
 #define aal_exception_okcancel(msg, list...)    \
-        aal_exception_throw(EXCEPTION_INFORMATION, EXCEPTION_OKCANCEL, msg, ##list)
+        aal_exception_throw(EXCEPTION_MESSAGE, EXCEPTION_OKCANCEL, msg, ##list)
 
 #define aal_exception_retryignore(msg, list...) \
         aal_exception_throw(EXCEPTION_ERROR, EXCEPTION_RETRYIGNORE, msg, ##list)
@@ -55,6 +58,7 @@ extern void aal_exception_off(void);
 #define aal_exception_bug(msg, list...)
 #define aal_exception_warn(msg, list...)
 #define aal_exception_info(msg, list...)
+#define aal_exception_mess(msg, list...)
 #define aal_exception_fatal(msg, list...)
 #define aal_exception_error(msg, list...)
 #define aal_exception_yesno(msg, list...)

@@ -232,10 +232,11 @@ typedef struct aal_block aal_block_t;
 /* This is the type of exception */
 enum aal_exception_type {
 	EXCEPTION_INFORMATION   = 1,
-	EXCEPTION_WARNING       = 2,
-	EXCEPTION_ERROR	        = 3,
-	EXCEPTION_FATAL	        = 4,
-	EXCEPTION_BUG	        = 5
+	EXCEPTION_MESSAGE       = 2,
+	EXCEPTION_WARNING       = 3,
+	EXCEPTION_ERROR	        = 4,
+	EXCEPTION_FATAL	        = 5,
+	EXCEPTION_BUG	        = 6
 };
 
 typedef enum aal_exception_type aal_exception_type_t;
