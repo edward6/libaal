@@ -99,6 +99,7 @@ void aal_gauge_done(aal_gauge_t *gauge) {
 	if (gauge->state == GAUGE_RUNNING ||
 	    gauge->state == GAUGE_STARTED)
 	{
+		aal_gauge_resume(gauge);
 		aal_gauge_change(gauge, GAUGE_DONE);
 	}
 }
@@ -142,9 +143,6 @@ void aal_gauge_rename(aal_gauge_t *gauge,
 	va_end(arg_list);
     
 	gauge->name[len] = '\0';
-   
-	gauge->state = GAUGE_STARTED;
-	aal_gauge_touch(gauge);
 }
 
 /* Calls gauge handler */
