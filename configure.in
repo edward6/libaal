@@ -73,6 +73,7 @@ AC_PROG_CC
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([errno.h fcntl.h stdlib.h string.h sys/ioctl.h unistd.h])
+AC_CHECK_HEADERS([asm/unaligned.h])
 
 AC_C_BIGENDIAN
 
