@@ -10,6 +10,8 @@
 
 #include <aal/types.h>
 
+#if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_EXCEPTIONS)) || !defined(ENABLE_STAND_ALONE)
+
 extern char *aal_exception_type_name(aal_exception_type_t type);
 extern char *aal_exception_option_name(aal_exception_option_t opt);
 
@@ -50,6 +52,33 @@ extern void aal_exception_off(void);
 
 #define aal_exception_retryignore(msg, list...) \
         aal_exception_throw(EXCEPTION_ERROR, EXCEPTION_RETRYIGNORE, msg, ##list)
+
+#else
+#define aal_exception_fatal(msg, list...) \
+        do {} while (0)
+	
+#define aal_exception_bug(msg, list...)	        \
+        do {} while (0)
+	
+#define aal_exception_error(msg, list...)       \
+        do {} while (0)
+	
+#define aal_exception_warn(msg, list...)        \
+        do {} while (0)
+	
+#define aal_exception_info(msg, list...)        \
+        do {} while (0)
+
+#define aal_exception_yesno(msg, list...)       \
+        do {} while (0)
+
+#define aal_exception_okcancel(msg, list...)    \
+        do {} while (0)
+
+#define aal_exception_retryignore(msg, list...) \
+        do {} while (0)
+
+#endif
 
 #endif
 
