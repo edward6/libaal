@@ -53,7 +53,7 @@ extern void __actual_assert(char *hint, int cond, char *text,
 #endif
 
 #else
-#define aal_bug(hint, cond)
+#define aal_bug(hint, text, list...)
 #define aal_assert(hint, cond)
 #endif
 
