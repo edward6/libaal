@@ -75,8 +75,8 @@
 
 #endif
 
-#define aal_get_leXX(xx, p, field)	(LE##xx##_TO_CPU ((p)->field))
-#define aal_set_leXX(xx, p, field, val)	((p)->field = CPU_TO_LE##xx(val))
+#define aal_get_leXX(xx, p, field)	(LE##xx##_TO_CPU (get_unaligned(&(p)->field)))
+#define aal_set_leXX(xx, p, field, val)	put_unaligned(&(p)->field, CPU_TO_LE##xx(val))
 
 #define aal_get_le16(p, field) 		aal_get_leXX(16, p, field)
 #define aal_set_le16(p, field, val) 	aal_set_leXX(16, p, field, val)
