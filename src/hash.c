@@ -3,7 +3,6 @@
    
    hash.c -- simple hash implementation. */
 
-#ifndef ENABLE_STAND_ALONE
 #include <aal/aal.h>
 
 /* Hash table size */
@@ -164,6 +163,8 @@ errno_t aal_hash_table_remove(aal_hash_table_t *table,
 
 }
 
+/* Calls @foreach_func for all hash table nodes. May be used for walking though
+   the all nodes registered in hash table. */
 errno_t aal_hash_table_foreach(aal_hash_table_t *table,
 			       foreach_func_t foreach_func,
 			       void *data)
@@ -187,4 +188,3 @@ errno_t aal_hash_table_foreach(aal_hash_table_t *table,
 
 	return 0;
 }
-#endif

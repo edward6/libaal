@@ -3,6 +3,7 @@
    
    list.c -- double-linked list implementation. */
 
+#ifndef ENABLE_STAND_ALONE
 #include <aal/aal.h>
 
 /* Allocates new aal_list_t instance and assigns passed @data to it */
@@ -51,7 +52,6 @@ uint32_t aal_list_len(aal_list_t *list) {
 	return len;
 }
 
-#ifndef ENABLE_STAND_ALONE
 /* This function walks though the @list and calls passed @func for each list
    item. This may be used for searching something, or performing some per-item
    actions. */
@@ -114,7 +114,6 @@ aal_list_t *aal_list_insert(aal_list_t *list,
 
 	return (list == NULL ? at : list);
 }
-#endif
 
 /* Inserts new item in sorted maner */
 aal_list_t *aal_list_insert_sorted(aal_list_t *list, void *data,
@@ -160,7 +159,6 @@ aal_list_t *aal_list_insert_sorted(aal_list_t *list, void *data,
 	return new_list;
 }
 
-#ifndef ENABLE_STAND_ALONE
 /* Inserts new item just before passed @list */
 aal_list_t *aal_list_prepend(aal_list_t *list, void *data) {
 	aal_list_t *new;
@@ -179,7 +177,6 @@ aal_list_t *aal_list_prepend(aal_list_t *list, void *data) {
     
 	return new;
 }
-#endif
 
 /* Inserts new item just after passed @list */
 aal_list_t *aal_list_append(aal_list_t *list, void *data) {
@@ -271,3 +268,4 @@ void aal_list_free(aal_list_t *list) {
 		last = temp;
 	}
 }
+#endif

@@ -6,6 +6,7 @@
 #ifndef AAL_LIST_H
 #define AAL_LIST_H
 
+#ifndef ENABLE_STAND_ALONE
 #include <aal/types.h>
 
 extern aal_list_t *aal_list_alloc(void *data);
@@ -14,7 +15,6 @@ extern aal_list_t *aal_list_first(aal_list_t *list);
 
 extern uint32_t aal_list_len(aal_list_t *list);
 
-#ifndef ENABLE_STAND_ALONE
 extern errno_t aal_list_foreach(aal_list_t *list, 
 				foreach_func_t func,
 				void *data);
@@ -27,8 +27,6 @@ extern aal_list_t *aal_list_at(aal_list_t *list, uint32_t n);
 
 extern aal_list_t *aal_list_insert(aal_list_t *list, 
 				   void *data, uint32_t n);
-
-#endif
 
 extern aal_list_t *aal_list_insert_sorted(aal_list_t *list,
 					  void *data,
@@ -54,3 +52,4 @@ extern void aal_list_free(aal_list_t *list);
     
 #endif
 
+#endif
