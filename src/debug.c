@@ -27,8 +27,10 @@ static void default_assert_handler(char *hint, int cond, char *text,
 	*/ 
 	aal_exception_bug("%s: Assertion (%s) at %s:%d in function %s() failed.",
 			  hint, text, file, line, func);
-	
+
+#ifndef ENABLE_STAND_ALONE
 	exit(-1);
+#endif
 }
 
 static assert_handler_t assert_handler = default_assert_handler;
