@@ -209,8 +209,7 @@ static count_t file_len(
 		return INVAL_BLK;
     
 #ifdef BLKGETSIZE64
-    
-	if (ioctl(*((int *)device->entity), BLKGETSIZE64, &size) >= 0) {
+	if (ioctl(*((int *)device->entity), BLKGETSIZE64, &size) >= (int)0) {
 		uint32_t block_count;
 		
 		size = (size / 4096) * 4096 / device->blksize;
