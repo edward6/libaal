@@ -1,7 +1,7 @@
 SUBDIRS         = src include
 
 EXTRA_DIST	= AUTHORS COPYING TODO NEWS BUGS README CREDITS THANKS \
-		  libaal.spec.in libaal.spec libaal.m4 ltconfig
+		  libaal.spec.in libaal.spec libaal.m4
 
 aclocaldir 	= $(datadir)/aclocal
 aclocal_DATA	= libaal.m4
