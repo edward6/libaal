@@ -13,11 +13,11 @@
 
 extern void aal_hash_table_free(aal_hash_table_t *table);
 
-extern int aal_hash_table_remove(aal_hash_table_t *table,
-				 void *key);
+extern errno_t aal_hash_table_remove(aal_hash_table_t *table,
+				     void *key);
 
-extern void aal_hash_table_insert(aal_hash_table_t *table,
-				  void *key, void *value);
+extern errno_t aal_hash_table_insert(aal_hash_table_t *table,
+				     void *key, void *value);
 
 extern void *aal_hash_table_lookup(aal_hash_table_t *table,
 				   void *key);

@@ -139,6 +139,7 @@ struct aal_hash_node {
 	void *value;
 	
 	aal_hash_node_t *next;
+	aal_hash_node_t *prev;
 };
 
 /* Type for hash fucntion */

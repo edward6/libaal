@@ -1,5 +1,5 @@
 /*
-  hash.c -- hash implementation.
+  hash.c -- simple hash implementation.
     
   Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
   libaal/COPYING.
@@ -8,61 +8,8 @@
 #if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_HASH_FUNCTIONS)) || !defined(ENABLE_STAND_ALONE)
 #include <aal/aal.h>
 
-/* Minimal and maximal hash table size */
-#define MIN_SIZE (11)
-#define MAX_SIZE (13845163)
-
-/* Possible hash table size values */
-static const uint32_t primes[] = {
-	11,
-	19,
-	37,
-	73,
-	109,
-	163,
-	251,
-	367,
-	557,
-	823,
-	1237,
-	1861,
-	2777,
-	4177,
-	6247,
-	9371,
-	14057,
-	21089,
-	31627,
-	47431,
-	71143,
-	106721,
-	160073,
-	240101,
-	360163,
-	540217,
-	810343,
-	1215497,
-	1823231,
-	2734867,
-	4102283,
-	6153409,
-	9230113,
-	13845163,
-};
-
-static const uint32_t nprimes = sizeof(primes) / sizeof(primes[0]);
-
-/* Returns closest known prime number */
-static uint32_t aal_spaced_primes_closest(uint32_t num) {
-	uint32_t i;
-                                                                                          
-	for (i = 0; i < nprimes; i++) {
-		if (primes[i] > num)
-			return primes[i];
-	}
-                                                                                          
-	return primes[nprimes - 1];
-}
+/* Hash table size */
+#define TABLE_SIZE (0x40000)
 
 /* Allocates new node and initializes it by @key and @value */
 static aal_hash_node_t *aal_hash_node_alloc(void *key, void *value) {
@@ -97,11 +44,10 @@ aal_hash_table_t *aal_hash_table_alloc(hash_func_t hash_func,
 	if (!(table = aal_calloc(sizeof(*table), 0)))
 		return NULL;
 
+	table->real = 0;
+	table->size = TABLE_SIZE;
 	table->hash_func = hash_func;
 	table->comp_func = comp_func;
-
-	table->real = 0;
-	table->size = MIN_SIZE;
 
 	size = table->size * sizeof(void *);
 
@@ -119,13 +65,13 @@ aal_hash_table_t *aal_hash_table_alloc(hash_func_t hash_func,
 void aal_hash_table_free(aal_hash_table_t *table) {
 	uint32_t i;
 	aal_hash_node_t *node;
-	aal_hash_node_t *next;
 	
 	aal_assert("umka-2269", table != NULL);
 
 	for (i = 0; i < table->size; i++) {
-		for (node = table->nodes[i]; node; node = next) {
-			next = node->next;
+		for (node = table->nodes[i];
+		     node != NULL; node = node->next)
+		{
 			aal_hash_node_free(node);
 		}
 	}
@@ -168,75 +114,51 @@ void *aal_hash_table_lookup(aal_hash_table_t *table,
 	return node ? node->value : NULL;
 }
 
-/* Resizes hash @table if it is needed */
-static void aal_hash_table_resize(aal_hash_table_t *table) {
-	if ((table->size >= table->real * 3 && table->size > MIN_SIZE) ||
-	    (table->size * 3 <= table->real && table->size < MAX_SIZE))
-	{
-		uint32_t i, new_size;
-		aal_hash_node_t **new_nodes;
-		aal_hash_node_t *node, *next;
-
-		new_size = aal_spaced_primes_closest(table->real);
-		new_size = CLAMP(new_size, MIN_SIZE, MAX_SIZE);
-		new_nodes = aal_calloc(new_size * sizeof(void *), 0);
-
-		for (i = 0; i < table->size; i++) {
-			uint32_t hash;
-			
-			for (node = table->nodes[i]; node; node = next) {
-				next = node->next;
-
-				hash = table->hash_func(node->key) %
-					new_size;
-				
-				node->next = new_nodes[hash];
-				new_nodes[hash] = node;
-			}
-		}
-
-		aal_free(table->nodes);
-		table->size = new_size;
-		table->nodes = new_nodes;
-	}
-}
-
 /* Inserts new node to passed @table */
-void aal_hash_table_insert(aal_hash_table_t *table,
-			   void *key, void *value)
+errno_t aal_hash_table_insert(aal_hash_table_t *table,
+			      void *key, void *value)
 {
+	uint32_t hash;
 	aal_hash_node_t **node;
+	aal_hash_node_t *new_node;
 
-	node = aal_hash_table_lookup_node(table, key);
+	hash = table->hash_func(key);
+	node = &table->nodes[hash % table->size];
+
+	if (!(new_node = aal_hash_node_alloc(key, value)))
+		return -EINVAL;
 	
-	if (*node)
-		(*node)->value = value;
-	else {
-		*node = aal_hash_node_alloc(key, value);
-		table->real++;
-		aal_hash_table_resize(table);
+	if (*node) {
+		new_node->next = *node;
+		(*node)->prev = new_node;
 	}
+	
+	*node = new_node;
+	table->real++;
+
+	return 0;
 }
 
 /* Removed node from passed @table by @key */
-int aal_hash_table_remove(aal_hash_table_t *table,
-			  void *key)
+errno_t aal_hash_table_remove(aal_hash_table_t *table,
+			      void *key)
 {
-	aal_hash_node_t **node, *dest;
-                                                                                          
-	node = aal_hash_table_lookup_node(table, key);
-	
-	if (*node) {
-		dest = *node;
+	aal_hash_node_t *prev;
+	aal_hash_node_t *next;
+	aal_hash_node_t **node;
 
-		(*node) = dest->next;
-		aal_hash_node_free(dest);
-		table->real--;
+	if (!*(node = aal_hash_table_lookup_node(table, key)))
+		return -EINVAL;
 
-		aal_hash_table_resize(table);
-		return 1;
-	}
-	
+	if ((prev = (*node)->prev))
+		prev->next = next;
+		
+	if ((next = (*node)->next))
+		next->prev = prev;
+		
+	aal_hash_node_free(*node);
+	table->real--;
+		
 	return 0;
 }
 #endif
