@@ -56,7 +56,11 @@ typedef unsigned long long int  uint64_t;
 #ifndef ENABLE_STAND_ALONE
 #  include <stdarg.h>
 #else
+#if defined(__svr4__) || defined(_AIX) || defined(_M_UNIX) || defined(__NetBSD__)
 typedef char *va_list;
+#else
+typedef void *va_list;
+#endif
 #undef va_arg
 #undef va_end
 #undef va_start
