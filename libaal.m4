@@ -27,7 +27,7 @@ AC_CHECK_LIB(aal, aal_device_open, ,
 http://www.namesys.com/pub/libaal])]
 $3)
 
-AC_MSG_CHECKING(for libaal - version >= $1)
+AC_MSG_CHECKING(for libaal version >= $1)
 
 AC_TRY_LINK_FUNC(libaal_version,,
     AC_MSG_RESULT(failed)
@@ -48,10 +48,10 @@ AC_TRY_RUN([
 #include <aal/aal.h>
 
 int main() {
-    int major, minor, micro;
     const char *version;    
+    int major, minor, micro;
 	
-    if ( !(version = libaal_version()) )
+    if (!(version = libaal_version()))
 	exit(1);
 		
     if (sscanf(version, "%d.%d.%d", &major, &minor, &micro) != 3) {
@@ -59,9 +59,9 @@ int main() {
 	exit(1);
     }
 	
-    if ((major >= $libaal_config_major_version) ||
+    if ((major >= $libaal_config_major_version) &&
 	((major == $libaal_config_major_version) && 
-	(minor >= $libaal_config_minor_version)) ||
+	(minor >= $libaal_config_minor_version)) &&
 	((major == $libaal_config_major_version) && 
 	(minor == $libaal_config_minor_version) && 
 	(micro >= $libaal_config_micro_version))) 
@@ -70,11 +70,11 @@ int main() {
     } else {
 	printf("\nAn old version of libaal (%s) was found.\n",
 	    version);
-	printf("You need a version of libaal newer than %d.%d.%d.\n",
-	    $libaal_config_major_version, 
-	    $libaal_config_minor_version,
-	    $libaal_config_micro_version);
-	printf("You can get it at - http://www.namesys.com/pub/libaal\n");
+	printf("You need a version of libaal newer than or "
+            "equal to %d.%d.%d.\n", $libaal_config_major_version, 
+	    $libaal_config_minor_version, $libaal_config_micro_version);
+
+	printf("You can get it at http://www.namesys.com/pub/libaal\n");
 	return 1;
     }
 }
