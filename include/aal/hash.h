@@ -25,7 +25,9 @@ extern errno_t aal_hash_table_foreach(aal_hash_table_t *table,
 				      void *data);
 
 extern aal_hash_table_t *aal_hash_table_alloc(hash_func_t hash_func,
-					      comp_func_t comp_func);
+					      comp_func_t comp_func,
+					      keyrem_func_t keyrem_func,
+					      valrem_func_t valrem_func);
 
 extern aal_hash_node_t **aal_hash_table_lookup_node(aal_hash_table_t *table,
 						    void *key);

@@ -23,14 +23,24 @@ static aal_hash_node_t *aal_hash_node_alloc(void *key, void *value) {
 }
 
 /* Releases passed @node */
-static void aal_hash_node_free(aal_hash_node_t *node) {
+static void aal_hash_node_free(aal_hash_table_t *table,
+			       aal_hash_node_t *node)
+{
+	if (table->keyrem_func)
+		table->keyrem_func(node->key);
+
+	if (table->valrem_func)
+		table->valrem_func(node->value);
+	
 	aal_free(node);
 }
 
 /* Allocates hash table with passed @hash_func used for calculating hashes and
    @comp_func used for comparing keys. */
 aal_hash_table_t *aal_hash_table_alloc(hash_func_t hash_func,
-				       comp_func_t comp_func)
+				       comp_func_t comp_func,
+				       keyrem_func_t keyrem_func,
+				       valrem_func_t valrem_func)
 {
 	uint32_t size;
 	aal_hash_table_t *table;
@@ -43,8 +53,12 @@ aal_hash_table_t *aal_hash_table_alloc(hash_func_t hash_func,
 
 	table->real = 0;
 	table->size = TABLE_SIZE;
+	
 	table->hash_func = hash_func;
 	table->comp_func = comp_func;
+
+	table->keyrem_func = keyrem_func;
+	table->valrem_func = valrem_func;
 
 	size = table->size * sizeof(void *);
 
@@ -71,7 +85,7 @@ void aal_hash_table_free(aal_hash_table_t *table) {
 		     node != NULL; node = next)
 		{
 			next = node->next;
-			aal_hash_node_free(node);
+			aal_hash_node_free(table, node);
 		}
 	}
 
@@ -140,7 +154,7 @@ errno_t aal_hash_table_remove(aal_hash_table_t *table,
 	if (*node) {
 		dest = *node;
 		*node = dest->next;
-		aal_hash_node_free(dest);
+		aal_hash_node_free(table, dest);
 		table->real--;
 		
 		return 0;

@@ -133,7 +133,13 @@ typedef uint64_t (*hash_func_t) (const void *);
 
 /* Type for callback compare function. It is used in list and hash functions for
    comparing their items. */
-typedef int (*comp_func_t) (const void *, const void *, void *);
+typedef int (*comp_func_t) (const void *,
+			    const void *,
+			    void *);
+
+/* Key remove function */
+typedef void (*keyrem_func_t) (const void *);
+typedef void (*valrem_func_t) (const void *);
 
 struct aal_hash_table {
 	uint32_t size;
@@ -141,6 +147,10 @@ struct aal_hash_table {
 
 	hash_func_t hash_func;
 	comp_func_t comp_func;
+	
+	keyrem_func_t keyrem_func;
+	valrem_func_t valrem_func;
+	
 	aal_hash_node_t **nodes;
 };
 
