@@ -44,6 +44,11 @@ typedef unsigned int            uint32_t;
 __extension__
 typedef unsigned long long int  uint64_t;
 
+#define MAX_UINT8 (~(uint8_t)0)
+#define MAX_UINT16 (~(uint16_t)0)
+#define MAX_UINT32 (~(uint32_t)0)
+#define MAX_UINT64 (~(uint64_t)0)
+
 /* Types and macros for working with variable length params. They are needed
    because we don't want use gcc builtins in alone mode for achive as small
    binary size as possible. */
@@ -164,10 +169,10 @@ typedef int (*foreach_func_t) (const void *, const void *);
     
    This variant of the function may return anything. This may be bytes, blocks,
    etc. */
-#define INVAL_BLK (~0ull)
 
 typedef uint64_t blk_t;
 typedef uint64_t count_t;
+#define INVAL_BLK MAX_UINT64
 
 struct aal_device_ops;
 

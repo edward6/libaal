@@ -9,14 +9,14 @@
    handlers as NULL, because application that is use libreiser4 and libaal must
    set it up. */
 #if defined(ENABLE_STAND_ALONE) && defined(ENABLE_MEMORY_MANAGER)
+static aal_free_handler_t free_handler = NULL;
 static aal_malloc_handler_t malloc_handler = NULL;
 static aal_realloc_handler_t realloc_handler = NULL;
-static aal_free_handler_t free_handler = NULL;
 #else
 #include <stdlib.h>
-static aal_malloc_handler_t malloc_handler = malloc;
-static aal_realloc_handler_t realloc_handler = realloc;
-static aal_free_handler_t free_handler = free;
+static aal_free_handler_t free_handler = (aal_free_handler_t)free;
+static aal_malloc_handler_t malloc_handler = (aal_malloc_handler_t)malloc;
+static aal_realloc_handler_t realloc_handler = (aal_realloc_handler_t)realloc;
 #endif
 
 #ifndef ENABLE_STAND_ALONE
