@@ -5,8 +5,9 @@
   libaal/COPYING.
 */
 
-#if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_PRINT_FUNCTIONS))
 #include <aal/aal.h>
+
+#if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_PRINT_FUNCTIONS))
 
 enum format_modifier {
 	MOD_EMPTY,
@@ -244,6 +245,17 @@ int aal_vsnprintf(
 
 	return aal_strlen(buff);
 }
+#else
+
+#include <stdio.h>
+
+int aal_vsnprintf(char *buff, uint32_t n,
+		  const char *format, 
+		  va_list arg_list)
+{
+	return vsnprintf(buff, n, format, arg_list);
+}
+#endif
 
 /* Forms string in passed buffer by using format string */
 int aal_snprintf(
@@ -261,5 +273,3 @@ int aal_snprintf(
 
 	return len;
 }
-
-#endif

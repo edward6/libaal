@@ -146,7 +146,7 @@ if test x$enable_stand_alone = xyes; then
     fi
 
     ALONE_CFLAGS="$ALONE_CFLAGS -Wl,-N -DENABLE_STAND_ALONE $MEMORY_MANAGER_CFLAGS \
-$PRINT_FUNCTIONS_CFLAGS $STRINGS_FUNCTIONS_CFLAGS $LRU_FUNCTIONS_CFLAGS \ 
+$PRINT_FUNCTIONS_CFLAGS $STRING_FUNCTIONS_CFLAGS $LRU_FUNCTIONS_CFLAGS \ 
 -fno-builtin -malign-jumps=1 -malign-loops=1 -malign-functions=1"
 fi
 
