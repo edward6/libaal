@@ -6,3 +6,9 @@ reiser4progs/COPYING.
 This file may be modified and/or distributed without restriction. This is
 not an invitation to misrepresent the history of reiser4progs.
 
+2004-09-14
+	Run ldconfig automatically on 'make install'.
+2004-08-24
+	Memory manager fixes to avoid high fragmentation.
+2004-08-09
+	1.0.0 version is released.
