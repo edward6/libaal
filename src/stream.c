@@ -164,8 +164,21 @@ aal_proto_t memory_stream = {
 static int32_t read_file(aal_stream_t *stream,
 			 void *buff, uint32_t n)
 {
-	FILE *file = (FILE *)stream->entity;
-	return fread(buff, n, 1, file);
+	FILE *file;
+	uint32_t res;
+	uint32_t read;
+
+	file = (FILE *)stream->entity;
+
+	for (read = 0; read < n; read += res) {
+		if ((res = fread(buff + read, 1,
+				 n - read, file)) <= 0)
+		{
+			return read;
+		}
+	}
+
+	return read;
 }
 
 static int32_t write_file(aal_stream_t *stream,
@@ -185,7 +198,7 @@ static int32_t write_file(aal_stream_t *stream,
 		}
 	}
 
-	return 0;
+	return write;
 }
 
 static int eof_file(aal_stream_t *stream) {
