@@ -180,6 +180,8 @@ int aal_device_flags(
 	return device->flags;
 }
 
+#endif
+
 /* 
   Checks and sets new block size for specified device. Returns error code, see
   aal.h for more detailed description of errno_t.
@@ -190,6 +192,7 @@ errno_t aal_device_set_bs(
 {
 	aal_assert("umka-431", device != NULL);
 
+#ifndef ENABLE_STAND_ALONE
 	if (!aal_pow2(blocksize)) {
 		aal_exception_error("Block size %u isn't power "
 				    "of two.", blocksize);
@@ -200,12 +203,12 @@ errno_t aal_device_set_bs(
 		aal_exception_error("Block size can't be less "
 				    "than 512 bytes.");
 		return -EINVAL;
-	}	
+	}
+#endif
 
 	device->blocksize = blocksize;
 	return 0;
 }
-#endif
 
 /* Closes device. Frees all assosiated memory */
 void aal_device_close(

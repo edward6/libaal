@@ -37,8 +37,6 @@ extern char *aal_device_error(aal_device_t *device);
 
 extern int aal_device_flags(aal_device_t *device);
 
-extern errno_t aal_device_set_bs(aal_device_t *device, 
-				 uint32_t blocksize);
 #endif
 
 extern errno_t aal_device_read(aal_device_t *device, 
@@ -47,7 +45,10 @@ extern errno_t aal_device_read(aal_device_t *device,
 
 extern void aal_device_close(aal_device_t *device);
 
-extern uint32_t aal_device_get_bs(aal_device_t *device);
+extern errno_t aal_device_set_bs(aal_device_t *device, 
+				 uint32_t blocksize);
+
 extern count_t aal_device_len(aal_device_t *device);
+extern uint32_t aal_device_get_bs(aal_device_t *device);
 
 #endif
