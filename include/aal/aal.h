@@ -32,7 +32,6 @@ extern "C" {
 #include "block.h"
 #include "stream.h"
 #include "ui.h"
-#include "lru.h"
 
 extern const char *libaal_version(void);
 extern int libaal_max_interface_version(void);

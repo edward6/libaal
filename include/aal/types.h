@@ -144,28 +144,6 @@ typedef int (*comp_func_t) (const void *, const void *, void *);
 */
 typedef int (*foreach_func_t) (const void *, const void *);
 
-struct lru_ops {
-	int (*free) (void *);
-
-	int (*sync) (void *);
-
-	aal_list_t *(*get_next) (void *);
-	void (*set_next) (void *, aal_list_t *);
-	
-	aal_list_t *(*get_prev) (void *);
-	void (*set_prev) (void *, aal_list_t *);
-};
-
-typedef struct lru_ops lru_ops_t;
-
-struct aal_lru {
-	uint32_t adjust;
-	aal_list_t *list;
-	lru_ops_t *ops;
-};
-
-typedef struct aal_lru aal_lru_t;
-
 /* 
    This types is used for keeping the block number and block count value. They
    are needed to be increase source code maintainability.

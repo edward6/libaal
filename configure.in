@@ -74,11 +74,6 @@ AC_ARG_ENABLE(string_functions,
         enable_string_functions=no
 )
 
-AC_ARG_ENABLE(lru_functions,
-    [  --enable-lru-functions         enable lru functions in stand alone library [default=off]], ,
-        enable_lru_functions=no
-)
-
 # Checks for programs.
 AC_PROG_CC
 
@@ -157,12 +152,8 @@ if test x$enable_stand_alone = xyes; then
 	STRING_FUNCTIONS_CFLAGS="-DENABLE_STRING_FUNCTIONS"
     fi
 
-    if test x$enable_lru_functions = xyes; then
-	LRU_FUNCTIONS_CFLAGS="-DENABLE_LRU_FUNCTIONS"
-    fi
-
     ALONE_CFLAGS="$ALONE_CFLAGS -DENABLE_STAND_ALONE $MEMORY_MANAGER_CFLAGS \
-$EXCEPTIONS_CFLAGS $STRING_FUNCTIONS_CFLAGS $LRU_FUNCTIONS_CFLAGS $ALIGN_FLAGS"
+$EXCEPTIONS_CFLAGS $STRING_FUNCTIONS_CFLAGS $ALIGN_FLAGS"
 fi
 
 if test x$enable_debug = xyes; then
