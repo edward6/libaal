@@ -41,20 +41,6 @@ aal_list_t *aal_list_first(aal_list_t *list) {
 	return list;
 }
 
-#ifndef ENABLE_STAND_ALONE
-/* Returns next item */
-aal_list_t *aal_list_next(aal_list_t *list) {
-	if (!list) return NULL;
-	return list->next;
-}
-
-/* Returns prev item */
-aal_list_t *aal_list_prev(aal_list_t *list) {
-	if (!list) return NULL;
-	return list->prev;
-}
-#endif
-
 /* Returns list length */
 uint32_t aal_list_len(aal_list_t *list) {
 	uint32_t len = 0;
