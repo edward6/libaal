@@ -11,7 +11,7 @@ dnl
 dnl Adds the required libraries to $AAL_LIBS and does an
 dnl AC_SUBST(AAL_LIBS)
 
-AC_DEFUN(AC_CHECK_LIBAAL,
+AC_DEFUN([AC_CHECK_LIBAAL],
 [
 
 dnl save LIBS
