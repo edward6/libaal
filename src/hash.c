@@ -120,23 +120,18 @@ void *aal_hash_table_lookup(aal_hash_table_t *table,
 errno_t aal_hash_table_insert(aal_hash_table_t *table,
 			      void *key, void *value)
 {
-	uint32_t hash;
 	aal_hash_node_t **node;
-	aal_hash_node_t *new_node;
 
-	hash = table->hash_func(key);
-	node = &table->nodes[hash % table->size];
-
-	if (!(new_node = aal_hash_node_alloc(key, value)))
-		return -EINVAL;
+	node = aal_hash_table_lookup_node(table, key);
 	
 	if (*node) {
-		new_node->next = *node;
-		(*node)->prev = new_node;
+		(*node)->value = value;
+	} else {
+		if (!(*node = aal_hash_node_alloc(key, value)))
+			return -ENOMEM;
+		
+		table->real++;
 	}
-	
-	*node = new_node;
-	table->real++;
 
 	return 0;
 }
@@ -145,26 +140,22 @@ errno_t aal_hash_table_insert(aal_hash_table_t *table,
 errno_t aal_hash_table_remove(aal_hash_table_t *table,
 			      void *key)
 {
-	aal_hash_node_t *prev;
-	aal_hash_node_t *next;
+	aal_hash_node_t *dest;
 	aal_hash_node_t **node;
 
-	if (!*(node = aal_hash_table_lookup_node(table, key)))
-		return -EINVAL;
-
-	prev = (*node)->prev;
-	next = (*node)->next;
+	node = aal_hash_table_lookup_node(table, key);
 	
-	if (prev)
-		prev->next = next;
+	if (*node) {
+		dest = *node;
+		*node = dest->next;
+		aal_hash_node_free(dest);
+		table->real--;
 		
-	if (next)
-		next->prev = prev;
-		
-	aal_hash_node_free(*node);
-	table->real--;
-		
-	return 0;
+		return 0;
+	}
+
+	return -EINVAL;
+
 }
 
 errno_t aal_hash_table_foreach(aal_hash_table_t *table,
