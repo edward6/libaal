@@ -9,8 +9,8 @@
 #include <aal/aal.h>
 
 /* Minimal and maximal hash table size */
-#define TABLE_MIN_SIZE (11)
-#define TABLE_MAX_SIZE (13845163)
+#define MIN_SIZE (11)
+#define MAX_SIZE (13845163)
 
 /* Possible hash table size values */
 static const uint32_t primes[] = {
@@ -100,7 +100,7 @@ aal_hash_table_t *aal_hash_table_alloc(hash_func_t hash_func,
 	table->comp_func = comp_func;
 
 	table->real = 0;
-	table->size = TABLE_MIN_SIZE;
+	table->size = MIN_SIZE;
 	
 	if (!(table->nodes = aal_calloc(sizeof(void *),
 					table->size)))
@@ -170,15 +170,15 @@ void *aal_hash_table_lookup(aal_hash_table_t *table,
 
 /* Resizes hash @table if it is needed */
 static void aal_hash_table_resize(aal_hash_table_t *table) {
-	if ((table->size >= table->real * 3 && table->size > TABLE_MIN_SIZE) ||
-	    (table->size * 3 <= table->real && table->size < TABLE_MAX_SIZE))
+	if ((table->size >= table->real * 3 && table->size > MIN_SIZE) ||
+	    (table->size * 3 <= table->real && table->size < _MAX_SIZE))
 	{
 		uint32_t i, new_size;
 		aal_hash_node_t **new_nodes;
 		aal_hash_node_t *node, *next;
 
 		new_size = aal_spaced_primes_closest(table->real);
-		new_size = CLAMP(new_size, TABLE_MIN_SIZE, TABLE_MAX_SIZE);
+		new_size = CLAMP(new_size, MIN_SIZE, MAX_SIZE);
 
 		new_nodes = aal_calloc(sizeof(void *), new_size);
 
