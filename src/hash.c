@@ -166,4 +166,28 @@ errno_t aal_hash_table_remove(aal_hash_table_t *table,
 		
 	return 0;
 }
+
+errno_t aal_hash_table_foreach(aal_hash_table_t *table,
+			       foreach_func_t foreach_func,
+			       void *data)
+{
+	uint32_t i;
+	errno_t res;
+	
+	for (i = 0; i < table->size; i++) {
+		aal_hash_node_t *node;
+		aal_hash_node_t *next;
+		
+		for (node = table->nodes[i];
+		     node != NULL; node = next)
+		{
+			next = node->next;
+
+			if ((res = foreach_func(node, data)))
+				return res;
+		}
+	}
+
+	return 0;
+}
 #endif
