@@ -6,6 +6,7 @@
 #ifndef AAL_BITOPS_H
 #define AAL_BITOPS_H
 
+#ifndef ENABLE_STAND_ALONE
 typedef unsigned long long bit_t;
 
 extern inline int aal_set_bit(void *map, bit_t nr);
@@ -31,5 +32,6 @@ extern inline void aal_clear_bits(void *map, bit_t start,
 
 extern inline void aal_set_bits(void *map, bit_t start,
 				bit_t count);
+#endif
 
 #endif

@@ -5,6 +5,7 @@
    getting/setting one bit at some position, but also functions for working with
    bit range. */
 
+#ifndef ENABLE_STAND_ALONE
 #include <aal/aal.h>
 
 /* Turns on @nr bit in @map bitmap */
@@ -255,3 +256,4 @@ inline bit_t aal_find_set_bits(void *map,
 	*start = beg;
 	return end - beg;
 }
+#endif
