@@ -12,10 +12,10 @@
 #  include <config.h>
 #endif
 
-#if !defined(ENABLE_STAND_ALONE) && defined(ENABLE_DEBUG)
-
 extern void __actual_assert(char *hint, int cond, char *text,
 			    char *file, int line, char *func);
+
+#if !defined(ENABLE_STAND_ALONE) && defined(ENABLE_DEBUG)
 
 /*
   Something like standard assert, but working through exception 
@@ -40,7 +40,7 @@ extern void __actual_assert(char *hint, int cond, char *text,
 #endif
 
 #else
-#define aal_assert(hint, cond) while (0) {}
+#define aal_assert(hint, cond)
 #endif
 
 extern assert_handler_t aal_assert_get_handler(void);

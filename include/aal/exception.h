@@ -54,30 +54,14 @@ extern void aal_exception_off(void);
         aal_exception_throw(EXCEPTION_ERROR, EXCEPTION_RETRYIGNORE, msg, ##list)
 
 #else
-#define aal_exception_fatal(msg, list...)       \
-        do {} while (0)
-	
-#define aal_exception_bug(msg, list...)	        \
-        do {} while (0)
-	
-#define aal_exception_error(msg, list...)       \
-        do {} while (0)
-	
-#define aal_exception_warn(msg, list...)        \
-        do {} while (0)
-	
-#define aal_exception_info(msg, list...)        \
-        do {} while (0)
-
-#define aal_exception_yesno(msg, list...)       \
-        do {} while (0)
-
-#define aal_exception_okcancel(msg, list...)    \
-        do {} while (0)
-
-#define aal_exception_retryignore(msg, list...) \
-        do {} while (0)
-
+#define aal_exception_bug(msg, list...)
+#define aal_exception_warn(msg, list...)
+#define aal_exception_info(msg, list...)
+#define aal_exception_fatal(msg, list...)
+#define aal_exception_error(msg, list...)
+#define aal_exception_yesno(msg, list...)
+#define aal_exception_okcancel(msg, list...)
+#define aal_exception_retryignore(msg, list...)
 #endif
 
 #endif

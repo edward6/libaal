@@ -35,8 +35,7 @@
 	    }								\
     } while (0)
 #else
-#define aal_device_check_routine(device, routine, action)               \
-    do {} while (0)
+#define aal_device_check_routine(device, routine, action)
 #endif
 
 /*

@@ -43,9 +43,11 @@ void aal_assert_set_handler(assert_handler_t handler) {
 	assert_handler = handler;
 }
 
+#endif
+
 /* 
-   This function is used to provide asserts via exceptions. It is used by macro
-   aal_assert().
+  This function is used to provide asserts via exceptions. It is used by macro
+  aal_assert().
 */
 void __actual_assert(
 	char *hint,	     /* person owner of assert */
@@ -55,9 +57,10 @@ void __actual_assert(
 	int line,	     /* line of code assertion was failed in */
 	char *func)          /* function in code assertion was failed in */
 {
+#if !defined(ENABLE_STAND_ALONE) && defined(ENABLE_DEBUG)
 	/* Checking the condition and assert handler validness */
 	if (!cond && assert_handler)
 		assert_handler(hint, cond, text, file, line, func);
+#endif
 }
 
-#endif
