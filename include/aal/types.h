@@ -212,7 +212,7 @@ struct aal_device_ops {
 			 void *, blk_t, count_t);
     
 	errno_t (*write) (aal_device_t *, 
-			 void *, blk_t, count_t);
+			  void *, blk_t, count_t);
     
 	errno_t (*sync) (aal_device_t *);
     
