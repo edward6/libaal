@@ -51,8 +51,8 @@ AC_ARG_ENABLE(Werror,
 )
 
 AC_ARG_ENABLE(debug, 
-    [  --disable-debug                disable debug information in binaries], , 
-	enable_debug=yes
+    [  --enable-debug                enable debug information in binaries], , 
+	enable_debug=no
 )
 
 AC_ARG_ENABLE(stand_alone,
@@ -162,7 +162,7 @@ if test x$enable_debug = xyes; then
     GENERIC_CFLAGS="$GENERIC_CFLAGS -O0 -g"
     ALONE_CFLAGS="$ALONE_CFLAGS -O0 -g"
 else
-    GENERIC_CFLAGS="$GENERIC_CFLAGS -O2"
+    GENERIC_CFLAGS="$GENERIC_CFLAGS -O3"
     ALONE_CFLAGS="$ALONE_CFLAGS -Os"
 
     if test "x$uninitialized" = xyes; then
