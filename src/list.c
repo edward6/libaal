@@ -41,6 +41,7 @@ aal_list_t *aal_list_first(aal_list_t *list) {
 	return list;
 }
 
+#ifndef ENABLE_STAND_ALONE
 /* Returns next item */
 aal_list_t *aal_list_next(aal_list_t *list) {
 	if (!list) return NULL;
@@ -52,6 +53,7 @@ aal_list_t *aal_list_prev(aal_list_t *list) {
 	if (!list) return NULL;
 	return list->prev;
 }
+#endif
 
 /* Returns list length */
 uint32_t aal_list_len(aal_list_t *list) {
@@ -65,6 +67,7 @@ uint32_t aal_list_len(aal_list_t *list) {
 	return len;
 }
 
+#ifndef ENABLE_STAND_ALONE
 /*
   This functions makes walk though the @list and calls passed @func for each
   list item. This may be used for searching something, or performing some
@@ -128,6 +131,7 @@ aal_list_t *aal_list_insert(aal_list_t *list,
 
 	return (list == NULL ? at : list);
 }
+#endif
 
 /* Inserts new item in sorted maner */
 aal_list_t *aal_list_insert_sorted(aal_list_t *list, void *data,
@@ -173,6 +177,7 @@ aal_list_t *aal_list_insert_sorted(aal_list_t *list, void *data,
 	return new_list;
 }
 
+#ifndef ENABLE_STAND_ALONE
 /* Inserts new item just before passed @list */
 aal_list_t *aal_list_prepend(aal_list_t *list, void *data) {
 	aal_list_t *new;
@@ -192,6 +197,7 @@ aal_list_t *aal_list_prepend(aal_list_t *list, void *data) {
     
 	return new;
 }
+#endif
 
 /* Inserts new item just after passed @list */
 aal_list_t *aal_list_append(aal_list_t *list, void *data) {

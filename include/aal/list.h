@@ -47,10 +47,10 @@ extern void aal_list_free(aal_list_t *list);
   backward). They are used for simple search, etc.
 */
 #define aal_list_foreach_forward(list, walk) \
-    for (walk = aal_list_first(list); walk; walk = aal_list_next(walk))
+    for (walk = aal_list_first(list); walk; walk = walk->next)
 
 #define aal_list_foreach_backward(list, walk) \
-    for (walk = aal_list_last(list); walk; walk = aal_list_prev(walk))
+    for (walk = aal_list_last(list); walk; walk = walk->prev)
     
 #endif
 
