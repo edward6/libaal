@@ -203,5 +203,4 @@ AC_OUTPUT([
 ])
 
 echo
-echo Type \'make\' to compile libaal.
-echo Don\'t forget to run /sbin/ldconfig as root after make install.
+echo Type \'make\' to compile libaal and \'make install\' to install it.

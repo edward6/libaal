@@ -12,3 +12,9 @@ endef
 
 ETAGS:
 	$(all-sources) | etags -
+
+install-exec-hook:
+	./run-ldconfig $(libdir)
+
+uninstall-hook:
+	./run-ldconfig $(libdir)
