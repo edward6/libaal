@@ -41,7 +41,7 @@ errno_t file_open(
 	uint32_t blksize,	    /* used blocksize */
 	int flags)		    /* flags file will be opened with */
 {
-	int fd, fmode;
+	int fd;
 	char *filename;
 
 	if (!device)
@@ -58,21 +58,11 @@ errno_t file_open(
 	/* Opening specified file with specified flags */
 	filename = (char *)person;
 
-	if ((WRITE & flags) && (READ & flags))
-		fmode = O_RDWR;
-	else {
-		if (READ & flags)
-			fmode = O_RDONLY;
-
-		if (WRITE & flags)
-			fmode = O_WRONLY;
-	}
-	
 #if defined(O_LARGEFILE)
-	if ((fd = open(filename, fmode | O_LARGEFILE)) == -1)
-#else
-	if ((fd = open(filename, fmode)) == -1)
+	flags |= O_LARGEFILE;
 #endif
+
+	if ((fd = open(filename, flags)) == -1)
 		goto error_free_entity;
 
 	*(int *)device->entity = fd;
@@ -115,8 +105,8 @@ static errno_t file_read(
 		return -EINVAL;
     
 	/* Positioning inside file. As configure script defines
-	   __USE_FILE_OFFSET64 macro inside config.h file, lseek function will
-	   be mapped into lseek64 one. */
+	   __USE_FILE_OFFSET64 macro inside config.h file, lseek64 function will
+	   be actually used. */
 	off = (off_t)block * (off_t)device->blksize;
 	
 	if (lseek(*((int *)device->entity), off, SEEK_SET) == (off_t)-1) {
