@@ -194,7 +194,7 @@ static errno_t file_equals(
 }
 
 #if defined(__linux__) && defined(_IOR) && !defined(BLKGETSIZE64)
-#   define BLKGETSIZE64 _IOR(0x12, 114, sizeof(uint64_t))
+#   define BLKGETSIZE64 _IOR(0x12, 114, uint64_t)
 #endif
 
 /* Handler for "len" operation for use with file device. See bellow for
