@@ -117,8 +117,8 @@ CFLAGS=""
 ALONE_CFLAGS=""
 GENERIC_CFLAGS=""
 
-dnl make libc threadsafe (not required for us for awhile, but useful other users of
-dnl libaal)
+# make libc threadsafe (not required for us for awhile, but useful other users of
+# libaal)
 
 GENERIC_CFLAGS="$GENERIC_CFLAGS -D_REENTRANT"
 
