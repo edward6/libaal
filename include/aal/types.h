@@ -147,7 +147,7 @@ typedef struct aal_hash_table aal_hash_table_t;
 typedef errno_t (*foreach_func_t) (void *, void *);
 
 /* These types is used for keeping the block number and block count value. They
-   are needed to be increase source code maintainability.
+   are needed to increase source code maintainability.
 
    For instance, there is some function:
 
