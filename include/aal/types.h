@@ -27,7 +27,7 @@
 #define ESTRUCT                 0x5
 
 #ifndef __int8_t_defined
-# define __int8_t_defined
+#define __int8_t_defined
 typedef signed char             int8_t;
 typedef short int               int16_t;
 typedef int                     int32_t;
@@ -151,7 +151,7 @@ typedef struct aal_hash_table aal_hash_table_t;
 
 /* Type for callback function that is called for each element of list. Usage is
    the same as previous one. */
-typedef int (*foreach_func_t) (const void *, const void *);
+typedef int (*foreach_func_t) (const void *, void *);
 
 /* This types is used for keeping the block number and block count value. They
    are needed to be increase source code maintainability.
