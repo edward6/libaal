@@ -11,16 +11,17 @@
 
 #if !defined(ENABLE_STAND_ALONE) && defined(ENABLE_DEBUG)
 
-#include <aal/aal.h>
 #include <stdlib.h>
+#include <aal/aal.h>
 
 static void default_assert_handler(char *hint, int cond, char *text,
 				   char *file, int line, char *func)
 {
 	/* Actual exception throwing. Messages will contain hint for owner,
 	   file, line and function assertion was failed in. */ 
-	aal_bug("%s: Assertion (%s) at %s:%d in function %s() failed.",
-		hint, text, file, line, func);
+	aal_exception_throw(EXCEPTION_TYPE_BUG, EXCEPTION_OPT_OK,
+			    "%s: Assertion (%s) at %s:%d in function "
+			    "%s() failed.", hint, text, file, line, func);
 
 	abort();
 }
@@ -37,8 +38,30 @@ void aal_assert_set_handler(assert_handler_t handler) {
 	
 	assert_handler = handler;
 }
-
 #endif
+
+void __actual_bug(
+	char *hint,	     /* person owner of assert */
+	char *file,	     /* source file assertion was failed in */
+	int line,	     /* line of code assertion was failed in */
+	char *func,          /* function in code assertion was failed in */
+	char *text,	     /* text of the assertion */
+	...)
+{
+#if !defined(ENABLE_STAND_ALONE) && defined(ENABLE_DEBUG)
+	char desc[256];
+	va_list arg_list;
+	
+	va_start(arg_list, text);
+	aal_memset(desc, 0, sizeof(desc));
+	aal_vsnprintf(desc, 256, text, arg_list);
+	va_end(arg_list);
+	
+	aal_exception_throw(EXCEPTION_TYPE_BUG, EXCEPTION_OPT_OK,
+			    "%s: Bug (%s) at %s:%d in function %s(). "
+			    "%s.", hint, text, file, line, func, desc);
+#endif
+}
 
 /* This function is used to provide asserts via exceptions. It is used by macro
    aal_assert(). */

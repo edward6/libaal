@@ -30,9 +30,6 @@ extern aal_exception_option_t aal_exception_throw(aal_exception_type_t type,
 #define aal_fatal(msg, list...)       \
         aal_exception_throw(EXCEPTION_TYPE_FATAL, EXCEPTION_OPT_OK, msg, ##list)
 	
-#define aal_bug(msg, list...)	      \
-        aal_exception_throw(EXCEPTION_TYPE_BUG, EXCEPTION_OPT_OK, msg, ##list)
-	
 #define aal_error(msg, list...)       \
         aal_exception_throw(EXCEPTION_TYPE_ERROR, EXCEPTION_OPT_OK, msg, ##list)
 	
@@ -55,7 +52,6 @@ extern aal_exception_option_t aal_exception_throw(aal_exception_type_t type,
         aal_exception_throw(EXCEPTION_TYPE_ERROR, EXCEPTION_OPT_RETRYIGNORE, msg, ##list)
 
 #else
-#define aal_bug(msg, list...)
 #define aal_warn(msg, list...)
 #define aal_info(msg, list...)
 #define aal_mess(msg, list...)

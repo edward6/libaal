@@ -10,31 +10,50 @@
 #  include <config.h>
 #endif
 
+extern void __actual_bug(char *hint, char *file, int line, 
+			 char *func, char *text, ...);
+
 extern void __actual_assert(char *hint, int cond, char *text,
 			    char *file, int line, char *func);
 
 #if !defined(ENABLE_STAND_ALONE) && defined(ENABLE_DEBUG)
-
-/* Something like standard assert, but working through the exception factory. */
 #ifdef __GNUC__
-#define aal_assert(hint, cond)          \
-    	__actual_assert(hint, cond,     \
-	   #cond,                       \
-	    __FILE__,                   \
-	    __LINE__,                   \
-	    __PRETTY_FUNCTION__)
+#define aal_bug(hint, text, list...)         \
+    	__actual_bug(hint,                   \
+		     __FILE__,		     \
+		     __LINE__,		     \
+		     __PRETTY_FUNCTION__,    \
+		     #text,		     \
+		     ##list)
+
+#define aal_assert(hint, cond)               \
+    	__actual_assert(hint,                \
+			cond,		     \
+			#cond,		     \
+			__FILE__,	     \
+			__LINE__,	     \
+			__PRETTY_FUNCTION__)
 
 #else
-#define aal_assert(hint, cond)          \
-	__actual_assert(hint, cond,     \
-	    #cond,                      \
-	    "unknown",                  \
-	    0,                          \
-	    "unknown")
+#define aal_bug(hint, text, list...)         \
+    	__actual_bug(hint,                   \
+		     "unknown",		     \
+		     0,		             \
+		     "unknown",              \
+		     #text,		     \
+		     ##list)
+
+#define aal_assert(hint, cond)               \
+	__actual_assert(hint, cond,          \
+			#cond,		     \
+			"unknown",	     \
+			0,		     \
+			"unknown")
 
 #endif
 
 #else
+#define aal_bug(hint, cond)
 #define aal_assert(hint, cond)
 #endif
 
