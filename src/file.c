@@ -4,7 +4,7 @@
    file.c -- standard file device abstraction layer. It is used files functions
    to read or write into device. */
 
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>

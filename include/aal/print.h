@@ -6,7 +6,7 @@
 #ifndef AAL_PRINT_H
 #define AAL_PRINT_H
 
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 #include <aal/types.h>
 
 extern int aal_vsnprintf(char *buff, uint32_t n,

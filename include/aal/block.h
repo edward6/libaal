@@ -8,7 +8,7 @@
 
 #include <aal/types.h>
 
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 extern void aal_block_move(aal_block_t *block,
 			   aal_device_t *device,
 			   blk_t nr);

@@ -8,7 +8,7 @@
 
 #include <aal/types.h>
 
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 extern void aal_exception_on(void);
 extern void aal_exception_off(void);
 

@@ -5,7 +5,7 @@
    getting/setting one bit at some position, but also functions for working with
    bit range. */
 
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 #include <aal/libaal.h>
 
 /* Turns on @nr bit in @map bitmap */

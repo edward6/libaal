@@ -50,10 +50,10 @@ typedef unsigned long long int  uint64_t;
 #define MAX_UINT64 ((uint64_t)~0)
 
 /* Types and macros for working with variable length params. They are needed
-   because we don't want use gcc builtins in alone mode for achive as small
+   because we don't want use gcc builtins in minimal mode for achive as small
    binary size as possible. */
 
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 #  include <stdarg.h>
 #else
 #ifndef _VA_LIST_

@@ -3,7 +3,7 @@
    
    list.c -- double-linked list implementation. */
 
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 #include <aal/libaal.h>
 
 /* Allocates new aal_list_t instance and assigns passed @data to it */

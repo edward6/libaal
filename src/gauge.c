@@ -20,7 +20,7 @@
    In the case some exception occurs durring gauge running, it will be stoped
    and failing report will be made. */
 
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 
 #include <aal/libaal.h>
 

@@ -6,7 +6,7 @@
 #ifndef AAL_GAUGE_H
 #define AAL_GAUGE_H
 
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 #include <aal/types.h>
 
 extern aal_gauge_t *aal_gauge_create(aal_gauge_handler_t handler, 

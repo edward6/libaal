@@ -4,7 +4,7 @@
    ui.c -- callback function for using them for asking user to enter
    something. */
 
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 #include <aal/libaal.h>
 
 static aal_numeric_func_t numeric_handler = NULL;

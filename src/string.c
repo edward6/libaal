@@ -5,7 +5,7 @@
 
 #include <aal/libaal.h>
 
-#ifdef ENABLE_STAND_ALONE
+#ifdef ENABLE_MINIMAL
 
 /* Memory and string working functions. They are full analog of standard ones.
    See corresponding man page for details. */

@@ -9,7 +9,7 @@
 #  include <config.h>
 #endif
 
-#if !defined(ENABLE_STAND_ALONE) && defined(ENABLE_DEBUG)
+#if !defined(ENABLE_MINIMAL) && defined(ENABLE_DEBUG)
 
 #include <stdlib.h>
 #include <aal/libaal.h>
@@ -48,7 +48,7 @@ void __actual_bug(
 	char *text,	     /* text of the assertion */
 	...)
 {
-#if !defined(ENABLE_STAND_ALONE) && defined(ENABLE_DEBUG)
+#if !defined(ENABLE_MINIMAL) && defined(ENABLE_DEBUG)
 	char desc[512];
 	va_list arg_list;
 	
@@ -74,7 +74,7 @@ void __actual_assert(
 	int line,	     /* line of code assertion was failed in */
 	char *func)          /* function in code assertion was failed in */
 {
-#if !defined(ENABLE_STAND_ALONE) && defined(ENABLE_DEBUG)
+#if !defined(ENABLE_MINIMAL) && defined(ENABLE_DEBUG)
 	/* Checking the condition and assert handler validness */
 	if (!cond && assert_handler)
 		assert_handler(hint, cond, text, file, line, func);

@@ -6,7 +6,7 @@
 #ifndef AAL_STREAM_H
 #define AAL_STREAM_H
 
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 #include <aal/types.h>
 
 extern int aal_stream_eof(aal_stream_t *stream);

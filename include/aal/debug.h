@@ -16,7 +16,7 @@ extern void __actual_bug(char *hint, char *file, int line,
 extern void __actual_assert(char *hint, int cond, char *text,
 			    char *file, int line, char *func);
 
-#if !defined(ENABLE_STAND_ALONE) && defined(ENABLE_DEBUG)
+#if !defined(ENABLE_MINIMAL) && defined(ENABLE_DEBUG)
 #ifdef __GNUC__
 #define aal_bug(hint, text, list...)         \
     	__actual_bug(hint,                   \

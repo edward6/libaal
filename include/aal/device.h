@@ -13,7 +13,7 @@ extern aal_device_t *aal_device_open(struct aal_device_ops *ops,
 				     uint32_t blksize,
 				     int flags);
 
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 extern errno_t aal_device_sync(aal_device_t *device);
 
 extern bool_t aal_device_readonly(aal_device_t *device);

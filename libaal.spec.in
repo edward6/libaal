@@ -27,7 +27,7 @@ with the libaal library.
 %setup -q
 
 %build
-BUILD_OPTS="--enable-stand-alone"
+BUILD_OPTS="--enable-libminimal"
 %if %{enable_debug}
 BUILD_OPTS="$BUILD_OPTS --enable-debug"
 %endif
@@ -36,7 +36,7 @@ BUILD_OPTS="$BUILD_OPTS --enable-debug"
 %if %{enable_debug}
         --enable-debug \
 %endif
-        --enable-stand-alone
+        --enable-libminimal
 make
 
 %install
@@ -54,14 +54,14 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %doc AUTHORS BUGS COPYING CREDITS INSTALL NEWS README THANKS TODO
 %{_libdir}/libaal-1.0.so.*
-%{_libdir}/libaal-alone.so.*
+%{_libdir}/libaal-minimal.so.*
 
 %files devel
 %defattr(-,root,root)
 %{_libdir}/libaal.so
 %{_libdir}/libaal.*a
-%{_libdir}/libaal-alone.so
-%{_libdir}/libaal-alone.*a
+%{_libdir}/libaal-minimal.so
+%{_libdir}/libaal-minimal.*a
 %dir %{_includedir}/aal
 %{_includedir}/aal/*
 %{_datadir}/aclocal/libaal.m4

@@ -46,7 +46,7 @@ AC_DEFINE_UNQUOTED(LIBAAL_MIN_INTERFACE_VERSION, $LIBAAL_INTERFACE_AGE)
 AM_ENABLE_SHARED
 
 AC_ARG_ENABLE(Werror,
-    [  --enable-Werror                enable build with gcc -Werror], ,
+    [  --enable-Werror               enable build with gcc -Werror], ,
 	enable_Werror=no
 )
 
@@ -55,13 +55,13 @@ AC_ARG_ENABLE(debug,
 	enable_debug=no
 )
 
-AC_ARG_ENABLE(stand_alone,
-    [  --enable-stand-alone           enable build stand alone library], ,
-        enable_stand_alone=no
+AC_ARG_ENABLE(libminimal,
+    [  --enable-libminimal           enable building of minimal footprint library], ,
+        enable_libminimal=no
 )
 
 AC_ARG_ENABLE(memory_manager,
-    [  --enable-memory-manager        enable memory manager in stand alone library], ,
+    [  --enable-memory-manager       enable memory manager in minimal library], ,
         enable_memory_manager=no
 )
 
@@ -127,7 +127,7 @@ else
 fi
 
 CFLAGS=""
-ALONE_CFLAGS=""
+MINIMAL_CFLAGS=""
 GENERIC_CFLAGS=""
 
 # make libc threadsafe (not required for us for awhile, but useful other users of
@@ -148,22 +148,22 @@ AC_CHECK_SIZEOF(off_t, 64, [
 
 AM_PROG_LIBTOOL
 
-if test x$enable_stand_alone = xyes; then
+if test x$enable_libminimal = xyes; then
     if test x$enable_memory_manager = xyes; then
 	MEMORY_MANAGER_CFLAGS="-DENABLE_MEMORY_MANAGER"
     fi
 
-    ALONE_CFLAGS="$ALONE_CFLAGS -DENABLE_STAND_ALONE $MEMORY_MANAGER_CFLAGS $ALIGN_FLAGS"
+    MINIMAL_CFLAGS="$MINIMAL_CFLAGS -DENABLE_MINIMAL $MEMORY_MANAGER_CFLAGS $ALIGN_FLAGS"
 fi
 
 CFLAGS="$CFLAGS -W -Wall"
 
 if test x$enable_debug = xyes; then
     GENERIC_CFLAGS="$GENERIC_CFLAGS -O0 -g"
-    ALONE_CFLAGS="$ALONE_CFLAGS -O0 -g"
+    MINIMAL_CFLAGS="$MINIMAL_CFLAGS -O0 -g"
 else
     GENERIC_CFLAGS="$GENERIC_CFLAGS -O3"
-    ALONE_CFLAGS="$ALONE_CFLAGS -Os"
+    MINIMAL_CFLAGS="$MINIMAL_CFLAGS -Os"
 
     if test "x$uninitialized" = xyes; then
        CFLAGS="$CFLAGS -Wuninitialized"
@@ -184,14 +184,14 @@ if test x$enable_Werror = xyes; then
     CFLAGS="$CFLAGS -Werror"
 fi
 
-AM_CONDITIONAL(ENABLE_STAND_ALONE, test x$enable_stand_alone = xyes)
+AM_CONDITIONAL(ENABLE_MINIMAL, test x$enable_libminimal = xyes)
 AM_CONDITIONAL(ENABLE_DEBUG, test x$enable_debug = xyes)
 
 if test x$enable_debug = xyes; then
     AC_DEFINE(ENABLE_DEBUG)
 fi
 
-AC_SUBST(ALONE_CFLAGS)
+AC_SUBST(MINIMAL_CFLAGS)
 AC_SUBST(GENERIC_CFLAGS)
 
 AC_OUTPUT([

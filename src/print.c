@@ -3,7 +3,7 @@
    
    print.c -- printf and friends. */
 
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 #include <aal/libaal.h>
 #include <stdio.h>
 

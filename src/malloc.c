@@ -8,7 +8,7 @@
 /* Checking whether allone mode is in use. If so, initializes memory working
    handlers as NULL, because application that is use libreiser4 and libaal must
    set it up. */
-#if defined(ENABLE_STAND_ALONE) && defined(ENABLE_MEMORY_MANAGER)
+#if defined(ENABLE_MINIMAL) && defined(ENABLE_MEMORY_MANAGER)
 static aal_free_handler_t free_handler = NULL;
 static aal_malloc_handler_t malloc_handler = NULL;
 #else
@@ -17,9 +17,9 @@ static aal_free_handler_t free_handler = (aal_free_handler_t)free;
 static aal_malloc_handler_t malloc_handler = (aal_malloc_handler_t)malloc;
 #endif
 
-#ifndef ENABLE_STAND_ALONE
-/* Sets new handler for malloc function. This is useful for alone mode, because
-   all application which are working in alone mode (without libc, probably in
+#ifndef ENABLE_MINIMAL
+/* Sets new handler for malloc function. This is useful for minimal mode, because
+   all application which are working in minimal mode (without libc, probably in
    real mode of processor, etc) have own memory allocation factory. That factory
    usualy operates on some static memory heap. And all allocation function just
    mark some piece of heap as used. And all deallocation function marks
@@ -50,7 +50,7 @@ aal_free_handler_t aal_free_get_handler(void) {
 
 /* Memory manager stuff. Simple memory manager is needed for appliances where
    libc cannot be used but libreiser4 must be working. */
-#if defined(ENABLE_STAND_ALONE) && defined(ENABLE_MEMORY_MANAGER)
+#if defined(ENABLE_MINIMAL) && defined(ENABLE_MEMORY_MANAGER)
 typedef struct chunk chunk_t;
 typedef enum chunk_state chunk_state_t;
 

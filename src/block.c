@@ -112,7 +112,7 @@ aal_block_t *aal_block_load(
 	return NULL;
 }
 
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 /* Sets block new number into passed @block */
 void aal_block_move(
 	aal_block_t *block,		/* block, position will be set to */

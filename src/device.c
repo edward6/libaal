@@ -21,7 +21,7 @@
     
    This macro was introdused to decrease source code by removing a lot of common
    pieces and replace them by just one line of macro. */
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 #define aal_device_check_routine(device, routine, action)		\
     do {								\
 	    if (!device->ops->routine) {				\
@@ -46,7 +46,7 @@ aal_device_t *aal_device_open(
 
 	aal_assert("umka-429", ops != NULL);
     
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 	/* Rough check for blocksize validness */
 	if (!aal_pow2(blksize)) {
 		aal_error("Block size %u isn't power of two.", blksize);
@@ -80,7 +80,7 @@ aal_device_t *aal_device_open(
 	return NULL;
 }
 
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 errno_t aal_device_reopen(
 	aal_device_t *device,       /* device for reopening */
 	uint32_t blksize,           /* block size device is working with */
@@ -149,7 +149,7 @@ errno_t aal_device_set_bs(
 {
 	aal_assert("umka-431", device != NULL);
 
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 	if (!aal_pow2(blksize)) {
 		aal_error("Block size %u isn't power of two.", blksize);
 		return -EINVAL;

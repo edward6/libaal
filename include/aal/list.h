@@ -6,7 +6,7 @@
 #ifndef AAL_LIST_H
 #define AAL_LIST_H
 
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 #include <aal/types.h>
 
 extern aal_list_t *aal_list_alloc(void *data);

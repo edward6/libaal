@@ -4,7 +4,7 @@
    libaal.h -- the central libaal header. aal - application abstraction library. It
    contains functions which help to work in any environment, out of the box. For
    now libaal supports two envinments: standard (userspace, libc, etc.) and so
-   called "alone" mode - the mode, bootloaders work in (real mode of processor,
+   called "minimal" mode - the mode, bootloaders work in (real mode of processor,
    no libc, etc). */
 
 #ifndef AAL_H

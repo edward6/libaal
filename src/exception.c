@@ -4,7 +4,7 @@
    exception.c -- exceptions handling functions. Exception factory is used for
    providing unified interface for error handling. */
 
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 #include <aal/libaal.h>
 
 static aal_exception_handler_t exception_handler = NULL;
@@ -87,7 +87,7 @@ static aal_exception_option_t aal_exception_actual_throw(
 	return opt;
 }
 
-#ifndef ENABLE_STNAD_ALONE
+#ifndef ENABLE_MINIMAL
 #  define MAX_MESSAGE_SIZE (4096)
 #else
 #  define MAX_MESSAGE_SIZE (256)

@@ -3,7 +3,7 @@
    
    string.h -- memory-working and string-working functions. They are needed in
    order to be independent from specific application. As libreiser4 is used
-   string functions, we should provide them for it, because in alone mode they
+   string functions, we should provide them for it, because in minimal mode they
    doesn't exist due to libc is not in use. */
 
 #ifndef AAL_STRING_H

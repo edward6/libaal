@@ -3,7 +3,7 @@
    
    malloc.h -- memory allocation functions. ctualy they are memory allocation
    handlers which may be set by caller. In the allone mode they will point to
-   corresponding memory allocation functions, which are used in certain alone
+   corresponding memory allocation functions, which are used in certain minimal
    application (bootloaders, etc). In the standard mode they are pointed to libc
    memory allocation functions (malloc, free, etc). */
 
@@ -19,7 +19,7 @@ extern void aal_mem_init(void *start, uint32_t len);
 typedef void (*aal_free_handler_t) (void *);
 typedef void *(*aal_malloc_handler_t) (uint32_t);
 
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 extern void aal_malloc_set_handler(aal_malloc_handler_t handler);
 extern aal_malloc_handler_t aal_malloc_get_handler(void);
 

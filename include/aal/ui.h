@@ -6,7 +6,7 @@
 #ifndef AAL_UI_H
 #define AAL_UI_H
 
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 #include <aal/types.h>
 
 typedef int (*aal_check_numeric_func_t) (int64_t, void *);

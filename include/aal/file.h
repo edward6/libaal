@@ -6,7 +6,7 @@
 #ifndef AAL_FILE_H
 #define AAL_FILE_H
 
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 
 #include <aal/types.h>
 extern struct aal_device_ops file_ops;

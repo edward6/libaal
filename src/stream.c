@@ -3,7 +3,7 @@
    
    stream.c -- stream implementation. */  
 
-#ifndef ENABLE_STAND_ALONE
+#ifndef ENABLE_MINIMAL
 #include <stdio.h>
 #include <stdlib.h>
 #include <aal/libaal.h>
