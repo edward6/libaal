@@ -65,13 +65,15 @@ aal_hash_table_t *aal_hash_table_alloc(hash_func_t hash_func,
 void aal_hash_table_free(aal_hash_table_t *table) {
 	uint32_t i;
 	aal_hash_node_t *node;
+	aal_hash_node_t *next;
 	
 	aal_assert("umka-2269", table != NULL);
 
 	for (i = 0; i < table->size; i++) {
 		for (node = table->nodes[i];
-		     node != NULL; node = node->next)
+		     node != NULL; node = next)
 		{
+			next = node->next;
 			aal_hash_node_free(node);
 		}
 	}
@@ -150,10 +152,13 @@ errno_t aal_hash_table_remove(aal_hash_table_t *table,
 	if (!*(node = aal_hash_table_lookup_node(table, key)))
 		return -EINVAL;
 
-	if ((prev = (*node)->prev))
+	prev = (*node)->prev;
+	next = (*node)->next;
+	
+	if (prev)
 		prev->next = next;
 		
-	if ((next = (*node)->next))
+	if (next)
 		next->prev = prev;
 		
 	aal_hash_node_free(*node);
