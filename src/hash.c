@@ -89,6 +89,7 @@ static void aal_hash_node_free(aal_hash_node_t *node) {
 aal_hash_table_t *aal_hash_table_alloc(hash_func_t hash_func,
 				       comp_func_t comp_func)
 {
+	uint32_t size;
 	aal_hash_table_t *table;
 	
 	aal_assert("umka-2267", hash_func != NULL);
@@ -101,12 +102,11 @@ aal_hash_table_t *aal_hash_table_alloc(hash_func_t hash_func,
 
 	table->real = 0;
 	table->size = MIN_SIZE;
-	
-	if (!(table->nodes = aal_calloc(sizeof(void *),
-					table->size)))
-	{
+
+	size = table->size * sizeof(void *);
+
+	if (!(table->nodes = aal_calloc(size, 0)))
 		goto error_free_table;
-	}
 
 	return table;
 	
@@ -179,8 +179,7 @@ static void aal_hash_table_resize(aal_hash_table_t *table) {
 
 		new_size = aal_spaced_primes_closest(table->real);
 		new_size = CLAMP(new_size, MIN_SIZE, MAX_SIZE);
-
-		new_nodes = aal_calloc(sizeof(void *), new_size);
+		new_nodes = aal_calloc(new_size * sizeof(void *), 0);
 
 		for (i = 0; i < table->size; i++) {
 			uint32_t hash;
