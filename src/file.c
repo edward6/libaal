@@ -18,6 +18,9 @@
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 
+/* BLKGETSIZE & BLKGETSIZE64 defines: */
+#include <sys/mount.h>
+
 #include <aal/libaal.h>
 
 /* Function for saving last error message into device assosiated buffer */
@@ -193,10 +196,6 @@ static errno_t file_equals(
 	return !aal_strncmp(file1, file2, aal_strlen(file1));
 }
 
-#if defined(__linux__) && defined(_IOR) && !defined(BLKGETSIZE64)
-#   define BLKGETSIZE64 _IOR(0x12, 114, uint64_t)
-#endif
-
 /* Handler for "len" operation for use with file device. See bellow for
    understanding where it is used. */
 static count_t file_len(
@@ -209,18 +208,8 @@ static count_t file_len(
 		return INVAL_BLK;
     
 #ifdef BLKGETSIZE64
-	if ((int)ioctl(*((int *)device->entity), BLKGETSIZE64, &size) >= (int)0) {
-		uint32_t block_count;
-		
-		size = (size / 4096) * 4096 / device->blksize;
-		block_count = size;
-		
-		if ((uint64_t)block_count != size) {
-			aal_fatal("The partition size is too big.");
-			return INVAL_BLK;
-		}
-		
-		return (count_t)block_count;
+	if (ioctl(*((int *)device->entity), BLKGETSIZE64, &size) >= 0) {
+		return size / device->blksize;
 	}
     
 #endif
@@ -231,8 +220,7 @@ static count_t file_len(
 		
 		if (ioctl(*((int *)device->entity), BLKGETSIZE, &l_size) >= 0) {
 			size = l_size;
-			return (count_t)((size * 512 / 4096) * 4096 / 
-				device->blksize);
+			return size * 512 / device->blksize;
 		}
 	}
     
