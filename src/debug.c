@@ -14,7 +14,6 @@
 #if !defined(ENABLE_STAND_ALONE) && defined(ENABLE_DEBUG)
 
 #include <aal/aal.h>
-#include <unistd.h>
 #include <stdlib.h>
 
 static void default_assert_handler(char *hint, int cond, char *text,
@@ -27,7 +26,7 @@ static void default_assert_handler(char *hint, int cond, char *text,
 	aal_exception_bug("%s: Assertion (%s) at %s:%d in function %s() failed.",
 			  hint, text, file, line, func);
 
-	exit(0xff);
+	abort();
 }
 
 static assert_handler_t assert_handler = default_assert_handler;
