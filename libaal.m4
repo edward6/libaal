@@ -24,7 +24,7 @@ $3)
 
 AC_CHECK_LIB(aal, aal_device_open, ,
     [AC_MSG_ERROR([libaal not found; install libaal available at \
-    http://www.namesys.com/pub/libaal])]
+http://www.namesys.com/pub/libaal])]
 $3)
 
 AC_MSG_CHECKING(for libaal - version >= $1)
