@@ -119,6 +119,10 @@ aal_list_t *aal_list_insert(aal_list_t *list,
 			    void *data, uint32_t n) 
 {
 	aal_list_t *at = aal_list_at(list, n);
+
+	if (at && !at->next)
+		return aal_list_append(at, data);
+		
 	return aal_list_prepend(at, data);
 }
 
