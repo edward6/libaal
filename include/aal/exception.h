@@ -9,6 +9,9 @@
 #include <aal/types.h>
 
 #ifndef ENABLE_STAND_ALONE
+extern void aal_exception_on(void);
+extern void aal_exception_off(void);
+
 extern char *aal_exception_type_name(aal_exception_type_t type);
 extern char *aal_exception_option_name(aal_exception_option_t opt);
 
@@ -24,46 +27,43 @@ extern aal_exception_option_t aal_exception_throw(aal_exception_type_t type,
 						  const char *message, ...)
                                                   __aal_check_format(printf, 3, 4);
 
-extern void aal_exception_on(void);
-extern void aal_exception_off(void);
-
-#define aal_exception_fatal(msg, list...)       \
+#define aal_fatal(msg, list...)       \
         aal_exception_throw(EXCEPTION_FATAL, EXCEPTION_OK, msg, ##list)
 	
-#define aal_exception_bug(msg, list...)	        \
+#define aal_bug(msg, list...)	      \
         aal_exception_throw(EXCEPTION_BUG, EXCEPTION_OK, msg, ##list)
 	
-#define aal_exception_error(msg, list...)       \
+#define aal_error(msg, list...)       \
         aal_exception_throw(EXCEPTION_ERROR, EXCEPTION_OK, msg, ##list)
 	
-#define aal_exception_warn(msg, list...)        \
+#define aal_warn(msg, list...)        \
         aal_exception_throw(EXCEPTION_WARNING, EXCEPTION_OK, msg, ##list)
 	
-#define aal_exception_info(msg, list...)        \
+#define aal_info(msg, list...)        \
         aal_exception_throw(EXCEPTION_INFORMATION, EXCEPTION_OK, msg, ##list)
 
-#define aal_exception_mess(msg, list...)        \
+#define aal_mess(msg, list...)        \
         aal_exception_throw(EXCEPTION_MESSAGE, EXCEPTION_OK, msg, ##list)
 
-#define aal_exception_yesno(msg, list...)       \
+#define aal_yesno(msg, list...)       \
         aal_exception_throw(EXCEPTION_MESSAGE, EXCEPTION_YESNO, msg, ##list)
 
-#define aal_exception_okcancel(msg, list...)    \
+#define aal_okcancel(msg, list...)    \
         aal_exception_throw(EXCEPTION_MESSAGE, EXCEPTION_OKCANCEL, msg, ##list)
 
-#define aal_exception_retryignore(msg, list...) \
+#define aal_retryignore(msg, list...) \
         aal_exception_throw(EXCEPTION_ERROR, EXCEPTION_RETRYIGNORE, msg, ##list)
 
 #else
-#define aal_exception_bug(msg, list...)
-#define aal_exception_warn(msg, list...)
-#define aal_exception_info(msg, list...)
-#define aal_exception_mess(msg, list...)
-#define aal_exception_fatal(msg, list...)
-#define aal_exception_error(msg, list...)
-#define aal_exception_yesno(msg, list...)
-#define aal_exception_okcancel(msg, list...)
-#define aal_exception_retryignore(msg, list...)
+#define aal_bug(msg, list...)
+#define aal_warn(msg, list...)
+#define aal_info(msg, list...)
+#define aal_mess(msg, list...)
+#define aal_fatal(msg, list...)
+#define aal_error(msg, list...)
+#define aal_yesno(msg, list...)
+#define aal_okcancel(msg, list...)
+#define aal_retryignore(msg, list...)
 #endif
 
 #endif

@@ -19,8 +19,8 @@ static void default_assert_handler(char *hint, int cond, char *text,
 {
 	/* Actual exception throwing. Messages will contain hint for owner,
 	   file, line and function assertion was failed in. */ 
-	aal_exception_bug("%s: Assertion (%s) at %s:%d in function %s() failed.",
-			  hint, text, file, line, func);
+	aal_bug("%s: Assertion (%s) at %s:%d in function %s() failed.",
+		hint, text, file, line, func);
 
 	abort();
 }

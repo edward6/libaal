@@ -216,7 +216,7 @@ static count_t file_len(
 		block_count = size;
 		
 		if ((uint64_t)block_count != size) {
-			aal_exception_fatal("The partition size is too big.");
+			aal_fatal("The partition size is too big.");
 			return INVAL_BLK;
 		}
 		

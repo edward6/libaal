@@ -25,8 +25,8 @@
 #define aal_device_check_routine(device, routine, action)		\
     do {								\
 	    if (!device->ops->routine) {				\
-	        aal_exception_fatal("Device operation \""               \
-                                    #routine "\" isn't implemented.");  \
+	        aal_fatal("Device operation \""                         \
+                           #routine "\" isn't implemented.");           \
 	        action;							\
 	    }								\
     } while (0)
@@ -49,14 +49,12 @@ aal_device_t *aal_device_open(
 #ifndef ENABLE_STAND_ALONE
 	/* Rough check for blocksize validness */
 	if (!aal_pow2(blksize)) {
-		aal_exception_error("Block size %u isn't power "
-				    "of two.", blksize);
+		aal_error("Block size %u isn't power of two.", blksize);
 		return NULL;
 	}	
     
 	if (blksize < 512) {
-		aal_exception_error("Block size can't be less than "
-				    "512 bytes.");
+		aal_error("Block size can't be less than 512 bytes.");
 		return NULL;
 	}
 #endif
@@ -153,14 +151,12 @@ errno_t aal_device_set_bs(
 
 #ifndef ENABLE_STAND_ALONE
 	if (!aal_pow2(blksize)) {
-		aal_exception_error("Block size %u isn't power "
-				    "of two.", blksize);
+		aal_error("Block size %u isn't power of two.", blksize);
 		return -EINVAL;
 	}	
     
 	if (blksize < 512) {
-		aal_exception_error("Block size can't be less "
-				    "than 512 bytes.");
+		aal_error("Block size can't be less than 512 bytes.");
 		return -EINVAL;
 	}
 #endif
