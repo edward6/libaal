@@ -18,31 +18,33 @@
 */
 aal_block_t *aal_block_create(
 	aal_device_t *device,	/* device block will eb allocated on */
-	blk_t blk,	        /* block number for allocating */
+	uint32_t size,          /* blocksize to be used */
+	blk_t number,	        /* block number for allocating */
 	char c)			/* char for filling allocated block */
 {
 	aal_block_t *block;
 
 	aal_assert("umka-443", device != NULL);
+	aal_assert("umka-2221", size >= device->blocksize);
     
 	if (!(block = aal_calloc(sizeof(*block), 0))) {
 		aal_exception_error("Out of memory!");
 		return NULL;
 	}
 
+	block->size = size;
+	block->number = number;
 	block->device = device;
 	    
-	if (!(block->data = aal_calloc(aal_device_get_bs(device), c))) {
+	if (!(block->data = aal_calloc(size, c))) {
 		aal_exception_error("Out of memory!");
 		goto error_free_block;
 	}
-	
-	block->blk = blk;
+
 	return block;
 	
  error_free_block:
 	aal_free(block);
- error:
 	return NULL;
 }
 
@@ -53,29 +55,31 @@ aal_block_t *aal_block_create(
 */
 aal_block_t *aal_block_read(
 	aal_device_t *device,	/* device block will be read from */
-	blk_t blk)		/* block number for reading */
+	uint32_t size,          /* blocksize to be used */
+	blk_t number)           /* block number for reading */
 {
+	blk_t blk;
+	uint32_t count;
 	aal_block_t *block;
 
 	aal_assert("umka-444", device != NULL);
+	aal_assert("umka-2220", size >= device->blocksize);
 
 	/* Allocating new block at passed position blk */    
-	if (!(block = aal_block_create(device, blk, 0)))
+	if (!(block = aal_block_create(device, size, number, 0)))
 		return NULL;
 
-	/* Reading block data from device */
-	if (aal_device_read(device, block->data, blk, 1)) {
-		aal_block_free(block);
-		return NULL;
-	}
-    
-	/* 
-	   Mark block as clean. It means, block will not be realy wrote onto
-	   device when aal_block_write method will be called, since block was
-	   not changed.
-	*/
-    
+	count = size / device->blocksize;
+	blk = number * (size / device->blocksize);
+	
+	if (aal_device_read(device, block->data, blk, count))
+		goto error_free_block;
+
 	return block;
+
+ error_free_block:
+	aal_block_free(block);
+	return NULL;
 }
 
 #ifndef ENABLE_STAND_ALONE
@@ -83,18 +87,26 @@ aal_block_t *aal_block_read(
 errno_t aal_block_reread(
 	aal_block_t *block, 	/* block to be reread */
 	aal_device_t *device,	/* device, new block should be reread from */
-	blk_t blk)	        /* block number for rereading */
+	blk_t number)           /* block number for rereading */
 {
+	blk_t blk;
 	errno_t res;
+	uint32_t count;
 	
 	aal_assert("umka-631", block != NULL);
 	aal_assert("umka-632", device != NULL);
 
-	if ((res = aal_device_read(device, block->data, blk, 1)))
+	aal_assert("umka-2222", block->size >=
+		   device->blocksize);
+
+	count = block->size / device->blocksize;
+	blk = number * (block->size / device->blocksize);
+	
+	if ((res = aal_device_read(device, block->data, blk, count)))
 		return res;
 
-	aal_block_move(block, blk);
 	block->device = device;
+	aal_block_move(block, blk);
 
 	return 0;
 }
@@ -108,29 +120,27 @@ errno_t aal_block_write(
 	aal_block_t *block)		/* block for writing */
 {
 	blk_t blk;
+	errno_t res;
+	uint32_t count;
+	aal_device_t *device;
 
 	aal_assert("umka-446", block != NULL);
 
-	blk = aal_block_number(block);
+	device = block->device;
 
-	return aal_device_write(block->device,
-				block->data, blk, 1);
+	count = block->size / device->blocksize;
+	blk = block->number * (block->size / device->blocksize);
+	
+	return aal_device_write(device, block->data, blk, count);
 }
 
 /* Sets block new number into passed @block */
 void aal_block_move(
 	aal_block_t *block,		/* block, position will be set to */
-	blk_t blk)			/* position for setting up */
+	blk_t number)                   /* new block number */
 {
 	aal_assert("umka-450", block != NULL);
-
-	/* Checking for passed block validness */
-	if (blk > aal_device_len(block->device)) {
-		aal_exception_error("Can't setup block into address out of device.");
-		return;
-	}
-    
-	block->blk = blk;
+	block->number = number;
 }
 #endif
 
@@ -139,12 +149,12 @@ blk_t aal_block_number(
 	aal_block_t *block)		/* block, position will be obtained from */
 {
 	aal_assert("umka-448", block != NULL);
-	return block->blk;
+	return block->number;
 }
 
 uint32_t aal_block_size(aal_block_t *block) {
 	aal_assert("umka-1049", block != NULL);
-	return block->device->blocksize;
+	return block->size;
 }
 
 /* Frees block instance and all assosiated memory */

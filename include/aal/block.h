@@ -13,19 +13,21 @@
 #ifndef ENABLE_STAND_ALONE
 extern errno_t aal_block_reread(aal_block_t *block, 
 				aal_device_t *device,
-				blk_t blk);
+				blk_t number);
 
 extern errno_t aal_block_write(aal_block_t *block);
 
 extern void aal_block_move(aal_block_t *block, 
-			   blk_t blk);
+			   blk_t number);
 #endif
 
 extern aal_block_t *aal_block_read(aal_device_t *device, 
-				   blk_t blk);
+				   uint32_t size,
+				   blk_t number);
 
 extern aal_block_t *aal_block_create(aal_device_t *device, 
-				     blk_t blk, char c);
+				     uint32_t size,
+				     blk_t number, char c);
 
 extern void aal_block_free(aal_block_t *block);
 extern blk_t aal_block_number(aal_block_t *block);

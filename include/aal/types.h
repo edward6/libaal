@@ -246,7 +246,8 @@ struct aal_block {
 	int flags;
 	void *data;
 
-	blk_t blk;
+	blk_t number;
+	uint32_t size;
 	aal_device_t *device;
 };
 
