@@ -179,4 +179,4 @@ AC_OUTPUT([
 
 echo
 echo Type \'make\' to compile libaal
-
+echo Don\'t forget to add \'$prefix/lib\' directory to /etc/ld.so.conf
