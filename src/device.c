@@ -95,7 +95,7 @@ errno_t aal_device_reopen(
 
 bool_t aal_device_readonly(aal_device_t *device) {
 	aal_assert("umka-1291", device != NULL);
-	return ((device->flags & 7) == O_RDONLY) ? TRUE : FALSE;
+	return ((device->flags & 7) == O_RDONLY);
 }
 
 /* Performs write operation on specified device. Actualqy it calls corresponding

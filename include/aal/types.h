@@ -81,20 +81,6 @@ typedef char *va_list;
 #  define NULL ((void *)0)
 #endif
 
-/* Here we define FALSE and TRUE macros in order to make sources more clean for
-   understanding. I mean, that there where we need some boolean value, we will
-   use these two macro. */
-#if defined(FALSE)
-#  undef FALSE
-#endif
-
-#if defined(TRUE)
-#  undef TRUE
-#endif
-
-#define FALSE 0
-#define TRUE  1
-
 /* Simple type for direction denoting */
 enum aal_dir {
 	DIR_UP     = 1 << 0,
