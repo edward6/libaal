@@ -67,19 +67,13 @@ aal_gauge_t *aal_gauge_create(
 	return gauge;
 }
 
-/* Resets gauge */
-void aal_gauge_reset(aal_gauge_t *gauge) {
-	aal_assert("umka-894", gauge != NULL);
-
-	gauge->value = 0;
-	gauge->state = GAUGE_STARTED;
-}
-
 /* Resets gauge and forces it to redraw itself */
 void aal_gauge_start(aal_gauge_t *gauge) {
 	aal_assert("umka-892", gauge != NULL);
 
-	aal_gauge_reset(gauge);
+	gauge->value = 0;
+	gauge->state = GAUGE_STARTED;
+
 	aal_gauge_touch(gauge);
     
 	gauge->state = GAUGE_RUNNING;

@@ -11,7 +11,6 @@
 #ifndef ENABLE_STAND_ALONE
 #include <aal/types.h>
 
-extern void aal_gauge_reset(aal_gauge_t *gauge);
 extern void aal_gauge_start(aal_gauge_t *gauge);
 extern void aal_gauge_done(aal_gauge_t *gauge);
 extern void aal_gauge_touch(aal_gauge_t *gauge);
