@@ -87,7 +87,7 @@ void aal_hash_table_free(aal_hash_table_t *table) {
 aal_hash_node_t **aal_hash_table_lookup_node(aal_hash_table_t *table,
 					     void *key)
 {
-	uint32_t hash;
+	uint64_t hash;
 	aal_hash_node_t **node;
 
 	aal_assert("umka-2271", key != NULL);

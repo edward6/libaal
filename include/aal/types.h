@@ -142,7 +142,7 @@ struct aal_hash_node {
 };
 
 /* Type for hash fucntion */
-typedef uint32_t (*hash_func_t) (const void *);
+typedef uint64_t (*hash_func_t) (const void *);
 
 /*
   Type for callback compare function. It is used in list and hash functions for
