@@ -46,15 +46,15 @@ aal_alpha_func_t aal_ui_get_alpha_handler(void) {
 	return alpha_handler;
 }
 
-char *aal_ui_get_alpha(char *defvalue, 
-		       aal_check_alpha_func_t check_func,
-		       void *data, const char *format, ...)
+void aal_ui_get_alpha(char *defvalue, 
+		      aal_check_alpha_func_t check_func,
+		      void *data, const char *format, ...)
 {
 	char buff[256];
 	va_list arg_list;
     
 	if (!alpha_handler)
-		return NULL;
+		return;
     
 	aal_memset(buff, 0, sizeof(buff));
     
@@ -62,6 +62,6 @@ char *aal_ui_get_alpha(char *defvalue,
 	aal_vsnprintf(buff, sizeof(buff), format, arg_list);
 	va_end(arg_list);
     
-	return alpha_handler(buff, defvalue, check_func, data);
+	alpha_handler(buff, defvalue, check_func, data);
 }
 #endif
