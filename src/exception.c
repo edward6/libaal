@@ -5,7 +5,7 @@
    providing unified interface for error handling. */
 
 #ifndef ENABLE_STAND_ALONE
-#include <aal/aal.h>
+#include <aal/libaal.h>
 
 static aal_exception_handler_t exception_handler = NULL;
 

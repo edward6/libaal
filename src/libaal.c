@@ -10,12 +10,12 @@
 #endif
 
 /* Returns libaal max supported interface version */
-int libreiser4_max_interface_version(void) {
+int libaal_max_interface_version(void) {
 	return LIBAAL_MAX_INTERFACE_VERSION;
 }
 
 /* Returns libaal min supported interface version */
-int libreiser4_min_interface_version(void) {
+int liblibaal_min_interface_version(void) {
 	return LIBAAL_MIN_INTERFACE_VERSION;
 }
 

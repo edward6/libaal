@@ -4,7 +4,7 @@
    print.c -- printf and friends. */
 
 #ifndef ENABLE_STAND_ALONE
-#include <aal/aal.h>
+#include <aal/libaal.h>
 #include <stdio.h>
 
 int aal_vsnprintf(

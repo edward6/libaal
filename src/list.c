@@ -4,7 +4,7 @@
    list.c -- double-linked list implementation. */
 
 #ifndef ENABLE_STAND_ALONE
-#include <aal/aal.h>
+#include <aal/libaal.h>
 
 /* Allocates new aal_list_t instance and assigns passed @data to it */
 aal_list_t *aal_list_alloc(void *data) {

@@ -18,7 +18,7 @@
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 
-#include <aal/aal.h>
+#include <aal/libaal.h>
 
 /* Function for saving last error message into device assosiated buffer */
 static void file_error(

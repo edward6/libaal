@@ -6,7 +6,7 @@
    bit range. */
 
 #ifndef ENABLE_STAND_ALONE
-#include <aal/aal.h>
+#include <aal/libaal.h>
 
 /* Turns on @nr bit in @map bitmap */
 inline int aal_set_bit(void *map, bit_t nr) {

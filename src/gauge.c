@@ -23,7 +23,7 @@
 #ifndef ENABLE_STAND_ALONE
 
 #include <stdio.h>
-#include <aal/aal.h>
+#include <aal/libaal.h>
 
 static aal_gauge_type_t handlers[MAX_GAUGES];
 

@@ -5,7 +5,7 @@
    something. */
 
 #ifndef ENABLE_STAND_ALONE
-#include <aal/aal.h>
+#include <aal/libaal.h>
 
 static aal_numeric_func_t numeric_handler = NULL;
 

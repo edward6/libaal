@@ -3,7 +3,7 @@
    
    hash.c -- simple hash implementation. */
 
-#include <aal/aal.h>
+#include <aal/libaal.h>
 
 /* Allocates new node and initializes it by @key and @value. */
 static aal_hash_node_t *aal_hash_node_alloc(void *key, void *value) {

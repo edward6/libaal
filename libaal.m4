@@ -18,8 +18,8 @@ dnl save LIBS
 saved_LIBS="$LIBS"
 
 dnl Check for headers and library
-AC_CHECK_HEADER(aal/aal.h, ,
-    [AC_MSG_ERROR([<aal/aal.h> not found; install libaal])] 
+AC_CHECK_HEADER(aal/libaal.h, ,
+    [AC_MSG_ERROR([<aal/libaal.h> not found; install libaal])] 
 $3)
 
 AC_CHECK_LIB(aal, aal_device_open, ,
@@ -45,7 +45,7 @@ dnl Compare MINIMUM-VERSION with libaal version
 AC_TRY_RUN([
 #include <stdio.h>
 #include <stdlib.h>
-#include <aal/aal.h>
+#include <aal/libaal.h>
 
 int main() {
     const char *version;    

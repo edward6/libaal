@@ -3,7 +3,7 @@
    
    string.c -- memory-working and string-working functions. */
 
-#include <aal/aal.h>
+#include <aal/libaal.h>
 
 #ifdef ENABLE_STAND_ALONE
 

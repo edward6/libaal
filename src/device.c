@@ -7,7 +7,7 @@
 #  include <config.h>
 #endif
 
-#include <aal/aal.h>
+#include <aal/libaal.h>
 #include <fcntl.h>
 
 /* This macro is used for checking whether specified routine from the device
@@ -100,7 +100,7 @@ bool_t aal_device_readonly(aal_device_t *device) {
 
 /* Performs write operation on specified device. Actualqy it calls corresponding
    operation (write) from assosiated with device operations. Returns error code,
-   see aal.h for more detailed description of errno_t. */
+   see types.h for more detailed description of errno_t. */
 errno_t aal_device_write(
 	aal_device_t *device,	/* device instance we will write into */
 	void *buff,		/* buffer with data to be wrote */
@@ -116,7 +116,7 @@ errno_t aal_device_write(
 
 /* Performs sync operation on specified device. Actualy it calls corresponding
    operation (sync) from assosiated with device operations. Returns error code,
-   see aal.h for more detailed description of errno_t. */
+   see types.h for more detailed description of errno_t. */
 errno_t aal_device_sync(
 	aal_device_t *device)	/* device instance that will be synchronized */
 {
@@ -142,7 +142,7 @@ bool_t aal_device_equals(
 #endif
 
 /* Checks and sets new block size for specified device. Returns error code, see
-   aal.h for more detailed description of errno_t. */
+   types.h for more detailed description of errno_t. */
 errno_t aal_device_set_bs(
 	aal_device_t *device,	/* device to be set with passed blocksize */
 	uint32_t blksize)       /* new blocksize value */
@@ -187,7 +187,7 @@ uint32_t aal_device_get_bs(
 
 /* Performs read operation on specified device. Actualy it calls corresponding
    operation (read) from assosiated with device operations. Returns error code,
-   see aal.h for more detailed description of errno_t. */
+   see types.h for more detailed description of errno_t. */
 errno_t aal_device_read(
 	aal_device_t *device,	/* device instance we will read from */
 	void *buff,		/* buffer we will read into */

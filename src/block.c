@@ -3,7 +3,7 @@
    
    block.c -- data block functions. */
 
-#include <aal/aal.h>
+#include <aal/libaal.h>
 
 errno_t aal_block_init(aal_block_t *block,
 		       aal_device_t *device,

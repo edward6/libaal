@@ -3,7 +3,7 @@
    
    malloc.c -- hanlders for memory allocation functions. */
 
-#include <aal/aal.h>
+#include <aal/libaal.h>
 
 /* Checking whether allone mode is in use. If so, initializes memory working
    handlers as NULL, because application that is use libreiser4 and libaal must

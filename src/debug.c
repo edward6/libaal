@@ -12,7 +12,7 @@
 #if !defined(ENABLE_STAND_ALONE) && defined(ENABLE_DEBUG)
 
 #include <stdlib.h>
-#include <aal/aal.h>
+#include <aal/libaal.h>
 
 static void default_assert_handler(char *hint, int cond, char *text,
 				   char *file, int line, char *func)

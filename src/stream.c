@@ -6,7 +6,7 @@
 #ifndef ENABLE_STAND_ALONE
 #include <stdio.h>
 #include <stdlib.h>
-#include <aal/aal.h>
+#include <aal/libaal.h>
 
 aal_stream_t *aal_stream_create(void *entity,
 				aal_proto_t *proto)
