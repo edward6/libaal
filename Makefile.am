@@ -1,33 +1,14 @@
-aalincludedir 		 = -I$(top_srcdir)/include
+SUBDIRS         = src include
 
-libaal_sources  	 = device.c file.c exception.c list.c malloc.c \
-			   print.c string.c math.c debug.c bitops.c \
-			   gauge.c block.c ui.c stream.c lru.c
+EXTRA_DIST	= AUTHORS COPYING TODO NEWS BUGS README CREDITS THANKS \
+		  libaal.m4 ltconfig
 
-if ENABLE_STAND_ALONE
-ALONE_LIBS               = libaal-alone.la 
-else
-ALONE_LIBS               = 
-endif
+aclocaldir 	= $(datadir)/aclocal
+aclocal_DATA	= libaal.m4
 
-lib_LTLIBRARIES		 = libaal.la $(ALONE_LIBS)
-noinst_LTLIBRARIES	 = libaal-static.la 
+define all-sources
+	( find ./ -name '*.[ch]' -print | grep -v SCCS )
+endef
 
-libaal_la_LDFLAGS 	 = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
-			   -release $(LT_RELEASE)
-
-libaal_la_SOURCES  	 = $(libaal_sources)
-
-libaal_la_CFLAGS         = @GENERIC_CFLAGS@
-
-libaal_static_la_SOURCES = $(libaal_sources)
-
-libaal_static_la_CFLAGS  = @GENERIC_CFLAGS@
-
-if ENABLE_STAND_ALONE
-libaal_alone_la_SOURCES  = $(libaal_sources)
-libaal_alone_la_CFLAGS   = @ALONE_CFLAGS@
-endif
-
-INCLUDES = $(aalincludedir)
-
+TAGS:
+	$(all-sources) | etags -
