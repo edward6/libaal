@@ -38,11 +38,11 @@ typedef long long int           int64_t;
 typedef unsigned char           uint8_t;
 typedef unsigned short int      uint16_t;
 #ifndef __uint32_t_defined
+#define __uint32_t_defined
 typedef unsigned int            uint32_t;
-# define __uint32_t_defined
-#endif
 __extension__
 typedef unsigned long long int  uint64_t;
+#endif
 
 #define MAX_UINT8 (~(uint8_t)0)
 #define MAX_UINT16 (~(uint16_t)0)
@@ -54,11 +54,9 @@ typedef unsigned long long int  uint64_t;
    binary size as possible. */
 
 #ifndef ENABLE_STAND_ALONE
-#include <stdarg.h>
+#  include <stdarg.h>
 #else
-
 typedef char *va_list;
-
 #undef va_arg
 #undef va_end
 #undef va_start
