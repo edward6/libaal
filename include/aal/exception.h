@@ -28,31 +28,31 @@ extern aal_exception_option_t aal_exception_throw(aal_exception_type_t type,
                                                   __aal_check_format(printf, 3, 4);
 
 #define aal_fatal(msg, list...)       \
-        aal_exception_throw(EXCEPTION_FATAL, EXCEPTION_OK, msg, ##list)
+        aal_exception_throw(EXCEPTION_TYPE_FATAL, EXCEPTION_OPT_OK, msg, ##list)
 	
 #define aal_bug(msg, list...)	      \
-        aal_exception_throw(EXCEPTION_BUG, EXCEPTION_OK, msg, ##list)
+        aal_exception_throw(EXCEPTION_TYPE_BUG, EXCEPTION_OPT_OK, msg, ##list)
 	
 #define aal_error(msg, list...)       \
-        aal_exception_throw(EXCEPTION_ERROR, EXCEPTION_OK, msg, ##list)
+        aal_exception_throw(EXCEPTION_TYPE_ERROR, EXCEPTION_OPT_OK, msg, ##list)
 	
 #define aal_warn(msg, list...)        \
-        aal_exception_throw(EXCEPTION_WARNING, EXCEPTION_OK, msg, ##list)
+        aal_exception_throw(EXCEPTION_TYPE_WARNING, EXCEPTION_OPT_OK, msg, ##list)
 	
 #define aal_info(msg, list...)        \
-        aal_exception_throw(EXCEPTION_INFORMATION, EXCEPTION_OK, msg, ##list)
+        aal_exception_throw(EXCEPTION_TYPE_INFO, EXCEPTION_OPT_OK, msg, ##list)
 
 #define aal_mess(msg, list...)        \
-        aal_exception_throw(EXCEPTION_MESSAGE, EXCEPTION_OK, msg, ##list)
+        aal_exception_throw(EXCEPTION_TYPE_MESSAGE, EXCEPTION_OPT_OK, msg, ##list)
 
 #define aal_yesno(msg, list...)       \
-        aal_exception_throw(EXCEPTION_MESSAGE, EXCEPTION_YESNO, msg, ##list)
+        aal_exception_throw(EXCEPTION_TYPE_MESSAGE, EXCEPTION_OPT_YESNO, msg, ##list)
 
 #define aal_okcancel(msg, list...)    \
-        aal_exception_throw(EXCEPTION_MESSAGE, EXCEPTION_OKCANCEL, msg, ##list)
+        aal_exception_throw(EXCEPTION_TYPE_MESSAGE, EXCEPTION_OPT_OKCANCEL, msg, ##list)
 
 #define aal_retryignore(msg, list...) \
-        aal_exception_throw(EXCEPTION_ERROR, EXCEPTION_RETRYIGNORE, msg, ##list)
+        aal_exception_throw(EXCEPTION_TYPE_ERROR, EXCEPTION_OPT_RETRYIGNORE, msg, ##list)
 
 #else
 #define aal_bug(msg, list...)

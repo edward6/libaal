@@ -97,7 +97,7 @@ static aal_exception_option_t aal_exception_actual_throw(
 	aal_exception_option_t opt;
 
 	if (!exception_handler || disable_count)
-		return EXCEPTION_UNHANDLED;
+		return EXCEPTION_OPT_UNHANDLED;
 	
 	opt = exception_handler(exception);
 	aal_exception_catch(exception);
@@ -137,7 +137,7 @@ aal_exception_option_t aal_exception_throw(
 	return aal_exception_actual_throw(exception);
     
  error_no_memory:
-	return EXCEPTION_UNHANDLED;
+	return EXCEPTION_OPT_UNHANDLED;
 }
 
 /* These functions are used for switching exception factory into silent mode.

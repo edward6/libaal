@@ -237,34 +237,35 @@ struct aal_block {
 
 typedef struct aal_block aal_block_t;
 
-/* This is the type of exception */
+/* This is the type of exception. */
 enum aal_exception_type {
-	EXCEPTION_INFORMATION   = 1,
-	EXCEPTION_MESSAGE       = 2,
-	EXCEPTION_WARNING       = 3,
-	EXCEPTION_ERROR	        = 4,
-	EXCEPTION_FATAL	        = 5,
-	EXCEPTION_BUG	        = 6
+	EXCEPTION_TYPE_INFO        = 1,
+	EXCEPTION_TYPE_MESSAGE     = 2,
+	EXCEPTION_TYPE_WARNING     = 3,
+	EXCEPTION_TYPE_ERROR	   = 4,
+	EXCEPTION_TYPE_FATAL	   = 5,
+	EXCEPTION_TYPE_BUG	   = 6,
+	EXCEPTION_TYPE_LAST
 };
 
 typedef enum aal_exception_type aal_exception_type_t;
 
 enum aal_exception_option {
-	EXCEPTION_UNHANDLED     = 1 << 0,
-	EXCEPTION_YES	        = 1 << 1,
-	EXCEPTION_NO	        = 1 << 2,
-	EXCEPTION_OK	        = 1 << 3,
-	EXCEPTION_RETRY	        = 1 << 4,
-	EXCEPTION_IGNORE        = 1 << 5,
-	EXCEPTION_CANCEL        = 1 << 6,
-	EXCEPTION_LAST		= 1 << 7
+	EXCEPTION_OPT_UNHANDLED    = 1 << 0,
+	EXCEPTION_OPT_YES	   = 1 << 1,
+	EXCEPTION_OPT_NO	   = 1 << 2,
+	EXCEPTION_OPT_OK	   = 1 << 3,
+	EXCEPTION_OPT_RETRY	   = 1 << 4,
+	EXCEPTION_OPT_IGNORE       = 1 << 5,
+	EXCEPTION_OPT_CANCEL       = 1 << 6,
+	EXCEPTION_OPT_LAST         = 1 << 7
 };
 
 typedef enum aal_exception_option aal_exception_option_t;
 
-#define EXCEPTION_YESNO		(EXCEPTION_YES | EXCEPTION_NO)
-#define EXCEPTION_OKCANCEL	(EXCEPTION_OK | EXCEPTION_CANCEL)
-#define EXCEPTION_RETRYIGNORE	(EXCEPTION_RETRY | EXCEPTION_IGNORE)
+#define EXCEPTION_OPT_YESNO	   (EXCEPTION_OPT_YES | EXCEPTION_OPT_NO)
+#define EXCEPTION_OPT_OKCANCEL	   (EXCEPTION_OPT_OK | EXCEPTION_OPT_CANCEL)
+#define EXCEPTION_OPT_RETRYIGNORE  (EXCEPTION_OPT_RETRY | EXCEPTION_OPT_IGNORE)
 
 /* Format checking stuff */
 #ifdef __GNUC__
