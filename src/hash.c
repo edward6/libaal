@@ -98,7 +98,7 @@ aal_hash_node_t **aal_hash_table_lookup_node(aal_hash_table_t *table,
 
 	aal_assert("umka-2271", key != NULL);
 	aal_assert("umka-2270", table != NULL);
-	aal_assert("umka-3118", !(table->size & (table->size - 1)));
+	aal_assert("umka-3118", (table->size & (table->size - 1)) == 0);
 	
 	hash = table->hash_func(key);
 	node = &table->nodes[hash & (table->size - 1)];
