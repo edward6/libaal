@@ -5,10 +5,7 @@
 
 #include <aal/aal.h>
 
-/* Hash table size */
-#define TABLE_SIZE (0x40000)
-
-/* Allocates new node and initializes it by @key and @value */
+/* Allocates new node and initializes it by @key and @value. */
 static aal_hash_node_t *aal_hash_node_alloc(void *key, void *value) {
 	aal_hash_node_t *node;
 
@@ -36,12 +33,12 @@ static void aal_hash_node_free(aal_hash_table_t *table,
 
 /* Allocates hash table with passed @hash_func used for calculating hashes and
    @comp_func used for comparing keys. */
-aal_hash_table_t *aal_hash_table_alloc(hash_func_t hash_func,
-				       comp_func_t comp_func,
-				       keyrem_func_t keyrem_func,
-				       valrem_func_t valrem_func)
+aal_hash_table_t *aal_hash_table_create(uint32_t size,
+					hash_func_t hash_func,
+					comp_func_t comp_func,
+					keyrem_func_t keyrem_func,
+					valrem_func_t valrem_func)
 {
-	uint32_t size;
 	aal_hash_table_t *table;
 	
 	aal_assert("umka-2267", hash_func != NULL);
@@ -51,7 +48,7 @@ aal_hash_table_t *aal_hash_table_alloc(hash_func_t hash_func,
 		return NULL;
 
 	table->real = 0;
-	table->size = TABLE_SIZE;
+	table->size = size;
 	
 	table->hash_func = hash_func;
 	table->comp_func = comp_func;
