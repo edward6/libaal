@@ -122,7 +122,7 @@ static int32_t write_memory(aal_stream_t *stream,
 			    void *buff, uint32_t n)
 {
 	/* Expanding memory erea to fit yet another @n bytes. */
-	if (stream->offset + n > stream->size) {
+	if (stream->offset + n + 1 > stream->size) {
 		stream->size = stream->size + n + 1;
 		
 		if (!(stream->entity = realloc(stream->entity,
