@@ -6,10 +6,14 @@
 #ifndef AAL_MATH_H
 #define AAL_MATH_H
 
-extern int aal_min(int v1, int v2);
-extern int aal_log2(unsigned long n);
-extern int aal_pow2(unsigned long n);
-extern unsigned long aal_abs(long n);
+#include "types.h"
 
+extern int aal_log2(uint32_t n);
+extern int aal_pow2(uint32_t n);
+extern uint32_t aal_abs(int32_t n);
+
+extern int aal_min(int32_t v1, int32_t v2);
+uint32_t aal_mod64(uint64_t n, uint32_t div);
+uint64_t aal_div64(uint64_t n, uint32_t div, uint32_t *rem);
 #endif
 
