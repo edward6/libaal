@@ -12,7 +12,7 @@
   handlers as NULL, because application that is use libreiser4 and libaal must
   set it up.
 */
-#if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_MEMORY_MANAGER)) || !defined(ENABLE_STAND_ALONE)
+#if defined(ENABLE_STAND_ALONE) && defined(ENABLE_MEMORY_MANAGER)
 static aal_malloc_handler_t malloc_handler = NULL;
 static aal_realloc_handler_t realloc_handler = NULL;
 static aal_free_handler_t free_handler = NULL;

@@ -52,6 +52,10 @@ typedef unsigned long long int  uint64_t;
   binary size as possible.
 */
 
+#ifndef ENABLE_STAND_ALONE
+#include <stdarg.h>
+#endif
+
 #if !defined(_VA_LIST_) && !defined(_VA_LIST) && !defined(__VA_LIST)
 typedef char *va_list;
 #endif
