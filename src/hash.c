@@ -5,11 +5,14 @@
   libaal/COPYING.
 */
 
+#if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_HASH_FUNCTIONS)) || !defined(ENABLE_STAND_ALONE)
 #include <aal/aal.h>
 
+/* Minimal and maximal hash table size */
 #define TABLE_MIN_SIZE (11)
 #define TABLE_MAX_SIZE (13845163)
 
+/* Possible hash table size values */
 static const uint32_t primes[] = {
 	11,
 	19,
@@ -49,6 +52,7 @@ static const uint32_t primes[] = {
 
 static const uint32_t nprimes = sizeof(primes) / sizeof(primes[0]);
 
+/* Returns closest known prime number */
 static uint32_t aal_spaced_primes_closest(uint32_t num) {
 	uint32_t i;
                                                                                           
@@ -60,6 +64,7 @@ static uint32_t aal_spaced_primes_closest(uint32_t num) {
 	return primes[nprimes - 1];
 }
 
+/* Allocates new node and initializes it by @key and @value */
 static aal_hash_node_t *aal_hash_node_alloc(void *key, void *value) {
 	aal_hash_node_t *node;
 
@@ -72,10 +77,15 @@ static aal_hash_node_t *aal_hash_node_alloc(void *key, void *value) {
 	return node;
 }
 
+/* Releases passed @node */
 static void aal_hash_node_free(aal_hash_node_t *node) {
 	aal_free(node);
 }
 
+/*
+  Allocates hash table with passed @hash_func used for calculating hashes and
+  @comp_func used for comparing keys.
+*/
 aal_hash_table_t *aal_hash_table_alloc(hash_func_t hash_func,
 				       comp_func_t comp_func)
 {
@@ -105,6 +115,7 @@ aal_hash_table_t *aal_hash_table_alloc(hash_func_t hash_func,
 	return NULL;
 }
 
+/* Releases all nodes and hash @table itself */
 void aal_hash_table_free(aal_hash_table_t *table) {
 	uint32_t i;
 	aal_hash_node_t *node;
@@ -113,14 +124,17 @@ void aal_hash_table_free(aal_hash_table_t *table) {
 	aal_assert("umka-2269", table != NULL);
 
 	for (i = 0; i < table->size; i++) {
-		for (node = table->nodes[i]; node; node = node->next)
+		for (node = table->nodes[i]; node; node = next) {
+			next = node->next;
 			aal_hash_node_free(node);
+		}
 	}
 
 	aal_free(table->nodes);
 	aal_free(table);
 }
 
+/* Makes lookup for node by passed @key */
 aal_hash_node_t **aal_hash_table_lookup_node(aal_hash_table_t *table,
 					     void *key)
 {
@@ -144,6 +158,7 @@ aal_hash_node_t **aal_hash_table_lookup_node(aal_hash_table_t *table,
 	return node;
 }
 
+/* Makes lookup for value by passed @key */
 void *aal_hash_table_lookup(aal_hash_table_t *table,
 			    void *key)
 {
@@ -153,6 +168,7 @@ void *aal_hash_table_lookup(aal_hash_table_t *table,
 	return node ? node->value : NULL;
 }
 
+/* Resizes hash @table if it is needed */
 static void aal_hash_table_resize(aal_hash_table_t *table) {
 	if ((table->size >= table->real * 3 && table->size > TABLE_MIN_SIZE) ||
 	    (table->size * 3 <= table->real && table->size < TABLE_MAX_SIZE))
@@ -186,6 +202,7 @@ static void aal_hash_table_resize(aal_hash_table_t *table) {
 	}
 }
 
+/* Inserts new node to passed @table */
 void aal_hash_table_insert(aal_hash_table_t *table,
 			   void *key, void *value)
 {
@@ -202,6 +219,7 @@ void aal_hash_table_insert(aal_hash_table_t *table,
 	}
 }
 
+/* Removed node from passed @table by @key */
 int aal_hash_table_remove(aal_hash_table_t *table,
 			  void *key)
 {
@@ -219,5 +237,7 @@ int aal_hash_table_remove(aal_hash_table_t *table,
 		aal_hash_table_resize(table);
 		return 1;
 	}
+	
 	return 0;
 }
+#endif
