@@ -1,5 +1,5 @@
 /* Copyright (C) 2001-2005 by Hans Reiser, licensing governed by libaal/COPYING.
-         
+
    unaligned.h -- libaal unalignment declaration. */
 
 #ifdef HAVE_CONFIG_H
