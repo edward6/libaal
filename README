@@ -1,0 +1,11 @@
+This file is part of libaal package
+
+Copyright (C) 2001, 2002, 2003 by Hans Reiser, licensing governed by
+libaal/COPYING.
+
+This is a library, that provides application abstraction mechanism.
+It includes device abstraction, libc independence code, etc.
+
+Send libaal bug reports, requests for help, feature requests, 
+comments, etc. to reiserfs-list@namesys.com, vitaly@namesys.com,
+umka@namesys.com
