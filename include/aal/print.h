@@ -6,6 +6,7 @@
 #ifndef AAL_PRINT_H
 #define AAL_PRINT_H
 
+#ifndef ENABLE_STAND_ALONE
 #include <aal/types.h>
 
 extern int aal_vsnprintf(char *buff, uint32_t n,
@@ -15,5 +16,7 @@ extern int aal_vsnprintf(char *buff, uint32_t n,
 extern int aal_snprintf(char *buff, uint32_t n,
 			const char *format, 
 			...);
+#endif
+
 #endif
 

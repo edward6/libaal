@@ -8,8 +8,7 @@
 
 #include <aal/types.h>
 
-#if (defined(ENABLE_STAND_ALONE) && defined(ENABLE_EXCEPTIONS)) || !defined(ENABLE_STAND_ALONE)
-
+#ifndef ENABLE_STAND_ALONE
 extern char *aal_exception_type_name(aal_exception_type_t type);
 extern char *aal_exception_option_name(aal_exception_option_t opt);
 
@@ -22,7 +21,8 @@ extern void aal_exception_set_handler(aal_exception_handler_t handler);
 
 extern aal_exception_option_t aal_exception_throw(aal_exception_type_t type, 
 						  aal_exception_option_t opt,
-						  const char *message, ...);
+						  const char *message, ...)
+                                                  __aal_check_format(printf, 3, 4);
 
 extern void aal_exception_on(void);
 extern void aal_exception_off(void);

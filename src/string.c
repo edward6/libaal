@@ -7,10 +7,8 @@
 
 #if defined(ENABLE_STAND_ALONE) && defined(ENABLE_STRING_FUNCTIONS)
 
-/* 
-  Memory and string working functions. They are full analog of standard ones.
-  See corresponding man page for details.
-*/
+/* Memory and string working functions. They are full analog of standard ones.
+   See corresponding man page for details. */
 void *aal_memset(void *dest, int c, uint32_t n) {
 	char *dest_p = (char *)dest;
 

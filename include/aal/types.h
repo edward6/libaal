@@ -261,6 +261,14 @@ typedef enum aal_exception_option aal_exception_option_t;
 #define EXCEPTION_OKCANCEL	(EXCEPTION_OK | EXCEPTION_CANCEL)
 #define EXCEPTION_RETRYIGNORE	(EXCEPTION_RETRY | EXCEPTION_IGNORE)
 
+/* Format checking stuff */
+#ifdef __GNUC__
+#define __aal_check_format(style, format, begin) \
+        __attribute__((__format__(style, format, begin)))
+#else
+        __aal_check_format(style, format, begin)
+#endif
+
 /* This is exception structure. It contains: exception message, exception type,
    exception options. Usualy, the life cycle of exception is very short.
    Exception instance created by aal_exception_throw function and passed t
