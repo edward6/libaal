@@ -105,7 +105,7 @@ typedef enum aal_direction aal_direction_t;
 typedef int bool_t;
 
 /* This type is used for return of result of execution some function. */
-typedef int errno_t;
+typedef int64_t errno_t;
 
 typedef struct aal_list aal_list_t;
 
@@ -158,7 +158,7 @@ typedef struct aal_hash_table aal_hash_table_t;
 
 /* Type for callback function that is called for each element of list. Usage is
    the same as previous one. */
-typedef int (*foreach_func_t) (const void *, void *);
+typedef errno_t (*foreach_func_t) (const void *, void *);
 
 /* This types is used for keeping the block number and block count value. They
    are needed to be increase source code maintainability.

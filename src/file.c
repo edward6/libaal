@@ -177,7 +177,7 @@ static errno_t file_sync(
 
 /* Handler for "equals" operation for use with file device. See bellow for
    understanding where it is used. */
-static int file_equals(
+static errno_t file_equals(
 	aal_device_t *device1,	    /* the first device for comparing */
 	aal_device_t *device2)	    /* the second one */
 {
