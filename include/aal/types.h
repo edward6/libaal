@@ -69,7 +69,6 @@ typedef char *va_list;
 
 #define va_arg(ap, type) \
         ((type *)(ap += sizeof(type)))[-1]
-
 #endif
 
 /* As libaal may be used without any standard headers, we need to declare NULL

@@ -47,10 +47,10 @@ extern void aal_list_free(aal_list_t *list);
 /* Macros for walking through the list in both directions (forward and
    backward). They are used for simple search, etc. */
 #define aal_list_foreach_forward(list, walk) \
-    for (walk = aal_list_first(list); walk; walk = walk->next)
+        for (walk = aal_list_first(list); walk; walk = walk->next)
 
 #define aal_list_foreach_backward(list, walk) \
-    for (walk = aal_list_last(list); walk; walk = walk->prev)
+        for (walk = aal_list_last(list); walk; walk = walk->prev)
     
 #endif
 
