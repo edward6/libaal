@@ -131,13 +131,11 @@ aal_list_t *aal_list_insert_sorted(aal_list_t *list, void *data,
 		return new_list;
 	}
   
-	cmp = comp_func((const void *)tmp_list->data,
-			(const void *)data, user);
+	cmp = comp_func(tmp_list->data,	data, user);
   
 	while ((tmp_list->next) && (cmp < 0)) {
 		tmp_list = tmp_list->next;
-		cmp = comp_func((const void *)tmp_list->data,
-				(const void *)data, user);
+		cmp = comp_func(tmp_list->data, data, user);
 	}
 
 	new_list = aal_list_alloc(data);
@@ -246,8 +244,7 @@ aal_list_t *aal_list_find_custom(aal_list_t *list, void *needle,
 		return NULL;
     
 	while (list) {
-		if (comp_func((const void *)list->data,
-			      (const void *)needle, user) == 0)
+		if (comp_func(list->data, needle, user) == 0)
 			return list;
 
 		list = list->next;

@@ -84,20 +84,23 @@ typedef char *va_list;
 /* Here we define FALSE and TRUE macros in order to make sources more clean for
    understanding. I mean, that there where we need some boolean value, we will
    use these two macro. */
-#if !defined(FALSE)
-#  define FALSE 0
+#if defined(FALSE)
+#  undef FALSE
 #endif
 
-#if !defined(TRUE)
-#  define TRUE 1
+#if defined(TRUE)
+#  undef TRUE
 #endif
+
+#define FALSE 0
+#define TRUE  1
 
 /* Simple type for direction denoting */
-enum aal_direction {
-	D_TOP    = 1 << 0,
-	D_BOTTOM = 1 << 1,
-	D_LEFT   = 1 << 2,
-	D_RIGHT  = 1 << 3
+enum aal_dir {
+	DIR_UP     = 1 << 0,
+	DIR_DOWN   = 1 << 1,
+	DIR_LEFT   = 1 << 2,
+	DIR_RIGHT  = 1 << 3
 };
 
 typedef enum aal_direction aal_direction_t;
@@ -129,17 +132,15 @@ struct aal_hash_node {
 };
 
 /* Type for hash fucntion */
-typedef uint64_t (*hash_func_t) (const void *);
+typedef uint64_t (*hash_func_t) (void *);
 
 /* Type for callback compare function. It is used in list and hash functions for
    comparing their items. */
-typedef int (*comp_func_t) (const void *,
-			    const void *,
-			    void *);
+typedef int (*comp_func_t) (void *, void *, void *);
 
-/* Key remove function */
-typedef void (*keyrem_func_t) (const void *);
-typedef void (*valrem_func_t) (const void *);
+/* Key remove functions. */
+typedef void (*keyrem_func_t) (void *);
+typedef void (*valrem_func_t) (void *);
 
 struct aal_hash_table {
 	uint32_t size;
@@ -147,7 +148,6 @@ struct aal_hash_table {
 
 	hash_func_t hash_func;
 	comp_func_t comp_func;
-	
 	keyrem_func_t keyrem_func;
 	valrem_func_t valrem_func;
 	
@@ -156,11 +156,11 @@ struct aal_hash_table {
 
 typedef struct aal_hash_table aal_hash_table_t;
 
-/* Type for callback function that is called for each element of list. Usage is
-   the same as previous one. */
-typedef errno_t (*foreach_func_t) (const void *, void *);
+/* Type for callback function that is called for each element of list or hash
+   table. */
+typedef errno_t (*foreach_func_t) (void *, void *);
 
-/* This types is used for keeping the block number and block count value. They
+/* These types is used for keeping the block number and block count value. They
    are needed to be increase source code maintainability.
 
    For instance, there is some function:
@@ -188,9 +188,7 @@ struct aal_device_ops;
    name of device (for instance, /dev/hda2), block size of device and device
    operations. */
 struct aal_device {
-	
 	int flags;
-	
 	void *data;
 	void *entity;
 	void *person;
