@@ -218,30 +218,17 @@ inline bit_t aal_find_zero_bits(void *map,
 				bit_t *start,
 				bit_t count)
 {
-	bit_t prev;
-	bit_t next;
+	bit_t set, zero;
 
-	prev = aal_find_next_zero_bit(map, size, *start);
-	next = aal_find_next_zero_bit(map, size, prev + 1);
+	zero = aal_find_next_zero_bit(map, size, *start);
+	set = aal_find_next_set_bit(map, size, zero + 1);
 
-	count--;
-	*start = prev;
-
-	while (next - prev == 1 && count--) {
-		bit_t curr;
-		prev = next;
-		
-		curr = aal_find_next_zero_bit(map, size, next + 1);
-
-		if (curr - prev != 1) {
-			next++;
-			break;
-		}
-
-		next = curr;
-	}
-
-	return next - *start;
+	*start = zero;
+	
+	if (set - zero < count)
+		count = set - zero;
+	
+	return count;
 }
 
 /* Finds @count set bits inside @map */
@@ -250,28 +237,15 @@ inline bit_t aal_find_set_bits(void *map,
 			       bit_t *start,
 			       bit_t count)
 {
-	bit_t prev;
-	bit_t next;
+	bit_t set, zero;
 
-	prev = aal_find_next_set_bit(map, size, *start);
-	next = aal_find_next_set_bit(map, size, prev + 1);
+	set = aal_find_next_set_bit(map, size, *start);
+	zero = aal_find_next_zero_bit(map, size, set + 1);
 
-	count--;
-	*start = prev;
-
-	while (next - prev == 1 && count--) {
-		bit_t curr;
-		prev = next;
+	*start = set;
+	
+	if (zero - set < count)
+		count = zero - set;
 		
-		curr = aal_find_next_set_bit(map, size, next + 1);
-
-		if (curr - prev != 1) {
-			next++;
-			break;
-		}
-
-		next = curr;
-	}
-
-	return next - *start;
+	return count;
 }
