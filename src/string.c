@@ -76,10 +76,13 @@ int aal_strcmp(const char *s1, const char *s2) {
 	uint32_t len = len1 < len2 ? len1 : len2;
 	int comp;
 	
-	if ((comp = aal_memcmp((const void *)s1, (const void *)s2, len)))
+	if ((comp = aal_memcmp((const void *)s1, 
+			       (const void *)s2, len)))
+	{
 		return comp;
+	}
 	
-	return len1 < len2 ? -1 : len1 > len2 : 1 : 0;
+	return len1 < len2 ? -1 : (len1 > len2 ? 1 : 0);
 }
 
 char *aal_strncpy(char *dest, const char *src, uint32_t n) {
