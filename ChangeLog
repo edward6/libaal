@@ -6,6 +6,11 @@ reiser4progs/COPYING.
 This file may be modified and/or distributed without restriction. This is
 not an invitation to misrepresent the history of reiser4progs.
 
+2005-02-17
+	Make libminimal enabled by default.
+2005-01-17
+	Unaligned access is added.
+	Make endian methods to be aligned.
 2004-12-04
 	The version is 1.0.
 2004-11-24
