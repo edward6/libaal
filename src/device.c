@@ -66,10 +66,9 @@ aal_device_t *aal_device_open(
 		return NULL;
 
 	device->ops = ops;
-	device->blksize = blksize;
-	
 	device->flags = flags;
 	device->person = person;
+	device->blksize = blksize;
 
 	if (ops->open) {
 		if (ops->open(device, person, blksize, flags))
@@ -87,7 +86,7 @@ aal_device_t *aal_device_open(
 errno_t aal_device_reopen(
 	aal_device_t *device,       /* device for reopening */
 	uint32_t blksize,           /* block size device is working with */
-	int flags)		    /* flags device opened with (O_RDONLY...) */
+	int flags)		    /* flags device opened with (READ, WRITE...) */
 {
 	device->flags = flags;
 	device->blksize = blksize;
@@ -98,7 +97,7 @@ errno_t aal_device_reopen(
 
 bool_t aal_device_readonly(aal_device_t *device) {
 	aal_assert("umka-1291", device != NULL);
-	return ((device->flags & 7) == O_RDONLY) ? TRUE : FALSE;
+	return device->flags & READ ? TRUE : FALSE;
 }
 
 /* Performs write operation on specified device. Actualqy it calls corresponding

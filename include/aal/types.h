@@ -166,6 +166,13 @@ typedef int (*foreach_func_t) (const void *, const void *);
    etc. */
 #define INVAL_BLK (~0ull)
 
+enum device_mode {
+	READ   = 1 << 0,
+	WRITE  = 1 << 1
+};
+
+typedef enum device_mode device_mode_t;
+
 typedef uint64_t blk_t;
 typedef uint64_t count_t;
 

@@ -41,7 +41,7 @@ errno_t file_open(
 	uint32_t blksize,	    /* used blocksize */
 	int flags)		    /* flags file will be opened with */
 {
-	int fd;
+	int fd, fmode;
 	char *filename;
 
 	if (!device)
@@ -57,11 +57,23 @@ errno_t file_open(
 
 	/* Opening specified file with specified flags */
 	filename = (char *)person;
+
+	fmode = 0;
+	
+	if ((WRITE & flags) && (READ & flags))
+		fmode |= O_RDWR;
+	else {
+		if (READ & flags)
+			fmode |= O_RDONLY;
+
+		if (WRITE & flags)
+			fmode |= O_WRONLY;
+	}
 	
 #if defined(O_LARGEFILE)
-	if ((fd = open(filename, flags | O_LARGEFILE)) == -1)
+	if ((fd = open(filename, fmode | O_LARGEFILE)) == -1)
 #else
-	if ((fd = open(filename, flags)) == -1)
+	if ((fd = open(filename, fmode)) == -1)
 #endif
 		goto error_free_entity;
 
@@ -262,5 +274,4 @@ struct aal_device_ops file_ops = {
 	.equals = file_equals,	    /* handler for comparing two devices */
 	.len    = file_len	    /* handler for length obtaining */
 };
-
 #endif
