@@ -11,12 +11,12 @@ static aal_exception_handler_t exception_handler = NULL;
 
 /* Strings for all exception types */
 static char *type_names[] = {
-	"Information",
+	"Info ",
 	"",
-	"Warning", 
+	"Warn ", 
 	"Error", 
 	"Fatal", 
-	"Bug"
+	"Bug  "
 };
 
 /* Strings for all exception options */

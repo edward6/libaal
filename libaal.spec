@@ -53,7 +53,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root)
 %doc AUTHORS BUGS COPYING CREDITS INSTALL NEWS README THANKS TODO
-%{_libdir}/libaal-0.4.so.*
+%{_libdir}/libaal-0.5.so.*
 %{_libdir}/libaal-alone.so.*
 
 %files devel
