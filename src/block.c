@@ -58,7 +58,6 @@ aal_block_t *aal_block_read(
 	uint32_t size,          /* blocksize to be used */
 	blk_t number)           /* block number for reading */
 {
-	blk_t blk;
 	uint32_t count;
 	aal_block_t *block;
 
@@ -70,10 +69,12 @@ aal_block_t *aal_block_read(
 		return NULL;
 
 	count = size / device->blocksize;
-	blk = number * (size / device->blocksize);
 	
-	if (aal_device_read(device, block->data, blk, count))
+	if (aal_device_read(device, block->data,
+			    number * count, count))
+	{
 		goto error_free_block;
+	}
 
 	return block;
 
@@ -89,7 +90,6 @@ errno_t aal_block_reread(
 	aal_device_t *device,	/* device, new block should be reread from */
 	blk_t number)           /* block number for rereading */
 {
-	blk_t blk;
 	errno_t res;
 	uint32_t count;
 	
@@ -100,13 +100,15 @@ errno_t aal_block_reread(
 		   device->blocksize);
 
 	count = block->size / device->blocksize;
-	blk = number * (block->size / device->blocksize);
 	
-	if ((res = aal_device_read(device, block->data, blk, count)))
+	if ((res = aal_device_read(device, block->data,
+				   number * count, count)))
+	{
 		return res;
+	}
 
 	block->device = device;
-	aal_block_move(block, blk);
+	aal_block_move(block, number);
 
 	return 0;
 }
@@ -119,7 +121,6 @@ errno_t aal_block_reread(
 errno_t aal_block_write(
 	aal_block_t *block)		/* block for writing */
 {
-	blk_t blk;
 	errno_t res;
 	uint32_t count;
 	aal_device_t *device;
@@ -129,9 +130,9 @@ errno_t aal_block_write(
 	device = block->device;
 
 	count = block->size / device->blocksize;
-	blk = block->number * (block->size / device->blocksize);
 	
-	return aal_device_write(device, block->data, blk, count);
+	return aal_device_write(device, block->data,
+				block->number * count, count);
 }
 
 /* Sets block new number into passed @block */
