@@ -79,9 +79,6 @@ aal_free_handler_t aal_free_get_handler(void) {
 typedef struct chunk chunk_t;
 typedef enum chunk_state chunk_state_t;
 
-#define ptr2chunk(ptr) \
-        ((chunk_t *)((int)ptr - sizeof(chunk_t)))
-
 enum chunk_state {
 	ST_FREE = 1 << 0,
 	ST_USED = 1 << 1 
@@ -95,9 +92,9 @@ struct chunk {
 	chunk_state_t state;
 } __attribute__((packed));
 
-static uint32_t mem_len = 0;
-static uint32_t mem_free = 0;
-static void *mem_start = NULL;
+static uint32_t area_len = 0;
+static uint32_t area_free = 0;
+static void *area_start = NULL;
 
 static void __chunk_init(void *ptr, uint32_t len,
 			 chunk_state_t state,
@@ -109,83 +106,44 @@ static void __chunk_init(void *ptr, uint32_t len,
 	((chunk_t *)ptr)->state = state;
 }
 
-static void __chunk_fuse(chunk_t *chunk) {
-	chunk_t *next = chunk->next;
-	chunk_t *prev = chunk->prev;
-	chunk_t *first = (chunk_t *)mem_start;
+/* Tries to fuse @passed chunk with @neig if it is free */
+static int __chunk_fuse(chunk_t *chunk, chunk_t *right) {
+
+	if (right == area_start || right->state != ST_FREE)
+		return 0;
+
+	if (chunk == area_start || chunk->state != ST_FREE)
+		return 0;
 	
-	/*
-	  Trying to fuse currect chunk with next one if it is free. This is
-	  needed for getting fragmentation smaller.
-	*/
-	if (next != first && next->state == ST_FREE) {
-		chunk->next = next->next;
+	chunk->next = right->next;
 
-		if (next->next != first)
-			next->next->prev = chunk;
+	if (right->next != area_start)
+		right->next->prev = chunk;
 
-		mem_free += sizeof(chunk_t);
-		chunk->len += (next->len + sizeof(chunk_t));
-	}
+	area_free += sizeof(chunk_t);
+	chunk->len += (right->len + sizeof(chunk_t));
 
-	/* Trying to fuse current chunk with the prvious one */
-	if (prev != first && prev->state == ST_FREE) {
-		prev->next = chunk->next;
-
-		if (chunk->next != first)
-			chunk->next->prev = prev;
-
-		mem_free += sizeof(chunk_t);
-		prev->len += (chunk->len + sizeof(chunk_t));
-	}
+	return 1;
 }
 
 static void *__chunk_split(chunk_t *chunk, uint32_t size) {
-	chunk_t *first = (chunk_t *)mem_start;
-
-	void *new = (void *)((int)chunk + size +
-			     sizeof(chunk_t));
+	void *new = (void *)((int)chunk + sizeof(chunk_t) + size);
 
 	/*
-	  Check if we have enough free space for split the found
-	  chunk.
-	*/
-	if ((int)new + sizeof(chunk_t) >= ((int)mem_start + mem_len))
-		return NULL;
-
-	/*
-	  Okay, we have found good enough chunk. And now we
-	  split into onto two.
+	  Okay, we have found chunk good enough. And now we
+	  split it onto two chunks.
 	*/
 	__chunk_init(new, chunk->len - size - sizeof(chunk_t),
 		     ST_FREE, chunk, chunk->next);
 
 	/* Setting up prev, next pointers */
-	if (chunk->next != first)
+	if (chunk->next != area_start)
 		chunk->next->prev = new;
 			
 	__chunk_init(chunk, size, ST_USED, chunk->prev, new);
 
-	mem_free -= (size + sizeof(chunk_t));
+	area_free -= (size + sizeof(chunk_t));
 	return (void *)((int)chunk + sizeof(chunk_t));
-}
-
-static int __chunk_exact(chunk_t *chunk,
- 			 uint32_t size)
-{
-	return chunk->len == size;
-}
-
-static int __chunk_proper(chunk_t *chunk,
- 			  uint32_t size)
-{
-	if (chunk->state != ST_FREE)
-		return 0;
-
-	if (__chunk_exact(chunk, size))
-		return 1;
-	
-	return chunk->len >= size + sizeof(chunk_t);
 }
 
 /*
@@ -193,76 +151,70 @@ static int __chunk_proper(chunk_t *chunk,
   order to allocate requested amount of memory.
 */
 static void *__chunk_alloc(uint32_t size) {
-	chunk_t *walk;
-
-	if (size == 0)
-		return NULL;
-
-	walk = (chunk_t *)mem_start;
+	chunk_t *walk = (chunk_t *)area_start;
 	
 	/* The loop though the all chunks in list */
 	while (1) {
-
-		if (__chunk_proper(walk, size)) {
-
-			/* Check if we need to split @walk chunk */
-			if (__chunk_exact(walk, size)) {
+		if (walk->state == ST_FREE) {
+			if (walk->len >= size + sizeof(chunk_t) + 1) {
+				return __chunk_split(walk, size);
+			} else if (walk->len == size) {
 				walk->state = ST_USED;
-				mem_free -= walk->len;
-				
+				area_free -= walk->len;
 				return (void *)walk + sizeof(chunk_t);
 			}
-			
-			return __chunk_split(walk, size);
 		}
 
-		if ((walk = walk->next) == mem_start)
+		/* Getting next chunk from list */
+		if ((walk = walk->next) == area_start)
 			break;
-	}
+	};
 
 	return NULL;
 }
+
+#define ptr2chunk(ptr) \
+        ((chunk_t *)((int)ptr - sizeof(chunk_t)))
 
 /* Frees passed memory pointer */
 static void __chunk_free(void *ptr) {
 	chunk_t *chunk = ptr2chunk(ptr);
 
 	chunk->state = ST_FREE;
-	mem_free += chunk->len;
+	area_free += chunk->len;
 
 	/*
 	  Fusing both left and right neighbour chunks if they are not used. This
-	  is needed for keep memory manager area in optimal state.
+	  is needed for keep memory manager area not fragmented.
 	*/
-	__chunk_fuse(chunk);
+	__chunk_fuse(chunk, chunk->next);
+	__chunk_fuse(chunk->prev, chunk);
 }
 
 /* Initializes memory manager on passed memory area */
 void aal_mem_init(void *start, uint32_t len) {
-	uint32_t size = len - sizeof(chunk_t);
+	__chunk_init(start, len - sizeof(chunk_t),
+		     ST_FREE, start, start);
 
-	__chunk_init(start, size, ST_FREE,
-		     start, start);
-
-	mem_len = len;
-	mem_free = size;
-	mem_start = start;
+	area_len = len;
+	area_start = start;
+	area_free = len - sizeof(chunk_t);
 
 	free_handler = __chunk_free;
 	malloc_handler = __chunk_alloc;
 }
 
 void aal_mem_fini(void) {
-	mem_len = 0;
-	mem_free = 0;
-	mem_start = NULL;
+	area_len = 0;
+	area_free = 0;
+	area_start = NULL;
 	
 	free_handler = NULL;
 	malloc_handler = NULL;
 }
 
 uint32_t aal_mem_free(void) {
-	return mem_free;
+	return area_free;
 }
 #else
 void aal_mem_init(void *start, uint32_t len) {
