@@ -40,6 +40,7 @@ aal_hash_table_t *aal_hash_table_alloc(hash_func_t hash_func,
 	aal_hash_table_t *table;
 	
 	aal_assert("umka-2267", hash_func != NULL);
+	aal_assert("umka-2273", comp_func != NULL);
 
 	if (!(table = aal_calloc(sizeof(*table), 0)))
 		return NULL;
@@ -95,13 +96,8 @@ aal_hash_node_t **aal_hash_table_lookup_node(aal_hash_table_t *table,
 	hash = table->hash_func(key);
 	node = &table->nodes[hash % table->size];
 
-	if (table->comp_func) {
-		while (*node && table->comp_func((*node)->key, key, NULL))
-			node = &(*node)->next;
-	} else {
-		while (node && (*node)->key != key)
-			node = &(*node)->next;
-	}
+	while (*node && table->comp_func((*node)->key, key, NULL))
+		node = &(*node)->next;
 
 	return node;
 }
