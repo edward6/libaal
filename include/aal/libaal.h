@@ -26,6 +26,7 @@ extern "C" {
 #include "math.h"
 #include "bitops.h"
 #include "endian.h"
+#include "unaligned.h"
 #include "debug.h"
 #include "gauge.h"
 #include "block.h"
