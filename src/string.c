@@ -12,7 +12,7 @@
 void *aal_memset(void *dest, int c, uint32_t n) {
 	char *dest_p = (char *)dest;
 
-	for (; (int)dest_p - (int)dest < (int)n; dest_p++)
+	for (; dest_p < (char *)dest + n; dest_p++)
 		*dest_p = c;
 
 	return dest;
@@ -26,14 +26,14 @@ void *aal_memcpy(void *dest, const void *src, uint32_t n) {
 		src_p = (char *)src;
 		dest_p = (char *)dest; 
 
-		for (; (int)src_p - (int)src < (int)n; src_p++, dest_p++)
+		for (; src_p < (char *)src + n; src_p++, dest_p++)
 			*dest_p = *src_p;
 		
 	} else {
 		src_p = (char *)src + n - 1;
 		dest_p = (char *)dest + n - 1;
 
-		for (; (int)src_p - (int)src >= 0; src_p--, dest_p--)
+		for (; src_p >= (char *)src; src_p--, dest_p--)
 			*dest_p = *src_p;
 	}
     
@@ -48,7 +48,7 @@ int aal_memcmp(const void *s1, const void *s2, uint32_t n) {
 	const char *p_s1 = (const char *)s1;
 	const char *p_s2 = (const char *)s2;
 	
-	for (; (uint32_t)(p_s1 - (int)s1) < n; p_s1++, p_s2++) {
+	for (; p_s1 < (char *)s1 + n; p_s1++, p_s2++) {
 		if (*p_s1 < *p_s2) 
 			return -1;
 	

@@ -105,8 +105,8 @@ static void *__chunk_split(chunk_t *chunk, uint32_t size, int forw) {
 
 	s = chunk->len - size - sizeof(chunk_t);
 	new = forw ? 
-		(void *)((int)chunk + sizeof(chunk_t) + size) :
-		(void *)((int)chunk + sizeof(chunk_t) + s);
+		(char *)chunk + sizeof(chunk_t) + size :
+		(char *)chunk + sizeof(chunk_t) + s;
 	
 	/* Okay, we have found chunk good enough. And now we split it onto two
 	   chunks. */
@@ -121,8 +121,8 @@ static void *__chunk_split(chunk_t *chunk, uint32_t size, int forw) {
 
 	area_free -= (size + sizeof(chunk_t));
 	return forw ?
-		(void *)((int)chunk + sizeof(chunk_t)):
-		(void *)((int)new + sizeof(chunk_t));
+		(char *)chunk + sizeof(chunk_t):
+		(char *)new + sizeof(chunk_t);
 }
 
 /* Makes search for proper memory chunk in list of chunks. If found, split it in
