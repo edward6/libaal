@@ -78,12 +78,24 @@ int32_t aal_stream_read(aal_stream_t *stream,
 	return stream->proto->read(stream, buff, n);
 }
 
+int aal_stream_eof(aal_stream_t *stream) {
+	aal_assert("umka-2643", stream != NULL);
+	
+	if (!stream->proto->eof)
+		return 0;
+	
+	return stream->proto->eof(stream);
+}
+
 int32_t aal_stream_format(aal_stream_t *stream,
 			  const char *format, ...)
 {
 	uint32_t n;
 	char buff[256];
 	va_list arg_list;
+
+	aal_assert("umka-2644", stream != NULL);
+	aal_assert("umka-2645", format != NULL);
 
 	va_start(arg_list, format);
 	

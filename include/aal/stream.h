@@ -9,6 +9,7 @@
 #ifndef ENABLE_STAND_ALONE
 #include <aal/types.h>
 
+extern int aal_stream_eof(aal_stream_t *stream);
 extern void aal_stream_fini(aal_stream_t *stream);
 extern void aal_stream_close(aal_stream_t *stream);
 extern void aal_stream_reset(aal_stream_t *stream);
