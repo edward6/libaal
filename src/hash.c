@@ -171,7 +171,7 @@ void *aal_hash_table_lookup(aal_hash_table_t *table,
 /* Resizes hash @table if it is needed */
 static void aal_hash_table_resize(aal_hash_table_t *table) {
 	if ((table->size >= table->real * 3 && table->size > MIN_SIZE) ||
-	    (table->size * 3 <= table->real && table->size < _MAX_SIZE))
+	    (table->size * 3 <= table->real && table->size < MAX_SIZE))
 	{
 		uint32_t i, new_size;
 		aal_hash_node_t **new_nodes;
