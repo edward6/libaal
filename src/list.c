@@ -54,15 +54,15 @@ aal_list_t *aal_list_prev(aal_list_t *list) {
 }
 
 /* Returns list length */
-uint32_t aal_list_length(aal_list_t *list) {
-	uint32_t length = 0;
+uint32_t aal_list_len(aal_list_t *list) {
+	uint32_t len = 0;
 
 	while (list) {
-		length++;
+		len++;
 		list = list->next;
 	}
 	
-	return length;
+	return len;
 }
 
 /*
