@@ -58,16 +58,14 @@ errno_t file_open(
 	/* Opening specified file with specified flags */
 	filename = (char *)person;
 
-	fmode = 0;
-	
 	if ((WRITE & flags) && (READ & flags))
-		fmode |= O_RDWR;
+		fmode = O_RDWR;
 	else {
 		if (READ & flags)
-			fmode |= O_RDONLY;
+			fmode = O_RDONLY;
 
 		if (WRITE & flags)
-			fmode |= O_WRONLY;
+			fmode = O_WRONLY;
 	}
 	
 #if defined(O_LARGEFILE)
