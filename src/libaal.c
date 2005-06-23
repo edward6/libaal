@@ -15,7 +15,7 @@ int libaal_max_interface_version(void) {
 }
 
 /* Returns libaal min supported interface version */
-int liblibaal_min_interface_version(void) {
+int libaal_min_interface_version(void) {
 	return LIBAAL_MIN_INTERFACE_VERSION;
 }
 
