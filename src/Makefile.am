@@ -25,3 +25,4 @@ libaal_minimal_la_CFLAGS   = @MINIMAL_CFLAGS@
 endif
 
 INCLUDES = $(aalincludedir)
+
