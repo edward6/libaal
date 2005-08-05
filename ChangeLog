@@ -6,6 +6,16 @@ reiser4progs/COPYING.
 This file may be modified and/or distributed without restriction. This is
 not an invitation to misrepresent the history of reiser4progs.
 
+2005-08-05
+	1.0.5 version.
+2005-03-21
+	Detect file size fixes.
+	Max file size fix: do not limit it by 2^41 bytes.
+	Unaligned access fixes.
+2005-03-16
+	Some casting fixes.
+2005-02-20
+	1.0.4 version.
 2005-02-17
 	Make libminimal enabled by default.
 2005-01-17
