@@ -14,7 +14,7 @@ AH_TEMPLATE([ENABLE_MEMORY_MANAGER], [Define for enable simple memory manager.])
 
 LIBAAL_MAJOR_VERSION=1
 LIBAAL_MINOR_VERSION=0
-LIBAAL_MICRO_VERSION=5
+LIBAAL_MICRO_VERSION=6
 
 LIBAAL_INTERFACE_AGE=0
 LIBAAL_BINARY_AGE=0
@@ -72,7 +72,7 @@ AC_PROG_CC
 
 # Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([errno.h fcntl.h stdlib.h string.h sys/ioctl.h unistd.h])
+AC_CHECK_HEADERS([errno.h fcntl.h stdlib.h string.h sys/ioctl.h unistd.h linux/falloc.h linux/types.h])
 
 AC_C_BIGENDIAN
 
@@ -86,7 +86,7 @@ AC_STRUCT_TM
 AC_PROG_GCC_TRADITIONAL
 AC_FUNC_MEMCMP
 AC_HEADER_STDC
-AC_CHECK_FUNCS([memmove memset strchr strerror strpbrk strrchr])
+AC_CHECK_FUNCS([memmove memset strchr strerror strpbrk strrchr fallocate])
 
 # The options -falign-* are supported by gcc 3.0 or later.
 # Probably it is sufficient to only check for -falign-loops.

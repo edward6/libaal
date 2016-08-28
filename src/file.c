@@ -6,6 +6,10 @@
 
 #ifndef ENABLE_MINIMAL
 
+#ifndef _GNU_SOURCE
+#  define _GNU_SOURCE
+#endif
+
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
@@ -18,8 +22,21 @@
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 
+#ifdef HAVE_LINUX_FALLOC_H
+#  include <linux/falloc.h>
+#endif
+
+#ifdef HAVE_LINUX_TYPES_H
+#  include <linux/types.h>
+#endif
+
 /* BLKGETSIZE & BLKGETSIZE64 defines: */
 #include <sys/mount.h>
+
+/* BLKDISCARD define: */
+#if defined(__linux__) && !defined(BLKDISCARD)
+#  define BLKDISCARD _IO(0x12,119)
+#endif
 
 #include <aal/libaal.h>
 
@@ -160,6 +177,62 @@ static errno_t file_write(
 	return 0;
 }
 
+/* Handler for "discard" operation for use with file device. See below for
+   understanding where it is used. */
+static errno_t file_discard(
+	aal_device_t *device,	    /* file device to discard */
+	blk_t block,		    /* start position for discarding */
+	count_t count)		    /* number of blocks to be discarded */
+{
+	struct stat st;
+	int ret;
+
+	if (!device)
+		return -EINVAL;
+
+	/* Stat the file */
+	if(stat(device->name, &st) != 0) {
+		file_error(device);
+		return errno;
+	}
+
+	/* Discard or punch hole depending on whether this is a block device */
+	if (S_ISBLK(st.st_mode)) {
+#ifdef BLKDISCARD
+		__u64 range[2];
+
+		range[0] = (__u64)block * device->blksize;
+		range[1] = (__u64)count * device->blksize;
+
+		ret = ioctl(*((int *)device->entity), BLKDISCARD, &range);
+#else
+		errno = EOPNOTSUPP;
+		ret = -1;
+#endif
+	} else {
+#if defined(HAVE_FALLOCATE) && defined(FALLOC_FL_PUNCH_HOLE)
+		off_t blk, len;
+
+		blk = (off_t)block * device->blksize;
+		len = (off_t)count * device->blksize;
+
+		ret = fallocate(*((int *)device->entity),
+				FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
+				blk, len);
+#else
+		errno = EOPNOTSUPP;
+		ret = -1;
+#endif
+	}
+
+	if (ret != 0) {
+		file_error(device);
+		return errno;
+	}
+
+	return 0;
+}
+
 /* Handler for "sync" operation for use with file device. See bellow for
    understanding where it is used. */
 static errno_t file_sync(
@@ -245,6 +318,7 @@ struct aal_device_ops file_ops = {
 	.close  = file_close,       /* handler for "create" operation */
 	.read   = file_read,	    /* handler for "read" operation */	    
 	.write  = file_write,	    /* handler for "write" operation */
+	.discard = file_discard,    /* handler for "discard" operation */
 	.sync   = file_sync,	    /* handler for "sync" operation */
 	.equals = file_equals,	    /* handler for comparing two devices */
 	.len    = file_len	    /* handler for length obtaining */

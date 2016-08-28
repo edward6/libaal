@@ -6,6 +6,10 @@ reiser4progs/COPYING.
 This file may be modified and/or distributed without restriction. This is
 not an invitation to misrepresent the history of reiser4progs.
 
+2014-06-28
+	1.0.6 version
+	Implement device discard functionality in libaal to be used
+	by mkfs and friends.
 2005-08-05
 	1.0.5 version.
 2005-03-21

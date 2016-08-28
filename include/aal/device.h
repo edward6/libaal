@@ -22,6 +22,10 @@ extern errno_t aal_device_reopen(aal_device_t *device,
 				 uint32_t blksize,
 				 int flags);
 
+extern errno_t aal_device_discard(aal_device_t *device,
+				blk_t block,
+				count_t count);
+
 extern errno_t aal_device_write(aal_device_t *device, 
 				void *buff, blk_t block,
 				count_t count);

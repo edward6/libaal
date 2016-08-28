@@ -202,7 +202,10 @@ struct aal_device_ops {
     
 	errno_t (*write) (aal_device_t *, 
 			  void *, blk_t, count_t);
-    
+
+	errno_t (*discard) (aal_device_t *,
+			    blk_t, count_t);
+
 	errno_t (*sync) (aal_device_t *);
     
 	errno_t (*equals) (aal_device_t *, 

@@ -114,6 +114,20 @@ errno_t aal_device_write(
 	return device->ops->write(device, buff, block, count);
 }
 
+/* Performs discard operation on specified device. Actualqy it calls corresponding
+   operation (discard) from assosiated with device operations. Returns error code,
+   see types.h for more detailed description of errno_t. */
+errno_t aal_device_discard(
+	aal_device_t *device,	/* device instance we will discard */
+	blk_t block,		/* block we will begin discarding from */
+	count_t count)		/* number of blocks to be discarded */
+{
+	aal_assert("intelfx-1", device != NULL);
+
+	aal_device_check_routine(device, discard, return -EINVAL);
+	return device->ops->discard(device, block, count);
+}
+
 /* Performs sync operation on specified device. Actualy it calls corresponding
    operation (sync) from assosiated with device operations. Returns error code,
    see types.h for more detailed description of errno_t. */
