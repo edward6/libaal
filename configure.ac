@@ -124,7 +124,7 @@ AC_CACHE_CHECK([whether -Wredundant-decls works], [redundant_decls_cv_], [
 if test "x$falign_loop_flag" = xyes; then
   ALIGN_FLAGS="-falign-jumps=1 -falign-loops=1 -falign-functions=1 -falign-labels=1 -fomit-frame-pointer -fno-inline -fstrength-reduce"
 else
-  ALIGN_FLAGS="-malign-jumps=1 -malign-loops=1 -malign-functions=1"
+  ALIGN_FLAGS="-falign-jumps=1 -falign-loops=1 -falign-functions=1"
 fi
 
 CFLAGS=""
