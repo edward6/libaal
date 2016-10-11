@@ -6,12 +6,12 @@ EXTRA_DIST	= AUTHORS COPYING TODO NEWS BUGS README CREDITS THANKS \
 aclocaldir 	= $(datadir)/aclocal
 aclocal_DATA	= libaal.m4
 
-define all-sources
+define all_sources
 	( find ./ -name '*.[ch]' -print | grep -v SCCS )
 endef
 
 ETAGS:
-	$(all-sources) | etags -
+	$(all_sources) | etags -
 
 install-exec-hook:
 	./run-ldconfig $(libdir)

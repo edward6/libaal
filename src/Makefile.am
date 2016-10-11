@@ -24,5 +24,5 @@ libaal_minimal_la_SOURCES  = $(libaal_sources)
 libaal_minimal_la_CFLAGS   = @MINIMAL_CFLAGS@
 endif
 
-INCLUDES = $(aalincludedir)
+AM_CPPFLAGS		= $(aalincludedir)
 
