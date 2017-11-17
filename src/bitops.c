@@ -9,7 +9,7 @@
 #include <aal/libaal.h>
 
 /* Turns on @nr bit in @map bitmap */
-inline int aal_set_bit(void *map, bit_t nr) {
+int aal_set_bit(void *map, bit_t nr) {
 	int retval;
 	unsigned char *p, mask;
 
@@ -24,7 +24,7 @@ inline int aal_set_bit(void *map, bit_t nr) {
 }
 
 /* Turns off @nr bit in @map bitmap */
-inline int aal_clear_bit(void *map, bit_t nr) {
+int aal_clear_bit(void *map, bit_t nr) {
 	int retval;
 	unsigned char *p, mask;
 
@@ -39,7 +39,7 @@ inline int aal_clear_bit(void *map, bit_t nr) {
 }
 
 /* Makes test of the @nr bit in @map bitmap */
-inline int aal_test_bit(void *map, bit_t nr) {
+int aal_test_bit(void *map, bit_t nr) {
 	unsigned char *p, mask;
   
 	p = (unsigned char *)map;
@@ -49,8 +49,7 @@ inline int aal_test_bit(void *map, bit_t nr) {
 }
 
 /* Finds first zero bit inside @map */
-inline bit_t aal_find_first_zero_bit(void *map, 
-				     bit_t size) 
+bit_t aal_find_first_zero_bit(void *map, bit_t size)
 {
 	int res;
 	unsigned char *p = map;
@@ -76,9 +75,7 @@ inline bit_t aal_find_first_zero_bit(void *map,
 }
 
 /* Finds zero bit inside @map starting from @offset */
-inline bit_t aal_find_next_zero_bit(void *map, 
-				    bit_t size,
-				    bit_t offset) 
+bit_t aal_find_next_zero_bit(void *map, bit_t size, bit_t offset)
 {
 	int bit = offset & 7, res;
 	unsigned char *addr = map;
@@ -114,9 +111,7 @@ static inline int aal_find_nzb(unsigned char byte, bit_t offset) {
 }
 
 /* Finds set bit inside @map starting from @offset */
-inline bit_t aal_find_next_set_bit(void *map, 
-				   bit_t size, 
-				   bit_t offset)
+bit_t aal_find_next_set_bit(void *map, bit_t size, bit_t offset)
 {
         unsigned char *addr = map;
         unsigned int byte_nr = offset >> 3;
@@ -148,9 +143,7 @@ inline bit_t aal_find_next_set_bit(void *map,
 }
 
 /* Makes cleanup of bits inside range @start and @count */
-inline void aal_clear_bits(void *map, 
-			   bit_t start, 
-			   bit_t count)
+void aal_clear_bits(void *map, bit_t start, bit_t count)
 {
 	int end_byte;
 	int start_byte;
@@ -181,9 +174,7 @@ inline void aal_clear_bits(void *map,
 }
 
 /* Sets up the bits inside range @start and @count */
-inline void aal_set_bits(void *map, 
-			 bit_t start, 
-			 bit_t count)
+void aal_set_bits(void *map, bit_t start, bit_t count)
 {
 	int end_byte;
 	int start_byte;
@@ -214,10 +205,10 @@ inline void aal_set_bits(void *map,
 }
 
 /* Finds @count clear bits inside @map */
-inline bit_t aal_find_zero_bits(void *map,
-				bit_t size,
-				bit_t *start,
-				bit_t count)
+bit_t aal_find_zero_bits(void *map,
+			 bit_t size,
+			 bit_t *start,
+			 bit_t count)
 {
 	bit_t beg, end, search_end;
 
@@ -236,10 +227,10 @@ inline bit_t aal_find_zero_bits(void *map,
 }
 
 /* Finds @count or less set bits inside @map */
-inline bit_t aal_find_set_bits(void *map,
-			       bit_t size,
-			       bit_t *start,
-			       bit_t count)
+bit_t aal_find_set_bits(void *map,
+			bit_t size,
+			bit_t *start,
+			bit_t count)
 {
 	bit_t beg, end, search_end;
 
