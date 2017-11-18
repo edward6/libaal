@@ -157,7 +157,7 @@ static void *__chunk_alloc(uint32_t size) {
 }
 
 #define ptr2chunk(ptr) \
-        ((chunk_t *)((int)ptr - sizeof(chunk_t)))
+        ((chunk_t *)((intptr_t)ptr - sizeof(chunk_t)))
 
 /* Frees passed memory pointer */
 static void __chunk_free(void *ptr) {
