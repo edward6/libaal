@@ -6,6 +6,10 @@ reiser4progs/COPYING.
 This file may be modified and/or distributed without restriction. This is
 not an invitation to misrepresent the history of reiser4progs.
 
+2017-11-23
+	1.0.7 version
+	Replace typedefs of intX_t, uintX_t by including standard
+	header stdint.h. Casting fixes.
 2014-06-28
 	1.0.6 version
 	Implement device discard functionality in libaal to be used
