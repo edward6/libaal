@@ -7,7 +7,7 @@
 #define AAL_BITOPS_H
 
 #ifndef ENABLE_MINIMAL
-typedef unsigned long long bit_t;
+typedef uint64_t bit_t;
 
 extern int aal_set_bit(void *map, bit_t nr);
 extern int aal_clear_bit(void *map, bit_t nr);
